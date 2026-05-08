@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# PyInstaller
+build/
+dist/
+*.spec
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.bak
+*.backup
+*_backup_*.py
+
+# 日志
+*.log
+
+# 大文件
+klxy.zip
+*.html
+image/debug_*.png
+image/tj/lkwg_enriched_data*.json
+test_*.png
+test_*.json
+image/sc/
+*.txt

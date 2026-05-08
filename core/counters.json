@@ -1,0 +1,19 @@
+{
+  "active_id": "c3_星尘虫",
+  "is_folded": false,
+  "counters": [
+    {
+      "id": "c3_星尘虫",
+      "pokemon_name": "星尘虫",
+      "counter_name": "星尘虫计数器",
+      "type": "虫系",
+      "count": 0,
+      "target": 80,
+      "base_prob": 1.8,
+      "is_custom": true,
+      "is_locked": false,
+      "nightmare_count": 0
+    }
+  ],
+  "pokemon_breakthrough_stats": {}
+}

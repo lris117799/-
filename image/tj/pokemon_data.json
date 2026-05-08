@@ -1,0 +1,5986 @@
+[
+  {
+    "id": 1,
+    "name": "迪莫",
+    "attribute": "光",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/25/o64cvcxq1l6tlur77xjqbwx2s4imabd.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%BF%AA%E8%8E%AB_1.png",
+    "stats": {
+      "hp": 120,
+      "attack": 80,
+      "magic_attack": 80,
+      "defense": 105,
+      "magic_defense": 105,
+      "speed": 92,
+      "total": 582
+    },
+    "height": "0.54~0.78",
+    "weight": "5.5~7.0"
+  },
+  {
+    "id": 2,
+    "name": "喵喵",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/34/swx8tx6o3mpyfnqrkxu1kth6sgzott2.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%96%B5%E5%96%B5_1.png",
+    "stats": {
+      "hp": 65,
+      "attack": 66,
+      "magic_attack": 66,
+      "defense": 49,
+      "magic_defense": 91,
+      "speed": 33,
+      "total": 370
+    },
+    "height": "0.53~0.75",
+    "weight": "3.62~4.6"
+  },
+  {
+    "id": 3,
+    "name": "喵呜",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/8d/dfnsd50cr86p61a37sanzt5jp3i022u.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%96%B5%E5%91%9C_1.png",
+    "stats": {
+      "hp": 86,
+      "attack": 87,
+      "magic_attack": 87,
+      "defense": 65,
+      "magic_defense": 121,
+      "speed": 44,
+      "total": 490
+    },
+    "height": "0.65~0.92",
+    "weight": "14.2~15.6"
+  },
+  {
+    "id": 4,
+    "name": "魔力猫",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/33/p4l4i0xh8rzj0mosp9sgw4qjfvlbl0r.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%AD%94%E5%8A%9B%E7%8C%AB_1.png",
+    "stats": {
+      "hp": 108,
+      "attack": 109,
+      "magic_attack": 109,
+      "defense": 81,
+      "magic_defense": 151,
+      "speed": 55,
+      "total": 613
+    },
+    "height": "1.5~2.15",
+    "weight": "105.0~125.0"
+  },
+  {
+    "id": 5,
+    "name": "火花",
+    "attribute": "火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a1/jzel7fdbrw66zvccwcx4ekg72d66m21.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%81%AB%E8%8A%B1_1.png",
+    "stats": {
+      "hp": 70,
+      "attack": 84,
+      "magic_attack": 37,
+      "defense": 56,
+      "magic_defense": 43,
+      "speed": 78,
+      "total": 368
+    },
+    "height": "0.53~0.71",
+    "weight": "7.6~8.5"
+  },
+  {
+    "id": 6,
+    "name": "焰火",
+    "attribute": "火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/b9/r8j0510jtxabhlyl5srx22orefxhh5g.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%84%B0%E7%81%AB_1.png",
+    "stats": {
+      "hp": 93,
+      "attack": 111,
+      "magic_attack": 49,
+      "defense": 75,
+      "magic_defense": 58,
+      "speed": 104,
+      "total": 490
+    },
+    "height": "0.82~1.1",
+    "weight": "21.0~30.7"
+  },
+  {
+    "id": 7,
+    "name": "火神",
+    "attribute": "火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/4f/627a47xjvghn9okifk66vhsx4uv7101.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%81%AB%E7%A5%9E_1.png",
+    "stats": {
+      "hp": 117,
+      "attack": 139,
+      "magic_attack": 61,
+      "defense": 94,
+      "magic_defense": 72,
+      "speed": 130,
+      "total": 613
+    },
+    "height": "1.52~2.18",
+    "weight": "90.5~110.0"
+  },
+  {
+    "id": 8,
+    "name": "水蓝蓝",
+    "attribute": "水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/0b/km91vn87f93y9ukj6ir6wsc4dl8shx1.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B0%B4%E8%93%9D%E8%93%9D_1.png",
+    "stats": {
+      "hp": 75,
+      "attack": 35,
+      "magic_attack": 76,
+      "defense": 56,
+      "magic_defense": 79,
+      "speed": 51,
+      "total": 372
+    },
+    "height": "0.45~0.65",
+    "weight": "2.85~4.205"
+  },
+  {
+    "id": 9,
+    "name": "波波拉",
+    "attribute": "水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/c2/63ym3z73l9k65ws69a63g8f0itajsu4.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B3%A2%E6%B3%A2%E6%8B%89_1.png",
+    "stats": {
+      "hp": 100,
+      "attack": 46,
+      "magic_attack": 102,
+      "defense": 75,
+      "magic_defense": 106,
+      "speed": 68,
+      "total": 497
+    },
+    "height": "0.72~1.03",
+    "weight": "29.5~34.0"
+  },
+  {
+    "id": 10,
+    "name": "水灵",
+    "attribute": "水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/50/33by7ml0nsrsxxq1l8l2uj4izqnuwpd.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B0%B4%E7%81%B5_1.png",
+    "stats": {
+      "hp": 125,
+      "attack": 58,
+      "magic_attack": 127,
+      "defense": 94,
+      "magic_defense": 132,
+      "speed": 85,
+      "total": 621
+    },
+    "height": "1.08~1.54",
+    "weight": "77.0~85.5"
+  },
+  {
+    "id": 11,
+    "name": "鸭吉吉（蓬松的样子）",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/9b/lsgonow9dtf4nlte0094yq43stn0nrv.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%B8%AD%E5%90%89%E5%90%89%EF%BC%88%E8%93%AC%E6%9D%BE%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 108,
+      "attack": 89,
+      "magic_attack": 41,
+      "defense": 74,
+      "magic_defense": 48,
+      "speed": 115,
+      "total": 475
+    },
+    "height": "0.69~0.98",
+    "weight": "14.3~18.2"
+  },
+  {
+    "id": 11,
+    "name": "鸭吉吉（紧实的样子）",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/fd/eewpeu21i6fzcqfcnez834gvppirdw8.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%B8%AD%E5%90%89%E5%90%89%EF%BC%88%E7%B4%A7%E5%AE%9E%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 108,
+      "attack": 89,
+      "magic_attack": 41,
+      "defense": 74,
+      "magic_defense": 48,
+      "speed": 115,
+      "total": 475
+    },
+    "height": "0.69~0.98",
+    "weight": "14.3~18.2"
+  },
+  {
+    "id": 11,
+    "name": "鸭吉吉（急急急鸭）",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/6f/7sidri1o3ke9cih06jlecsl5g9pqexq.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%B8%AD%E5%90%89%E5%90%89%EF%BC%88%E6%80%A5%E6%80%A5%E6%80%A5%E9%B8%AD%EF%BC%89_1.png",
+    "stats": {
+      "hp": 108,
+      "attack": 89,
+      "magic_attack": 41,
+      "defense": 74,
+      "magic_defense": 48,
+      "speed": 115,
+      "total": 475
+    },
+    "height": "0.69~0.98",
+    "weight": "14.3~18.2"
+  },
+  {
+    "id": 11,
+    "name": "鸭吉吉（等一等鸭）",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/dc/1prqafj7lzcp75byt1ttvpfoblncbrg.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%B8%AD%E5%90%89%E5%90%89%EF%BC%88%E7%AD%89%E4%B8%80%E7%AD%89%E9%B8%AD%EF%BC%89_1.png",
+    "stats": {
+      "hp": 108,
+      "attack": 89,
+      "magic_attack": 41,
+      "defense": 74,
+      "magic_defense": 48,
+      "speed": 115,
+      "total": 475
+    },
+    "height": "0.69~0.98",
+    "weight": "14.3~18.2"
+  },
+  {
+    "id": 11,
+    "name": "鸭吉吉（起来鸭）",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/3c/j6agh5wzsw4sxhzzjatf0w077ff8a0t.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%B8%AD%E5%90%89%E5%90%89%EF%BC%88%E8%B5%B7%E6%9D%A5%E9%B8%AD%EF%BC%89_1.png",
+    "stats": {
+      "hp": 108,
+      "attack": 89,
+      "magic_attack": 41,
+      "defense": 74,
+      "magic_defense": 48,
+      "speed": 115,
+      "total": 475
+    },
+    "height": "0.69~0.98",
+    "weight": "14.3~18.2"
+  },
+  {
+    "id": 11,
+    "name": "鸭吉吉（燃了鸭）",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/36/qur3wj31ncfb3a9hw2vdvghxn494jtk.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%B8%AD%E5%90%89%E5%90%89%EF%BC%88%E7%87%83%E4%BA%86%E9%B8%AD%EF%BC%89_1.png",
+    "stats": {
+      "hp": 108,
+      "attack": 89,
+      "magic_attack": 41,
+      "defense": 74,
+      "magic_defense": 48,
+      "speed": 115,
+      "total": 475
+    },
+    "height": "0.69~0.98",
+    "weight": "14.3~18.2"
+  },
+  {
+    "id": 12,
+    "name": "板板壳（本来的样子）",
+    "attribute": "水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/05/7yi5qyeejez9yyyhya70f2fkvtwlrp2.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%9D%BF%E6%9D%BF%E5%A3%B3%EF%BC%88%E6%9C%AC%E6%9D%A5%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 67,
+      "attack": 28,
+      "magic_attack": 72,
+      "defense": 64,
+      "magic_defense": 81,
+      "speed": 45,
+      "total": 357
+    },
+    "height": "0.53~0.76",
+    "weight": "7.5~10.5"
+  },
+  {
+    "id": 13,
+    "name": "咔咔壳（本来的样子）",
+    "attribute": "水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/70/n9aqhwtf7asg5d60p6rzsxwuupsdtba.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%92%94%E5%92%94%E5%A3%B3%EF%BC%88%E6%9C%AC%E6%9D%A5%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 90,
+      "attack": 37,
+      "magic_attack": 96,
+      "defense": 85,
+      "magic_defense": 107,
+      "speed": 60,
+      "total": 475
+    },
+    "height": "0.65~0.92",
+    "weight": "19.5~24.5"
+  },
+  {
+    "id": 14,
+    "name": "水泡壳（本来的样子）",
+    "attribute": "水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d0/0fhxxfotj2zivjel031i1w9v6ys3ts4.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B0%B4%E6%B3%A1%E5%A3%B3%EF%BC%88%E6%9C%AC%E6%9D%A5%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 112,
+      "attack": 46,
+      "magic_attack": 120,
+      "defense": 107,
+      "magic_defense": 134,
+      "speed": 75,
+      "total": 594
+    },
+    "height": "1.23~1.75",
+    "weight": "83.5~94.5"
+  },
+  {
+    "id": 15,
+    "name": "锥尾羊",
+    "attribute": "幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/0b/c9kn29sskgdppe1ipgd7ooyioj90dyt.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%94%A5%E5%B0%BE%E7%BE%8A_1.png",
+    "stats": {
+      "hp": 67,
+      "attack": 66,
+      "magic_attack": 29,
+      "defense": 72,
+      "magic_defense": 49,
+      "speed": 66,
+      "total": 349
+    },
+    "height": "0.57~0.81",
+    "weight": "13.3~16.5"
+  },
+  {
+    "id": 16,
+    "name": "铃兰羊",
+    "attribute": "幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/af/pbgcws3qiaqvryk28q9cmer116jy71d.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%93%83%E5%85%B0%E7%BE%8A_1.png",
+    "stats": {
+      "hp": 89,
+      "attack": 89,
+      "magic_attack": 39,
+      "defense": 96,
+      "magic_defense": 65,
+      "speed": 88,
+      "total": 466
+    },
+    "height": "0.7~1.01",
+    "weight": "29.0~36.0"
+  },
+  {
+    "id": 17,
+    "name": "花影羚羊",
+    "attribute": "幽/恶",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/b5/kyhqvze7bxy684o6pql6pkank91011k.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%8A%B1%E5%BD%B1%E7%BE%9A%E7%BE%8A_1.png",
+    "stats": {
+      "hp": 112,
+      "attack": 111,
+      "magic_attack": 48,
+      "defense": 120,
+      "magic_defense": 81,
+      "speed": 110,
+      "total": 582
+    },
+    "height": "1.42~1.92",
+    "weight": "76.9~98.0"
+  },
+  {
+    "id": 18,
+    "name": "雪绒鸟（本来的样子）",
+    "attribute": "翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/1c/1fd8czi6rfr8nf738hbqozt6bozum44.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%9B%AA%E7%BB%92%E9%B8%9F%EF%BC%88%E6%9C%AC%E6%9D%A5%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 54,
+      "attack": 77,
+      "magic_attack": 33,
+      "defense": 65,
+      "magic_defense": 44,
+      "speed": 69,
+      "total": 342
+    },
+    "height": "0.38~0.51",
+    "weight": "2.77~4.5"
+  },
+  {
+    "id": 19,
+    "name": "冬羽雀（本来的样子）",
+    "attribute": "翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/35/jmw35rn0cvpfhfqzbrqohexipzm8xg1.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%86%AC%E7%BE%BD%E9%9B%80%EF%BC%88%E6%9C%AC%E6%9D%A5%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 72,
+      "attack": 103,
+      "magic_attack": 44,
+      "defense": 86,
+      "magic_defense": 59,
+      "speed": 92,
+      "total": 456
+    },
+    "height": "0.62~0.71",
+    "weight": "8.92~12.7"
+  },
+  {
+    "id": 20,
+    "name": "岚鸟（本来的样子）",
+    "attribute": "翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/7f/ac3t55pytqhv4x8c9z9w7w6k00glr8p.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B2%9A%E9%B8%9F%EF%BC%88%E6%9C%AC%E6%9D%A5%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 90,
+      "attack": 128,
+      "magic_attack": 55,
+      "defense": 108,
+      "magic_defense": 74,
+      "speed": 115,
+      "total": 570
+    },
+    "height": "1.43~2.04",
+    "weight": "27.08~32.7"
+  },
+  {
+    "id": 21,
+    "name": "小灵菇",
+    "attribute": "幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/b8/ltybffbpudghq5tx60h70gy1vdj5xpa.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E7%81%B5%E8%8F%87_1.png",
+    "stats": {
+      "hp": 67,
+      "attack": 59,
+      "magic_attack": 59,
+      "defense": 62,
+      "magic_defense": 82,
+      "speed": 45,
+      "total": 374
+    },
+    "height": "0.43~0.61",
+    "weight": "5.4~7.1"
+  },
+  {
+    "id": 22,
+    "name": "幻灵菇",
+    "attribute": "幽/草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/8b/3xoutgdtyr7y19dtslj9ijfxv20wb69.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B9%BB%E7%81%B5%E8%8F%87_1.png",
+    "stats": {
+      "hp": 89,
+      "attack": 79,
+      "magic_attack": 79,
+      "defense": 83,
+      "magic_defense": 109,
+      "speed": 60,
+      "total": 499
+    },
+    "height": "0.64~0.92",
+    "weight": "13.2~16.5"
+  },
+  {
+    "id": 23,
+    "name": "幻影灵菇",
+    "attribute": "幽/草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/0f/915lidbxavc7iprutynlt2z380lxb7x.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B9%BB%E5%BD%B1%E7%81%B5%E8%8F%87_1.png",
+    "stats": {
+      "hp": 111,
+      "attack": 98,
+      "magic_attack": 98,
+      "defense": 103,
+      "magic_defense": 136,
+      "speed": 75,
+      "total": 621
+    },
+    "height": "0.92~1.32",
+    "weight": "39.4~48.4"
+  },
+  {
+    "id": 24,
+    "name": "石肤蜥（本来的样子）",
+    "attribute": "地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/8e/gfeccz7923wkt2g0k4zn9isjx7g52r3.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%9F%B3%E8%82%A4%E8%9C%A5%EF%BC%88%E6%9C%AC%E6%9D%A5%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 69,
+      "attack": 54,
+      "magic_attack": 53,
+      "defense": 65,
+      "magic_defense": 45,
+      "speed": 57,
+      "total": 343
+    },
+    "height": "0.49~0.7",
+    "weight": "21.0~34.0"
+  },
+  {
+    "id": 25,
+    "name": "石刺蜥（本来的样子）",
+    "attribute": "地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d1/dt0gk8z1gtu051gl10yoxdelrkk5aib.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%9F%B3%E5%88%BA%E8%9C%A5%EF%BC%88%E6%9C%AC%E6%9D%A5%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 92,
+      "attack": 72,
+      "magic_attack": 71,
+      "defense": 87,
+      "magic_defense": 60,
+      "speed": 76,
+      "total": 458
+    },
+    "height": "0.67~0.96",
+    "weight": "59.5~70.5"
+  },
+  {
+    "id": 26,
+    "name": "石冠王蜥（本来的样子）",
+    "attribute": "地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/00/dlzc7ctb4qlsc5pbonhpcu7kky4x3uz.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%9F%B3%E5%86%A0%E7%8E%8B%E8%9C%A5%EF%BC%88%E6%9C%AC%E6%9D%A5%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 115,
+      "attack": 89,
+      "magic_attack": 89,
+      "defense": 109,
+      "magic_defense": 75,
+      "speed": 95,
+      "total": 572
+    },
+    "height": "0.94~1.18",
+    "weight": "78.5~98.5"
+  },
+  {
+    "id": 27,
+    "name": "布是石",
+    "attribute": "地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/89/n2olozya089rge7wuokp3nazl44xqst.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B8%83%E6%98%AF%E7%9F%B3_1.png",
+    "stats": {
+      "hp": 72,
+      "attack": 81,
+      "magic_attack": 29,
+      "defense": 95,
+      "magic_defense": 90,
+      "speed": 42,
+      "total": 409
+    },
+    "height": "0.42~0.6",
+    "weight": "18.5~32.5"
+  },
+  {
+    "id": 28,
+    "name": "布是岩",
+    "attribute": "地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/f7/k35p74v6zheql64uqzmjj76g1yalg5e.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B8%83%E6%98%AF%E5%B2%A9_1.png",
+    "stats": {
+      "hp": 96,
+      "attack": 108,
+      "magic_attack": 39,
+      "defense": 127,
+      "magic_defense": 120,
+      "speed": 56,
+      "total": 546
+    },
+    "height": "0.93~1.34",
+    "weight": "97.5~115.0"
+  },
+  {
+    "id": 29,
+    "name": "布克棱岩",
+    "attribute": "地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/54/108j9nm783krd2nenbkyvvgy2xkgoso.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B8%83%E5%85%8B%E6%A3%B1%E5%B2%A9_1.png",
+    "stats": {
+      "hp": 120,
+      "attack": 135,
+      "magic_attack": 49,
+      "defense": 159,
+      "magic_defense": 150,
+      "speed": 70,
+      "total": 683
+    },
+    "height": "1.75~2.5",
+    "weight": "287.0~315.0"
+  },
+  {
+    "id": 30,
+    "name": "恶魔叮",
+    "attribute": "恶/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/1e/dup0zejk454blppyqq2c2q7mnym6s4s.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%81%B6%E9%AD%94%E5%8F%AE_1.png",
+    "stats": {
+      "hp": 86,
+      "attack": 112,
+      "magic_attack": 44,
+      "defense": 58,
+      "magic_defense": 43,
+      "speed": 84,
+      "total": 427
+    },
+    "height": "0.39~0.56",
+    "weight": "3.6~5.2"
+  },
+  {
+    "id": 31,
+    "name": "叮叮恶魔",
+    "attribute": "恶/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/0b/o9iqtz0rdzb2rkqkewx4v29qya3rknq.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8F%AE%E5%8F%AE%E6%81%B6%E9%AD%94_1.png",
+    "stats": {
+      "hp": 108,
+      "attack": 140,
+      "magic_attack": 55,
+      "defense": 73,
+      "magic_defense": 54,
+      "speed": 105,
+      "total": 535
+    },
+    "height": "0.78~1.12",
+    "weight": "25.0~34.0"
+  },
+  {
+    "id": 32,
+    "name": "毛毛",
+    "attribute": "虫/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/af/owgmiaowlsk52x3cjatoiowp9hq4d4u.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%AF%9B%E6%AF%9B_1.png",
+    "stats": {
+      "hp": 32,
+      "attack": 28,
+      "magic_attack": 28,
+      "defense": 40,
+      "magic_defense": 40,
+      "speed": 60,
+      "total": 228
+    },
+    "height": "0.31~0.45",
+    "weight": "3.0~4.5"
+  },
+  {
+    "id": 33,
+    "name": "爬爬",
+    "attribute": "虫/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/ea/524nzn85da28i54swvfzqbucowmlvu0.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%88%AC%E7%88%AC_1.png",
+    "stats": {
+      "hp": 42,
+      "attack": 37,
+      "magic_attack": 37,
+      "defense": 53,
+      "magic_defense": 53,
+      "speed": 80,
+      "total": 302
+    },
+    "height": "0.35~0.51",
+    "weight": "5.5~8.4"
+  },
+  {
+    "id": 34,
+    "name": "化蝶（平常的样子）",
+    "attribute": "虫/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/3b/s9jxu0z2vcq9ywb7wkgoyyyivr8hvsd.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8C%96%E8%9D%B6%EF%BC%88%E5%B9%B3%E5%B8%B8%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 53,
+      "attack": 46,
+      "magic_attack": 46,
+      "defense": 66,
+      "magic_defense": 66,
+      "speed": 100,
+      "total": 377
+    },
+    "height": "0.76~1.08",
+    "weight": "15.6~17.8"
+  },
+  {
+    "id": 35,
+    "name": "幽影树",
+    "attribute": "幽/草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/42/h8x8d49z7tbq02dibjv2lgnvk344pb7.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B9%BD%E5%BD%B1%E6%A0%91_1.png",
+    "stats": {
+      "hp": 111,
+      "attack": 96,
+      "magic_attack": 96,
+      "defense": 65,
+      "magic_defense": 123,
+      "speed": 80,
+      "total": 571
+    },
+    "height": "0.64~0.92",
+    "weight": "29.5~37.5"
+  },
+  {
+    "id": 36,
+    "name": "小鼠獭",
+    "attribute": "普通/水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/71/mhtudimorxc3o9un25icovvi9lahiza.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E9%BC%A0%E7%8D%AD_1.png",
+    "stats": {
+      "hp": 73,
+      "attack": 57,
+      "magic_attack": 57,
+      "defense": 60,
+      "magic_defense": 60,
+      "speed": 48,
+      "total": 355
+    },
+    "height": "0.37~0.53",
+    "weight": "6.7~7.5"
+  },
+  {
+    "id": 37,
+    "name": "燕尾獭",
+    "attribute": "普通/水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/ed/4k5p223a49bec7iscjj7m5ouqdxrufa.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%87%95%E5%B0%BE%E7%8D%AD_1.png",
+    "stats": {
+      "hp": 97,
+      "attack": 77,
+      "magic_attack": 77,
+      "defense": 81,
+      "magic_defense": 81,
+      "speed": 64,
+      "total": 477
+    },
+    "height": "0.61~0.88",
+    "weight": "28.6~31.5"
+  },
+  {
+    "id": 38,
+    "name": "卷胡巨獭",
+    "attribute": "普通/水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/4d/h1d1rubaklvrkodj1fr4j8jyiaqho8z.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8D%B7%E8%83%A1%E5%B7%A8%E7%8D%AD_1.png",
+    "stats": {
+      "hp": 121,
+      "attack": 96,
+      "magic_attack": 96,
+      "defense": 101,
+      "magic_defense": 101,
+      "speed": 80,
+      "total": 595
+    },
+    "height": "0.76~1.08",
+    "weight": "76.5~90.0"
+  },
+  {
+    "id": 39,
+    "name": "矿晶虫",
+    "attribute": "光/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/4b/rakgahc3c1vonzb7l1oypg0kwmhpi3z.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%9F%BF%E6%99%B6%E8%99%AB_1.png",
+    "stats": {
+      "hp": 79,
+      "attack": 77,
+      "magic_attack": 81,
+      "defense": 102,
+      "magic_defense": 75,
+      "speed": 52,
+      "total": 466
+    },
+    "height": "0.54~0.77",
+    "weight": "5.8~10.53"
+  },
+  {
+    "id": 40,
+    "name": "晶石蜗（西瓜碧玺的样子）",
+    "attribute": "光/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a1/bllriabi2ywqr0cnc2au8wyehtcd21y.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%99%B6%E7%9F%B3%E8%9C%97%EF%BC%88%E8%A5%BF%E7%93%9C%E7%A2%A7%E7%8E%BA%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 99,
+      "attack": 96,
+      "magic_attack": 101,
+      "defense": 128,
+      "magic_defense": 94,
+      "speed": 65,
+      "total": 583
+    },
+    "height": "1.03~1.35",
+    "weight": "59.1~71.05"
+  },
+  {
+    "id": 41,
+    "name": "奇丽草",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/1f/kv2w95rommythz2es62viqib0edez2m.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A5%87%E4%B8%BD%E8%8D%89_1.png",
+    "stats": {
+      "hp": 67,
+      "attack": 69,
+      "magic_attack": 69,
+      "defense": 73,
+      "magic_defense": 57,
+      "speed": 48,
+      "total": 383
+    },
+    "height": "0.38~0.55",
+    "weight": "4.1~5.7"
+  },
+  {
+    "id": 42,
+    "name": "奇丽叶",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/89/qe7mpeopll2by3im70dsqtesufqq62z.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A5%87%E4%B8%BD%E5%8F%B6_1.png",
+    "stats": {
+      "hp": 90,
+      "attack": 92,
+      "magic_attack": 92,
+      "defense": 97,
+      "magic_defense": 76,
+      "speed": 64,
+      "total": 511
+    },
+    "height": "0.62~0.89",
+    "weight": "24.0~31.0"
+  },
+  {
+    "id": 43,
+    "name": "奇丽花",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/8c/dbgfehb9vsrkwnn1jkxtibxciapkdur.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A5%87%E4%B8%BD%E8%8A%B1_1.png",
+    "stats": {
+      "hp": 112,
+      "attack": 115,
+      "magic_attack": 115,
+      "defense": 121,
+      "magic_defense": 95,
+      "speed": 80,
+      "total": 638
+    },
+    "height": "1.11~1.58",
+    "weight": "42.0~58.0"
+  },
+  {
+    "id": 44,
+    "name": "丢丢（草地附近的样子）",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/69/ncos20b0z39xr0ir1185rzav8cxd9vz.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%B8%A2%E4%B8%A2%EF%BC%88%E8%8D%89%E5%9C%B0%E9%99%84%E8%BF%91%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 44,
+      "attack": 45,
+      "magic_attack": 12,
+      "defense": 49,
+      "magic_defense": 40,
+      "speed": 78,
+      "total": 268
+    },
+    "height": "0.35~0.51",
+    "weight": "4.3~6.1"
+  },
+  {
+    "id": 45,
+    "name": "卡卡虫（草地附近的样子）",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d7/bi5t0j12hzaiw6f43kjijgblr8les6s.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8D%A1%E5%8D%A1%E8%99%AB%EF%BC%88%E8%8D%89%E5%9C%B0%E9%99%84%E8%BF%91%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 59,
+      "attack": 60,
+      "magic_attack": 16,
+      "defense": 65,
+      "magic_defense": 53,
+      "speed": 104,
+      "total": 357
+    },
+    "height": "0.53~0.76",
+    "weight": "18.5~21.6"
+  },
+  {
+    "id": 46,
+    "name": "卡瓦重（草地附近的样子）",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/95/ofh2y3cjn996jnxvajei3j5m1jole74.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8D%A1%E7%93%A6%E9%87%8D%EF%BC%88%E8%8D%89%E5%9C%B0%E9%99%84%E8%BF%91%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 74,
+      "attack": 75,
+      "magic_attack": 20,
+      "defense": 81,
+      "magic_defense": 67,
+      "speed": 130,
+      "total": 447
+    },
+    "height": "0.76~1.09",
+    "weight": "29.0~35.85"
+  },
+  {
+    "id": 47,
+    "name": "护主犬",
+    "attribute": "火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/64/t29c2r5ooabyzne8dt5uu9bzq10ibtz.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%8A%A4%E4%B8%BB%E7%8A%AC_1.png",
+    "stats": {
+      "hp": 68,
+      "attack": 103,
+      "magic_attack": 37,
+      "defense": 81,
+      "magic_defense": 66,
+      "speed": 96,
+      "total": 451
+    },
+    "height": "0.64~0.92",
+    "weight": "13.6~17.5"
+  },
+  {
+    "id": 48,
+    "name": "音速犬",
+    "attribute": "火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/4e/8rkwz0k7qvejlxs78isa65ajn16o1qk.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%9F%B3%E9%80%9F%E7%8A%AC_1.png",
+    "stats": {
+      "hp": 85,
+      "attack": 128,
+      "magic_attack": 46,
+      "defense": 101,
+      "magic_defense": 82,
+      "speed": 120,
+      "total": 562
+    },
+    "height": "1.13~1.62",
+    "weight": "39.5~51.5"
+  },
+  {
+    "id": 49,
+    "name": "绿耳松鼠",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/b5/2foanarop7ik9wf1aqo37m7rdr3ug39.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%BB%BF%E8%80%B3%E6%9D%BE%E9%BC%A0_1.png",
+    "stats": {
+      "hp": 69,
+      "attack": 50,
+      "magic_attack": 47,
+      "defense": 67,
+      "magic_defense": 52,
+      "speed": 48,
+      "total": 333
+    },
+    "height": "0.47~0.68",
+    "weight": "3.5~6.0"
+  },
+  {
+    "id": 50,
+    "name": "抱枕松鼠",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/3f/d7igqblvpoaio9o1ozoa2slcmskbzue.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%8A%B1%E6%9E%95%E6%9D%BE%E9%BC%A0_1.png",
+    "stats": {
+      "hp": 92,
+      "attack": 67,
+      "magic_attack": 63,
+      "defense": 89,
+      "magic_defense": 70,
+      "speed": 64,
+      "total": 445
+    },
+    "height": "0.6~0.84",
+    "weight": "21.05~27.08"
+  },
+  {
+    "id": 51,
+    "name": "蹦床松鼠",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/5e/6lkej27f60uxygncdnl4oktj79t9da2.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%B9%A6%E5%BA%8A%E6%9D%BE%E9%BC%A0_1.png",
+    "stats": {
+      "hp": 114,
+      "attack": 84,
+      "magic_attack": 79,
+      "defense": 111,
+      "magic_defense": 87,
+      "speed": 80,
+      "total": 555
+    },
+    "height": "0.78~1.12",
+    "weight": "47.5~68.4"
+  },
+  {
+    "id": 52,
+    "name": "嘟嘟煲",
+    "attribute": "毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/44/8gr1vgk1hjf59enrdxyhboe35g8rijd.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%98%9F%E5%98%9F%E7%85%B2_1.png",
+    "stats": {
+      "hp": 110,
+      "attack": 29,
+      "magic_attack": 82,
+      "defense": 71,
+      "magic_defense": 83,
+      "speed": 84,
+      "total": 459
+    },
+    "height": "0.65~0.8",
+    "weight": "48.5~56.0"
+  },
+  {
+    "id": 53,
+    "name": "嘟嘟锅",
+    "attribute": "毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/2a/bn409ikm4m2ir8inziq4jgl12f1lk53.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%98%9F%E5%98%9F%E9%94%85_1.png",
+    "stats": {
+      "hp": 137,
+      "attack": 36,
+      "magic_attack": 102,
+      "defense": 89,
+      "magic_defense": 104,
+      "speed": 105,
+      "total": 573
+    },
+    "height": "0.64~0.91",
+    "weight": "67.9~89.2"
+  },
+  {
+    "id": 54,
+    "name": "小灵面",
+    "attribute": "幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/ce/60arfjew3ryqzrh5dqh8mi6axn595h4.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E7%81%B5%E9%9D%A2_1.png",
+    "stats": {
+      "hp": 55,
+      "attack": 30,
+      "magic_attack": 72,
+      "defense": 59,
+      "magic_defense": 81,
+      "speed": 69,
+      "total": 366
+    },
+    "height": "0.38~0.55",
+    "weight": "0.1~0.55"
+  },
+  {
+    "id": 55,
+    "name": "暗影灵面（睁眼的样子）",
+    "attribute": "幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/ee/8iz9eknhqvv3ntbw6r2ksojvp3dfekx.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%9A%97%E5%BD%B1%E7%81%B5%E9%9D%A2%EF%BC%88%E7%9D%81%E7%9C%BC%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 74,
+      "attack": 40,
+      "magic_attack": 96,
+      "defense": 78,
+      "magic_defense": 108,
+      "speed": 92,
+      "total": 488
+    },
+    "height": "0.75~0.86",
+    "weight": "0.12~1.16"
+  },
+  {
+    "id": 56,
+    "name": "幽冥眼（睁眼的样子）",
+    "attribute": "幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/23/1y27uyj9zvo1gctws3g4ru9kgsg3thg.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B9%BD%E5%86%A5%E7%9C%BC%EF%BC%88%E7%9D%81%E7%9C%BC%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 92,
+      "attack": 50,
+      "magic_attack": 120,
+      "defense": 98,
+      "magic_defense": 135,
+      "speed": 115,
+      "total": 610
+    },
+    "height": "1.55~1.65",
+    "weight": "1.5~2.86"
+  },
+  {
+    "id": 57,
+    "name": "梦游（穿旧睡衣的样子）",
+    "attribute": "幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/21/oaaweyscathn6oqa015bfb6o9w5cbsa.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%A2%A6%E6%B8%B8%EF%BC%88%E7%A9%BF%E6%97%A7%E7%9D%A1%E8%A1%A3%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 90,
+      "attack": 40,
+      "magic_attack": 106,
+      "defense": 60,
+      "magic_defense": 74,
+      "speed": 92,
+      "total": 462
+    },
+    "height": "0.5~0.6",
+    "weight": "0.6~1.87"
+  },
+  {
+    "id": 58,
+    "name": "梦悠悠（穿旧睡衣的样子）",
+    "attribute": "幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/2b/glndghgzgkl35dw5l2jzm8m4cc3dv22.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%A2%A6%E6%82%A0%E6%82%A0%EF%BC%88%E7%A9%BF%E6%97%A7%E7%9D%A1%E8%A1%A3%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 113,
+      "attack": 50,
+      "magic_attack": 133,
+      "defense": 75,
+      "magic_defense": 93,
+      "speed": 115,
+      "total": 579
+    },
+    "height": "1.0~1.2",
+    "weight": "1.25~3.1"
+  },
+  {
+    "id": 59,
+    "name": "兽花蕾",
+    "attribute": "光/草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/fb/40ew1mdy3j3km17nwkdvlit9es9y39b.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%85%BD%E8%8A%B1%E8%95%BE_1.png",
+    "stats": {
+      "hp": 70,
+      "attack": 79,
+      "magic_attack": 82,
+      "defense": 70,
+      "magic_defense": 97,
+      "speed": 115,
+      "total": 513
+    },
+    "height": "0.38~0.45",
+    "weight": "4.25~6.5"
+  },
+  {
+    "id": 60,
+    "name": "伏地兽",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/5c/tspudx138x6hgz6dth0361r383pr0ha.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%BC%8F%E5%9C%B0%E5%85%BD_1.png",
+    "stats": {
+      "hp": 95,
+      "attack": 56,
+      "magic_attack": 25,
+      "defense": 70,
+      "magic_defense": 41,
+      "speed": 51,
+      "total": 338
+    },
+    "height": "0.52~0.74",
+    "weight": "12.4~15.8"
+  },
+  {
+    "id": 61,
+    "name": "贪食鼹",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d1/ps5nra6q9tzlnl4s6tkz4g5eejsr497.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%B4%AA%E9%A3%9F%E9%BC%B9_1.png",
+    "stats": {
+      "hp": 126,
+      "attack": 74,
+      "magic_attack": 33,
+      "defense": 94,
+      "magic_defense": 54,
+      "speed": 68,
+      "total": 449
+    },
+    "height": "0.84~1.21",
+    "weight": "21.6~35.84"
+  },
+  {
+    "id": 62,
+    "name": "巨噬针鼹",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/bf/kh1j7ti0ytu5d4nvr4te6kqakcclvx6.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B7%A8%E5%99%AC%E9%92%88%E9%BC%B9_1.png",
+    "stats": {
+      "hp": 158,
+      "attack": 93,
+      "magic_attack": 41,
+      "defense": 117,
+      "magic_defense": 68,
+      "speed": 85,
+      "total": 562
+    },
+    "height": "1.52~1.79",
+    "weight": "87.3~105.0"
+  },
+  {
+    "id": 63,
+    "name": "蹦蹦种子（海神球形态）",
+    "attribute": "草/毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/33/5rqqxhxtsklncbih4ii40p13jkrbqby.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%B9%A6%E8%B9%A6%E7%A7%8D%E5%AD%90%EF%BC%88%E6%B5%B7%E7%A5%9E%E7%90%83%E5%BD%A2%E6%80%81%EF%BC%89_1.png",
+    "stats": {
+      "hp": 60,
+      "attack": 64,
+      "magic_attack": 66,
+      "defense": 44,
+      "magic_defense": 63,
+      "speed": 51,
+      "total": 348
+    },
+    "height": "0.46~0.67",
+    "weight": "4.3~5.6"
+  },
+  {
+    "id": 64,
+    "name": "蹦蹦草（海神球形态）",
+    "attribute": "草/毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/62/sdazex9mreedpinwxklyhfu4k9xi8h9.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%B9%A6%E8%B9%A6%E8%8D%89%EF%BC%88%E6%B5%B7%E7%A5%9E%E7%90%83%E5%BD%A2%E6%80%81%EF%BC%89_1.png",
+    "stats": {
+      "hp": 80,
+      "attack": 85,
+      "magic_attack": 88,
+      "defense": 59,
+      "magic_defense": 84,
+      "speed": 68,
+      "total": 464
+    },
+    "height": "0.59~0.85",
+    "weight": "34.3~42.9"
+  },
+  {
+    "id": 65,
+    "name": "蹦蹦花（海神球形态）",
+    "attribute": "草/毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/b4/jpdd60oi1k87a3tjhtdhl6n7uf6zn7x.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%B9%A6%E8%B9%A6%E8%8A%B1%EF%BC%88%E6%B5%B7%E7%A5%9E%E7%90%83%E5%BD%A2%E6%80%81%EF%BC%89_1.png",
+    "stats": {
+      "hp": 100,
+      "attack": 107,
+      "magic_attack": 110,
+      "defense": 73,
+      "magic_defense": 105,
+      "speed": 85,
+      "total": 580
+    },
+    "height": "1.33~1.9",
+    "weight": "75.0~86.0"
+  },
+  {
+    "id": 66,
+    "name": "电咩咩",
+    "attribute": "电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/57/rrzi4lxo68m4mmhokly3l8z4t2ti2r7.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%94%B5%E5%92%A9%E5%92%A9_1.png",
+    "stats": {
+      "hp": 47,
+      "attack": 49,
+      "magic_attack": 49,
+      "defense": 55,
+      "magic_defense": 57,
+      "speed": 75,
+      "total": 332
+    },
+    "height": "0.58~0.83",
+    "weight": "7.17~9.1"
+  },
+  {
+    "id": 67,
+    "name": "粉咩咩",
+    "attribute": "电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d4/90spmq5ikabu64yf2g3l5lk8z3vvdpn.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%B2%89%E5%92%A9%E5%92%A9_1.png",
+    "stats": {
+      "hp": 62,
+      "attack": 66,
+      "magic_attack": 66,
+      "defense": 73,
+      "magic_defense": 76,
+      "speed": 100,
+      "total": 443
+    },
+    "height": "0.8~1.14",
+    "weight": "15.3~18.6"
+  },
+  {
+    "id": 68,
+    "name": "电球咩咩",
+    "attribute": "电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/01/4sz6qymt56rlm9ybuobr7s76qonzxvu.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%94%B5%E7%90%83%E5%92%A9%E5%92%A9_1.png",
+    "stats": {
+      "hp": 78,
+      "attack": 82,
+      "magic_attack": 82,
+      "defense": 91,
+      "magic_defense": 95,
+      "speed": 125,
+      "total": 553
+    },
+    "height": "1.13~1.62",
+    "weight": "48.6~58.0"
+  },
+  {
+    "id": 69,
+    "name": "蒲公英",
+    "attribute": "草/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/1d/87el3plwkuzm4wsb0l6s3ffqowsbiwl.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%92%B2%E5%85%AC%E8%8B%B1_1.png",
+    "stats": {
+      "hp": 89,
+      "attack": 99,
+      "magic_attack": 94,
+      "defense": 103,
+      "magic_defense": 78,
+      "speed": 52,
+      "total": 515
+    },
+    "height": "0.3~0.5",
+    "weight": "0.1~0.6"
+  },
+  {
+    "id": 70,
+    "name": "蒲公英娃娃",
+    "attribute": "草/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/eb/8np4gxq8dybdydnv77kwoc300to6ont.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%92%B2%E5%85%AC%E8%8B%B1%E5%A8%83%E5%A8%83_1.png",
+    "stats": {
+      "hp": 111,
+      "attack": 123,
+      "magic_attack": 117,
+      "defense": 129,
+      "magic_defense": 97,
+      "speed": 65,
+      "total": 642
+    },
+    "height": "0.7~1.0",
+    "weight": "0.3~1.35"
+  },
+  {
+    "id": 71,
+    "name": "伊贝儿",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/b2/3x1hdgzmc2cyjh9zkfdyw1smgck9o3r.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%BC%8A%E8%B4%9D%E5%84%BF_1.png",
+    "stats": {
+      "hp": 85,
+      "attack": 73,
+      "magic_attack": 71,
+      "defense": 76,
+      "magic_defense": 76,
+      "speed": 72,
+      "total": 453
+    },
+    "height": "0.44~0.62",
+    "weight": "3.3~4.2"
+  },
+  {
+    "id": 72,
+    "name": "伊贝粉粉",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/9e/ld012t25twk5oisvs10ok7g2t7apki1.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%BC%8A%E8%B4%9D%E7%B2%89%E7%B2%89_1.png",
+    "stats": {
+      "hp": 106,
+      "attack": 91,
+      "magic_attack": 89,
+      "defense": 95,
+      "magic_defense": 95,
+      "speed": 90,
+      "total": 566
+    },
+    "height": "1.03~1.47",
+    "weight": "9.3~12.5"
+  },
+  {
+    "id": 73,
+    "name": "白发懒人",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/46/06pz2jvhh5k0ukbgj30jmdfyz4nic06.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%99%BD%E5%8F%91%E6%87%92%E4%BA%BA_1.png",
+    "stats": {
+      "hp": 86,
+      "attack": 94,
+      "magic_attack": 38,
+      "defense": 81,
+      "magic_defense": 66,
+      "speed": 45,
+      "total": 410
+    },
+    "height": "0.72~1.03",
+    "weight": "19.5~23.5"
+  },
+  {
+    "id": 74,
+    "name": "动力猿",
+    "attribute": "普通/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/98/okpl88mwskdjsdfwxwln1kbpwxxly69.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8A%A8%E5%8A%9B%E7%8C%BF_1.png",
+    "stats": {
+      "hp": 115,
+      "attack": 125,
+      "magic_attack": 51,
+      "defense": 108,
+      "magic_defense": 88,
+      "speed": 60,
+      "total": 547
+    },
+    "height": "1.2~1.71",
+    "weight": "46.5~63.5"
+  },
+  {
+    "id": 75,
+    "name": "瞌睡王",
+    "attribute": "普通/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a2/64947rnxu8ncihl37rqldr3653bg57n.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%9E%8C%E7%9D%A1%E7%8E%8B_1.png",
+    "stats": {
+      "hp": 144,
+      "attack": 157,
+      "magic_attack": 64,
+      "defense": 135,
+      "magic_defense": 110,
+      "speed": 75,
+      "total": 685
+    },
+    "height": "1.61~2.31",
+    "weight": "124.5~136.5"
+  },
+  {
+    "id": 76,
+    "name": "海盔虫（本来的样子）",
+    "attribute": "水/毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/c5/hyqqzb0xxpt4zjthslvr4y25bvsbkvg.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B5%B7%E7%9B%94%E8%99%AB%EF%BC%88%E6%9C%AC%E6%9D%A5%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 71,
+      "attack": 25,
+      "magic_attack": 59,
+      "defense": 46,
+      "magic_defense": 66,
+      "speed": 60,
+      "total": 327
+    },
+    "height": "0.55~0.7",
+    "weight": "7.4~8.6"
+  },
+  {
+    "id": 77,
+    "name": "刺盔虫（本来的样子）",
+    "attribute": "水/毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d9/4p1drrucxykr3h3aaxf4xxk9l59554s.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%88%BA%E7%9B%94%E8%99%AB%EF%BC%88%E6%9C%AC%E6%9D%A5%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 94,
+      "attack": 33,
+      "magic_attack": 79,
+      "defense": 61,
+      "magic_defense": 88,
+      "speed": 80,
+      "total": 435
+    },
+    "height": "0.83~1.19",
+    "weight": "22.5~29.8"
+  },
+  {
+    "id": 78,
+    "name": "千棘盔（本来的样子）",
+    "attribute": "水/毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d3/m619bkrakzm4rsb834fgl8s3tuleqzw.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8D%83%E6%A3%98%E7%9B%94%EF%BC%88%E6%9C%AC%E6%9D%A5%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 118,
+      "attack": 41,
+      "magic_attack": 99,
+      "defense": 76,
+      "magic_defense": 111,
+      "speed": 100,
+      "total": 545
+    },
+    "height": "1.11~1.33",
+    "weight": "98.6~115.0"
+  },
+  {
+    "id": 79,
+    "name": "菊花梨",
+    "attribute": "萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/db/qitqnhdvjw8gwhnvvapfuqv6g0qgaef.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%8F%8A%E8%8A%B1%E6%A2%A8_1.png",
+    "stats": {
+      "hp": 106,
+      "attack": 49,
+      "magic_attack": 116,
+      "defense": 77,
+      "magic_defense": 115,
+      "speed": 60,
+      "total": 523
+    },
+    "height": "0.63~0.9",
+    "weight": "4.2~5.8"
+  },
+  {
+    "id": 80,
+    "name": "小星光（星光能量的样子）",
+    "attribute": "电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/b1/o9j051uk3ed7na8hgl6lyic6xv38mjb.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E6%98%9F%E5%85%89%EF%BC%88%E6%98%9F%E5%85%89%E8%83%BD%E9%87%8F%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 60,
+      "attack": 81,
+      "magic_attack": 85,
+      "defense": 72,
+      "magic_defense": 88,
+      "speed": 108,
+      "total": 494
+    },
+    "height": "0.78~1.12",
+    "weight": "27.5~36.2"
+  },
+  {
+    "id": 81,
+    "name": "星光狮（星光能量的样子）",
+    "attribute": "电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/75/cjjrzihw6bz4uzfdn1npim98tas9p21.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%98%9F%E5%85%89%E7%8B%AE%EF%BC%88%E6%98%9F%E5%85%89%E8%83%BD%E9%87%8F%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 75,
+      "attack": 101,
+      "magic_attack": 106,
+      "defense": 90,
+      "magic_defense": 110,
+      "speed": 135,
+      "total": 617
+    },
+    "height": "1.08~1.54",
+    "weight": "49.5~58.1"
+  },
+  {
+    "id": 82,
+    "name": "一窝蜂",
+    "attribute": "虫/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/de/drnf14ybuu1j1ulcxyktvpr52tlw89x.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%B8%80%E7%AA%9D%E8%9C%82_1.png",
+    "stats": {
+      "hp": 87,
+      "attack": 32,
+      "magic_attack": 29,
+      "defense": 27,
+      "magic_defense": 27,
+      "speed": 26,
+      "total": 228
+    },
+    "height": "0.37~0.52",
+    "weight": "4.0~5.5"
+  },
+  {
+    "id": 83,
+    "name": "黄蜂后",
+    "attribute": "虫/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/cc/81ny58tuiqt9xd2e6tsi79lf7yigchq.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%BB%84%E8%9C%82%E5%90%8E_1.png",
+    "stats": {
+      "hp": 116,
+      "attack": 43,
+      "magic_attack": 39,
+      "defense": 36,
+      "magic_defense": 36,
+      "speed": 35,
+      "total": 305
+    },
+    "height": "0.81~1.16",
+    "weight": "31.7~39.21"
+  },
+  {
+    "id": 84,
+    "name": "花魁蜂后",
+    "attribute": "虫/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/7c/la0ecwe4eufml69boq4366g7gbnfra1.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%8A%B1%E9%AD%81%E8%9C%82%E5%90%8E_1.png",
+    "stats": {
+      "hp": 145,
+      "attack": 54,
+      "magic_attack": 49,
+      "defense": 45,
+      "magic_defense": 45,
+      "speed": 44,
+      "total": 382
+    },
+    "height": "0.83~1.19",
+    "weight": "61.5~78.4"
+  },
+  {
+    "id": 85,
+    "name": "小夜",
+    "attribute": "恶",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/72/482iqm8394vdtee3ylwiwyndj9tr8vq.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E5%A4%9C_1.png",
+    "stats": {
+      "hp": 60,
+      "attack": 69,
+      "magic_attack": 63,
+      "defense": 62,
+      "magic_defense": 51,
+      "speed": 69,
+      "total": 374
+    },
+    "height": "0.51~0.73",
+    "weight": "4.5~7.6"
+  },
+  {
+    "id": 86,
+    "name": "紫夜",
+    "attribute": "恶",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/14/ev4kpmwhjhjkpbr8fkexil8olnj0qd5.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%B4%AB%E5%A4%9C_1.png",
+    "stats": {
+      "hp": 80,
+      "attack": 92,
+      "magic_attack": 84,
+      "defense": 83,
+      "magic_defense": 68,
+      "speed": 92,
+      "total": 499
+    },
+    "height": "0.72~1.03",
+    "weight": "17.6~22.5"
+  },
+  {
+    "id": 87,
+    "name": "朔夜伊芙",
+    "attribute": "恶",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/47/iefezmj355h7aifobba452t5fax5sup.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%9C%94%E5%A4%9C%E4%BC%8A%E8%8A%99_1.png",
+    "stats": {
+      "hp": 100,
+      "attack": 115,
+      "magic_attack": 105,
+      "defense": 104,
+      "magic_defense": 85,
+      "speed": 115,
+      "total": 624
+    },
+    "height": "1.06~1.51",
+    "weight": "46.2~57.5"
+  },
+  {
+    "id": 88,
+    "name": "乖乖鹄",
+    "attribute": "翼/水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/5a/t2rdnue1b6xwisya3nw5oyti9t2wdur.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%B9%96%E4%B9%96%E9%B9%84_1.png",
+    "stats": {
+      "hp": 75,
+      "attack": 57,
+      "magic_attack": 52,
+      "defense": 83,
+      "magic_defense": 58,
+      "speed": 69,
+      "total": 394
+    },
+    "height": "0.46~0.67",
+    "weight": "4.2~5.5"
+  },
+  {
+    "id": 89,
+    "name": "蓝珠天鹅",
+    "attribute": "翼/水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/5b/qho9vlfx1c2x6kn2a6hrbjx6b7ldqs8.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%93%9D%E7%8F%A0%E5%A4%A9%E9%B9%85_1.png",
+    "stats": {
+      "hp": 100,
+      "attack": 76,
+      "magic_attack": 69,
+      "defense": 110,
+      "magic_defense": 78,
+      "speed": 92,
+      "total": 525
+    },
+    "height": "0.88~1.03",
+    "weight": "14.08~18.1"
+  },
+  {
+    "id": 90,
+    "name": "翠顶夫人",
+    "attribute": "翼/水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/8d/0mse3bf6b98dflfbq9bwjeofgi8lo24.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%BF%A0%E9%A1%B6%E5%A4%AB%E4%BA%BA_1.png",
+    "stats": {
+      "hp": 125,
+      "attack": 95,
+      "magic_attack": 86,
+      "defense": 138,
+      "magic_defense": 97,
+      "speed": 115,
+      "total": 656
+    },
+    "height": "1.2~1.34",
+    "weight": "19.05~25.04"
+  },
+  {
+    "id": 91,
+    "name": "黑羽夫人",
+    "attribute": "翼/恶",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/63/6f0vzmzh3c2vr7vu4cli5ppzwcf18di.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%BB%91%E7%BE%BD%E5%A4%AB%E4%BA%BA_1.png",
+    "stats": {
+      "hp": 132,
+      "attack": 93,
+      "magic_attack": 87,
+      "defense": 130,
+      "magic_defense": 90,
+      "speed": 120,
+      "total": 652
+    },
+    "height": "1.25~1.4",
+    "weight": "20.5~28.06"
+  },
+  {
+    "id": 92,
+    "name": "锤头鹳",
+    "attribute": "翼/水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/c8/0kv8ab3s5umo3dbcwsthu9xnpo9y1fc.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%94%A4%E5%A4%B4%E9%B9%B3_1.png",
+    "stats": {
+      "hp": 111,
+      "attack": 67,
+      "magic_attack": 65,
+      "defense": 91,
+      "magic_defense": 72,
+      "speed": 105,
+      "total": 511
+    },
+    "height": "1.09~1.56",
+    "weight": "51.3~65.8"
+  },
+  {
+    "id": 93,
+    "name": "绿草精灵",
+    "attribute": "草/幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/17/i57n7v6fkt96if840ri0w2jwf07rsgr.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%BB%BF%E8%8D%89%E7%B2%BE%E7%81%B5_1.png",
+    "stats": {
+      "hp": 79,
+      "attack": 35,
+      "magic_attack": 89,
+      "defense": 87,
+      "magic_defense": 111,
+      "speed": 72,
+      "total": 473
+    },
+    "height": "0.71~1.01",
+    "weight": "9.3~10.3"
+  },
+  {
+    "id": 94,
+    "name": "魔草巫灵",
+    "attribute": "草/幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/59/1efyfsgz5qsbi73ldyaoxlziimgv58k.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%AD%94%E8%8D%89%E5%B7%AB%E7%81%B5_1.png",
+    "stats": {
+      "hp": 99,
+      "attack": 43,
+      "magic_attack": 112,
+      "defense": 109,
+      "magic_defense": 139,
+      "speed": 90,
+      "total": 592
+    },
+    "height": "0.74~1.05",
+    "weight": "29.0~34.0"
+  },
+  {
+    "id": 95,
+    "name": "记忆石",
+    "attribute": "地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/0a/q6hhh7atr12ne3qx79r3q311a3pcmo9.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%AE%B0%E5%BF%86%E7%9F%B3_1.png",
+    "stats": {
+      "hp": 112,
+      "attack": 108,
+      "magic_attack": 97,
+      "defense": 141,
+      "magic_defense": 79,
+      "speed": 70,
+      "total": 607
+    },
+    "height": "0.97~1.39",
+    "weight": "90.2~112.0"
+  },
+  {
+    "id": 96,
+    "name": "咔咔羽毛",
+    "attribute": "翼/普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/ed/ob21aol2viw67k7tp5830dj3rzphp66.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%92%94%E5%92%94%E7%BE%BD%E6%AF%9B_1.png",
+    "stats": {
+      "hp": 58,
+      "attack": 68,
+      "magic_attack": 66,
+      "defense": 61,
+      "magic_defense": 53,
+      "speed": 72,
+      "total": 378
+    },
+    "height": "0.62~0.89",
+    "weight": "2.62~3.9"
+  },
+  {
+    "id": 97,
+    "name": "咔咔雀",
+    "attribute": "翼/普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/9a/ap3uj4ncl7ems9nor7p2eekc040rowl.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%92%94%E5%92%94%E9%9B%80_1.png",
+    "stats": {
+      "hp": 78,
+      "attack": 91,
+      "magic_attack": 88,
+      "defense": 81,
+      "magic_defense": 71,
+      "speed": 96,
+      "total": 505
+    },
+    "height": "0.66~0.95",
+    "weight": "13.8~18.5"
+  },
+  {
+    "id": 98,
+    "name": "咔咔鸟",
+    "attribute": "翼/普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/fa/9xi3n8libbst7y2xe4bja79hfbmcmmn.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%92%94%E5%92%94%E9%B8%9F_1.png",
+    "stats": {
+      "hp": 97,
+      "attack": 114,
+      "magic_attack": 110,
+      "defense": 101,
+      "magic_defense": 89,
+      "speed": 120,
+      "total": 631
+    },
+    "height": "0.7~1.0",
+    "weight": "27.5~33.72"
+  },
+  {
+    "id": 99,
+    "name": "小草虫",
+    "attribute": "虫/草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a3/4wnznw67s6p9vg2jru046cjq7q8qs8w.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E8%8D%89%E8%99%AB_1.png",
+    "stats": {
+      "hp": 73,
+      "attack": 40,
+      "magic_attack": 43,
+      "defense": 50,
+      "magic_defense": 57,
+      "speed": 60,
+      "total": 323
+    },
+    "height": "0.47~0.67",
+    "weight": "2.1~3.4"
+  },
+  {
+    "id": 100,
+    "name": "草衣虫",
+    "attribute": "虫/草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/92/cxu0820j279llw3cmwkhmhqa0cac6ui.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%8D%89%E8%A1%A3%E8%99%AB_1.png",
+    "stats": {
+      "hp": 97,
+      "attack": 53,
+      "magic_attack": 57,
+      "defense": 67,
+      "magic_defense": 75,
+      "speed": 80,
+      "total": 429
+    },
+    "height": "0.6~0.87",
+    "weight": "7.2~8.6"
+  },
+  {
+    "id": 101,
+    "name": "花衣蝶",
+    "attribute": "虫/草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/ca/ssjrnqrtjz4ftobafu4guizlkdpye0f.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%8A%B1%E8%A1%A3%E8%9D%B6_1.png",
+    "stats": {
+      "hp": 122,
+      "attack": 67,
+      "magic_attack": 72,
+      "defense": 84,
+      "magic_defense": 94,
+      "speed": 100,
+      "total": 539
+    },
+    "height": "0.92~1.32",
+    "weight": "19.6~23.4"
+  },
+  {
+    "id": 102,
+    "name": "绿翼鸟",
+    "attribute": "萌/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/64/6legu9g43vllzz0bwdewrpp0f6zmwdu.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%BB%BF%E7%BF%BC%E9%B8%9F_1.png",
+    "stats": {
+      "hp": 52,
+      "attack": 68,
+      "magic_attack": 20,
+      "defense": 56,
+      "magic_defense": 53,
+      "speed": 81,
+      "total": 330
+    },
+    "height": "0.49~0.61",
+    "weight": "3.6~4.8"
+  },
+  {
+    "id": 103,
+    "name": "魔翼鸟",
+    "attribute": "萌/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/4d/di46fdrniv7kdxjfmi5kym1373p4xme.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%AD%94%E7%BF%BC%E9%B8%9F_1.png",
+    "stats": {
+      "hp": 70,
+      "attack": 91,
+      "magic_attack": 27,
+      "defense": 75,
+      "magic_defense": 70,
+      "speed": 108,
+      "total": 441
+    },
+    "height": "0.78~1.12",
+    "weight": "8.85~13.8"
+  },
+  {
+    "id": 104,
+    "name": "魔眷鸟",
+    "attribute": "萌/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/76/qdoq3s6blcshbk7z6iki63glfphv1ap.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%AD%94%E7%9C%B7%E9%B8%9F_1.png",
+    "stats": {
+      "hp": 87,
+      "attack": 113,
+      "magic_attack": 34,
+      "defense": 94,
+      "magic_defense": 88,
+      "speed": 135,
+      "total": 551
+    },
+    "height": "0.91~1.31",
+    "weight": "19.8~24.5"
+  },
+  {
+    "id": 105,
+    "name": "阿米亚特",
+    "attribute": "地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/01/qzl2l4nltxeu187qw1a2ybgfe5qj2tf.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%98%BF%E7%B1%B3%E4%BA%9A%E7%89%B9_1.png",
+    "stats": {
+      "hp": 64,
+      "attack": 95,
+      "magic_attack": 47,
+      "defense": 67,
+      "magic_defense": 42,
+      "speed": 45,
+      "total": 360
+    },
+    "height": "0.57~0.79",
+    "weight": "38.5~49.2"
+  },
+  {
+    "id": 106,
+    "name": "阿米樱",
+    "attribute": "地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/c6/mlsnrq1x6vea9vvb932aajlqpafb72q.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%98%BF%E7%B1%B3%E6%A8%B1_1.png",
+    "stats": {
+      "hp": 86,
+      "attack": 127,
+      "magic_attack": 62,
+      "defense": 89,
+      "magic_defense": 56,
+      "speed": 60,
+      "total": 480
+    },
+    "height": "0.78~1.12",
+    "weight": "94.2~143.0"
+  },
+  {
+    "id": 107,
+    "name": "罗隐",
+    "attribute": "地/恶",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/38/495925un1xk6eioymvva969ahadlk3m.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%BD%97%E9%9A%90_1.png",
+    "stats": {
+      "hp": 107,
+      "attack": 159,
+      "magic_attack": 78,
+      "defense": 112,
+      "magic_defense": 70,
+      "speed": 75,
+      "total": 601
+    },
+    "height": "1.48~2.12",
+    "weight": "290.0~305.0"
+  },
+  {
+    "id": 108,
+    "name": "风铃鲨",
+    "attribute": "水/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/fe/88nqs9bcxmqlj6ad7xoyz36k5fxw4qe.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%A3%8E%E9%93%83%E9%B2%A8_1.png",
+    "stats": {
+      "hp": 54,
+      "attack": 46,
+      "magic_attack": 46,
+      "defense": 63,
+      "magic_defense": 63,
+      "speed": 75,
+      "total": 347
+    },
+    "height": "0.41~0.59",
+    "weight": "13.07~16.8"
+  },
+  {
+    "id": 109,
+    "name": "蓝蝶鲨",
+    "attribute": "水/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/0a/ti363dbka1pfizpes11yhv112jlt4j5.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%93%9D%E8%9D%B6%E9%B2%A8_1.png",
+    "stats": {
+      "hp": 72,
+      "attack": 61,
+      "magic_attack": 61,
+      "defense": 84,
+      "magic_defense": 84,
+      "speed": 100,
+      "total": 462
+    },
+    "height": "0.81~1.16",
+    "weight": "34.82~48.6"
+  },
+  {
+    "id": 110,
+    "name": "彩蝶鲨",
+    "attribute": "水/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/51/eeqyrw3rswylx1c4sc3kxpzfgu5yqgm.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%BD%A9%E8%9D%B6%E9%B2%A8_1.png",
+    "stats": {
+      "hp": 90,
+      "attack": 77,
+      "magic_attack": 77,
+      "defense": 105,
+      "magic_defense": 105,
+      "speed": 125,
+      "total": 579
+    },
+    "height": "1.18~1.68",
+    "weight": "80.5~96.5"
+  },
+  {
+    "id": 111,
+    "name": "石石",
+    "attribute": "地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/c6/ozlttesinkk43ayc3sv3tbab5ckbshi.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%9F%B3%E7%9F%B3_1.png",
+    "stats": {
+      "hp": 76,
+      "attack": 79,
+      "magic_attack": 79,
+      "defense": 101,
+      "magic_defense": 56,
+      "speed": 76,
+      "total": 467
+    },
+    "height": "0.35~0.5",
+    "weight": "61.0~75.0"
+  },
+  {
+    "id": 112,
+    "name": "巨灵石",
+    "attribute": "地/幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/c1/c0lw5946cwte5stco3xurz3c0d98x2t.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B7%A8%E7%81%B5%E7%9F%B3_1.png",
+    "stats": {
+      "hp": 95,
+      "attack": 99,
+      "magic_attack": 99,
+      "defense": 126,
+      "magic_defense": 70,
+      "speed": 95,
+      "total": 584
+    },
+    "height": "1.95~2.3",
+    "weight": "205.0~240.0"
+  },
+  {
+    "id": 113,
+    "name": "仪使者",
+    "attribute": "地/幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/98/a4s6v19kpxbuk9cprtbjxwgs2xwxi70.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%BB%AA%E4%BD%BF%E8%80%85_1.png",
+    "stats": {
+      "hp": 64,
+      "attack": 54,
+      "magic_attack": 57,
+      "defense": 69,
+      "magic_defense": 71,
+      "speed": 51,
+      "total": 366
+    },
+    "height": "0.45~0.58",
+    "weight": "19.05~35.05"
+  },
+  {
+    "id": 114,
+    "name": "仪式之星",
+    "attribute": "地/幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a3/oomva04tf8o7qrqqakm0jxwilzw3c8o.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%BB%AA%E5%BC%8F%E4%B9%8B%E6%98%9F_1.png",
+    "stats": {
+      "hp": 85,
+      "attack": 72,
+      "magic_attack": 76,
+      "defense": 92,
+      "magic_defense": 95,
+      "speed": 68,
+      "total": 488
+    },
+    "height": "0.84~1.21",
+    "weight": "72.0~87.5"
+  },
+  {
+    "id": 115,
+    "name": "仪式巨像",
+    "attribute": "地/幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/6d/5ye4a7k1u4q5lzf6ibnmwb1d3vtzlld.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%BB%AA%E5%BC%8F%E5%B7%A8%E5%83%8F_1.png",
+    "stats": {
+      "hp": 106,
+      "attack": 90,
+      "magic_attack": 95,
+      "defense": 115,
+      "magic_defense": 119,
+      "speed": 85,
+      "total": 610
+    },
+    "height": "1.44~1.79",
+    "weight": "198.05~253.07"
+  },
+  {
+    "id": 116,
+    "name": "小独角兽",
+    "attribute": "光",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/ec/qdyvecckyuhnazeotxq9wkxwzb4ws8o.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E7%8B%AC%E8%A7%92%E5%85%BD_1.png",
+    "stats": {
+      "hp": 79,
+      "attack": 48,
+      "magic_attack": 129,
+      "defense": 62,
+      "magic_defense": 74,
+      "speed": 84,
+      "total": 476
+    },
+    "height": "0.98~1.41",
+    "weight": "41.5~55.6"
+  },
+  {
+    "id": 117,
+    "name": "白金独角兽",
+    "attribute": "光",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/b0/6mn7g1bmit3kop684uwf2ns9tg4rsed.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%99%BD%E9%87%91%E7%8B%AC%E8%A7%92%E5%85%BD_1.png",
+    "stats": {
+      "hp": 99,
+      "attack": 61,
+      "magic_attack": 161,
+      "defense": 77,
+      "magic_defense": 92,
+      "speed": 105,
+      "total": 595
+    },
+    "height": "1.35~1.93",
+    "weight": "94.5~105.0"
+  },
+  {
+    "id": 118,
+    "name": "旋叶虫（金黄的样子）",
+    "attribute": "普通/虫",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d6/jparkpdxm8e8qe6r164oni4tduf4qsq.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%97%8B%E5%8F%B6%E8%99%AB%EF%BC%88%E9%87%91%E9%BB%84%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 56,
+      "attack": 15,
+      "magic_attack": 65,
+      "defense": 63,
+      "magic_defense": 55,
+      "speed": 72,
+      "total": 326
+    },
+    "height": "0.1~0.15",
+    "weight": "0.1~0.85"
+  },
+  {
+    "id": 119,
+    "name": "蓬叶虫（金黄的样子）",
+    "attribute": "普通/虫",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/ba/p11mh7sopmm5wvvo4b0maw1j31n6vav.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%93%AC%E5%8F%B6%E8%99%AB%EF%BC%88%E9%87%91%E9%BB%84%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 74,
+      "attack": 19,
+      "magic_attack": 87,
+      "defense": 84,
+      "magic_defense": 73,
+      "speed": 96,
+      "total": 433
+    },
+    "height": "0.53~0.76",
+    "weight": "0.65~1.68"
+  },
+  {
+    "id": 120,
+    "name": "风滚暮虫（金黄的样子）",
+    "attribute": "普通/虫",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/53/i7jmthl2o8l116rbhkn2fyjmhtf57s5.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%A3%8E%E6%BB%9A%E6%9A%AE%E8%99%AB%EF%BC%88%E9%87%91%E9%BB%84%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 93,
+      "attack": 24,
+      "magic_attack": 109,
+      "defense": 105,
+      "magic_defense": 91,
+      "speed": 120,
+      "total": 542
+    },
+    "height": "0.6~0.7",
+    "weight": "1.45~3.43"
+  },
+  {
+    "id": 121,
+    "name": "小黑猫",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/c9/8rrqybxt78i08ws9ztf6iqrhpbf61fi.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E9%BB%91%E7%8C%AB_1.png",
+    "stats": {
+      "hp": 121,
+      "attack": 72,
+      "magic_attack": 130,
+      "defense": 54,
+      "magic_defense": 95,
+      "speed": 56,
+      "total": 528
+    },
+    "height": "0.55~0.65",
+    "weight": "3.1~4.5"
+  },
+  {
+    "id": 122,
+    "name": "黑猫巫师",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/cb/9uippciulkrlx979x5xnv9aqoprjcek.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%BB%91%E7%8C%AB%E5%B7%AB%E5%B8%88_1.png",
+    "stats": {
+      "hp": 152,
+      "attack": 91,
+      "magic_attack": 163,
+      "defense": 67,
+      "magic_defense": 119,
+      "speed": 70,
+      "total": 662
+    },
+    "height": "0.85~0.97",
+    "weight": "8.1~9.5"
+  },
+  {
+    "id": 123,
+    "name": "忽幽狸",
+    "attribute": "幽/毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/78/2jxh0kfsg1lzfa640r2nyaz03bcr97j.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%BF%BD%E5%B9%BD%E7%8B%B8_1.png",
+    "stats": {
+      "hp": 78,
+      "attack": 87,
+      "magic_attack": 84,
+      "defense": 84,
+      "magic_defense": 56,
+      "speed": 104,
+      "total": 493
+    },
+    "height": "0.76~1.09",
+    "weight": "8.3~9.8"
+  },
+  {
+    "id": 124,
+    "name": "影狸",
+    "attribute": "幽/毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/50/cwmitfohkag0d2t5zfu055dhwrm4vxk.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%BD%B1%E7%8B%B8_1.png",
+    "stats": {
+      "hp": 97,
+      "attack": 109,
+      "magic_attack": 105,
+      "defense": 105,
+      "magic_defense": 70,
+      "speed": 130,
+      "total": 616
+    },
+    "height": "1.11~1.59",
+    "weight": "23.5~37.5"
+  },
+  {
+    "id": 125,
+    "name": "多多",
+    "attribute": "毒/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/ce/616cnqj5bbxqzen5zwhzqhst14lpua9.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A4%9A%E5%A4%9A_1.png",
+    "stats": {
+      "hp": 47,
+      "attack": 53,
+      "magic_attack": 53,
+      "defense": 82,
+      "magic_defense": 66,
+      "speed": 54,
+      "total": 355
+    },
+    "height": "0.45~0.65",
+    "weight": "14.6~18.6"
+  },
+  {
+    "id": 126,
+    "name": "多啦多",
+    "attribute": "毒/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/ce/aewpz1647wrfl4r6fzxzem25ia6w3z8.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A4%9A%E5%95%A6%E5%A4%9A_1.png",
+    "stats": {
+      "hp": 63,
+      "attack": 70,
+      "magic_attack": 70,
+      "defense": 109,
+      "magic_defense": 88,
+      "speed": 72,
+      "total": 472
+    },
+    "height": "0.58~0.83",
+    "weight": "28.5~34.6"
+  },
+  {
+    "id": 127,
+    "name": "古啦多",
+    "attribute": "毒/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d8/nauiiyi051f6jwn5tuy0mrao8j1z1hn.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8F%A4%E5%95%A6%E5%A4%9A_1.png",
+    "stats": {
+      "hp": 79,
+      "attack": 88,
+      "magic_attack": 88,
+      "defense": 136,
+      "magic_defense": 110,
+      "speed": 90,
+      "total": 591
+    },
+    "height": "0.69~0.99",
+    "weight": "43.5~58.6"
+  },
+  {
+    "id": 128,
+    "name": "哭哭菇",
+    "attribute": "幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/ee/r5ob8gjuzspmnvdafl5zf5836e6bf6g.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%93%AD%E5%93%AD%E8%8F%87_1.png",
+    "stats": {
+      "hp": 74,
+      "attack": 38,
+      "magic_attack": 41,
+      "defense": 30,
+      "magic_defense": 60,
+      "speed": 36,
+      "total": 279
+    },
+    "height": "0.33~0.47",
+    "weight": "1.8~3.2"
+  },
+  {
+    "id": 129,
+    "name": "怖须菇",
+    "attribute": "幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a5/bh34wp7r6rvgj50zw0rz9uh7w1onmvl.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%80%96%E9%A1%BB%E8%8F%87_1.png",
+    "stats": {
+      "hp": 99,
+      "attack": 50,
+      "magic_attack": 55,
+      "defense": 40,
+      "magic_defense": 80,
+      "speed": 48,
+      "total": 372
+    },
+    "height": "0.69~0.99",
+    "weight": "8.72~15.6"
+  },
+  {
+    "id": 130,
+    "name": "怖哭菇",
+    "attribute": "幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/77/0vwsiij65kn8tbfm24x0zxekycspl5d.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%80%96%E5%93%AD%E8%8F%87_1.png",
+    "stats": {
+      "hp": 124,
+      "attack": 63,
+      "magic_attack": 69,
+      "defense": 50,
+      "magic_defense": 100,
+      "speed": 60,
+      "total": 466
+    },
+    "height": "1.23~1.76",
+    "weight": "22.5~28.6"
+  },
+  {
+    "id": 131,
+    "name": "恶魔狼",
+    "attribute": "恶",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/6a/8rz167blfbrzzs44u5mq8a0k7im6ap8.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%81%B6%E9%AD%94%E7%8B%BC_1.png",
+    "stats": {
+      "hp": 115,
+      "attack": 114,
+      "magic_attack": 45,
+      "defense": 91,
+      "magic_defense": 63,
+      "speed": 120,
+      "total": 548
+    },
+    "height": "1.23~1.76",
+    "weight": "74.0~92.0"
+  },
+  {
+    "id": 132,
+    "name": "小电企鹅",
+    "attribute": "冰/电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d6/4seo2uqqap8978sndkvqzoez1nc8nwy.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E7%94%B5%E4%BC%81%E9%B9%85_1.png",
+    "stats": {
+      "hp": 75,
+      "attack": 45,
+      "magic_attack": 101,
+      "defense": 59,
+      "magic_defense": 87,
+      "speed": 100,
+      "total": 467
+    },
+    "height": "0.44~0.56",
+    "weight": "3.82~5.39"
+  },
+  {
+    "id": 133,
+    "name": "电企鹅",
+    "attribute": "冰/电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/be/9br0yfxnfz0dsnrtgc7tlt75qtwxycl.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%94%B5%E4%BC%81%E9%B9%85_1.png",
+    "stats": {
+      "hp": 94,
+      "attack": 56,
+      "magic_attack": 126,
+      "defense": 73,
+      "magic_defense": 109,
+      "speed": 125,
+      "total": 583
+    },
+    "height": "0.9~1.14",
+    "weight": "14.6~26.9"
+  },
+  {
+    "id": 134,
+    "name": "雪豆丁",
+    "attribute": "冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d8/2thy3gt4khhs6gza0pb6ke0da94ajq8.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%9B%AA%E8%B1%86%E4%B8%81_1.png",
+    "stats": {
+      "hp": 97,
+      "attack": 104,
+      "magic_attack": 47,
+      "defense": 83,
+      "magic_defense": 62,
+      "speed": 36,
+      "total": 429
+    },
+    "height": "0.86~1.23",
+    "weight": "9.5~12.5"
+  },
+  {
+    "id": 135,
+    "name": "雪蛮人",
+    "attribute": "冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/e4/5jcbqvkc428abblnglyk3ok9nppvy4z.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%9B%AA%E8%9B%AE%E4%BA%BA_1.png",
+    "stats": {
+      "hp": 130,
+      "attack": 139,
+      "magic_attack": 63,
+      "defense": 111,
+      "magic_defense": 83,
+      "speed": 48,
+      "total": 574
+    },
+    "height": "1.11~1.59",
+    "weight": "59.0~76.0"
+  },
+  {
+    "id": 136,
+    "name": "雪巨人",
+    "attribute": "冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/ae/jppthxewnslz9d16550t3owv0hf3emx.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%9B%AA%E5%B7%A8%E4%BA%BA_1.png",
+    "stats": {
+      "hp": 162,
+      "attack": 174,
+      "magic_attack": 79,
+      "defense": 139,
+      "magic_defense": 104,
+      "speed": 60,
+      "total": 718
+    },
+    "height": "1.61~2.31",
+    "weight": "156.0~187.0"
+  },
+  {
+    "id": 137,
+    "name": "呼呼猪",
+    "attribute": "冰/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/e8/8vuqx5j838k85ddgjcl56zhh42wtfqa.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%91%BC%E5%91%BC%E7%8C%AA_1.png",
+    "stats": {
+      "hp": 98,
+      "attack": 95,
+      "magic_attack": 33,
+      "defense": 88,
+      "magic_defense": 81,
+      "speed": 68,
+      "total": 463
+    },
+    "height": "0.52~0.75",
+    "weight": "6.8~8.9"
+  },
+  {
+    "id": 138,
+    "name": "獠牙猪",
+    "attribute": "冰/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/e7/9k7bizwcoun5u7cvgvqgchfd9dmyxou.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%8D%A0%E7%89%99%E7%8C%AA_1.png",
+    "stats": {
+      "hp": 123,
+      "attack": 119,
+      "magic_attack": 41,
+      "defense": 110,
+      "magic_defense": 101,
+      "speed": 85,
+      "total": 579
+    },
+    "height": "0.77~1.1",
+    "weight": "52.8~67.4"
+  },
+  {
+    "id": 139,
+    "name": "雪娃娃",
+    "attribute": "冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/2f/e14xbg7hrv1sv43e1qqhk145dsjcd3x.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%9B%AA%E5%A8%83%E5%A8%83_1.png",
+    "stats": {
+      "hp": 56,
+      "attack": 67,
+      "magic_attack": 67,
+      "defense": 63,
+      "magic_defense": 63,
+      "speed": 69,
+      "total": 385
+    },
+    "height": "0.29~0.42",
+    "weight": "6.8~8.16"
+  },
+  {
+    "id": 140,
+    "name": "冰封怨灵",
+    "attribute": "冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/20/kgz0l0h5v268zpumgfbqz7nhqtvgyey.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%86%B0%E5%B0%81%E6%80%A8%E7%81%B5_1.png",
+    "stats": {
+      "hp": 75,
+      "attack": 90,
+      "magic_attack": 90,
+      "defense": 84,
+      "magic_defense": 84,
+      "speed": 92,
+      "total": 515
+    },
+    "height": "0.96~1.37",
+    "weight": "24.5~31.6"
+  },
+  {
+    "id": 141,
+    "name": "雪灵",
+    "attribute": "冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/20/s8u199aia0fr684sn42zevm9y7jblmz.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%9B%AA%E7%81%B5_1.png",
+    "stats": {
+      "hp": 94,
+      "attack": 112,
+      "magic_attack": 112,
+      "defense": 105,
+      "magic_defense": 105,
+      "speed": 115,
+      "total": 643
+    },
+    "height": "1.09~1.56",
+    "weight": "56.4~68.4"
+  },
+  {
+    "id": 142,
+    "name": "大耳帽兜",
+    "attribute": "冰/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/90/5nj4in6eecm1rhiqat7avfogm5l3cx0.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A4%A7%E8%80%B3%E5%B8%BD%E5%85%9C_1.png",
+    "stats": {
+      "hp": 78,
+      "attack": 62,
+      "magic_attack": 59,
+      "defense": 39,
+      "magic_defense": 78,
+      "speed": 54,
+      "total": 370
+    },
+    "height": "0.39~0.42",
+    "weight": "8.39~10.7"
+  },
+  {
+    "id": 143,
+    "name": "帽兜娃娃",
+    "attribute": "冰/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/5a/q7sirjhoajj2l6afronw9k5u8w84ibs.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B8%BD%E5%85%9C%E5%A8%83%E5%A8%83_1.png",
+    "stats": {
+      "hp": 104,
+      "attack": 83,
+      "magic_attack": 78,
+      "defense": 52,
+      "magic_defense": 104,
+      "speed": 72,
+      "total": 493
+    },
+    "height": "0.4~0.57",
+    "weight": "19.05~26.8"
+  },
+  {
+    "id": 144,
+    "name": "雪影娃娃",
+    "attribute": "冰/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/12/ixakouy2o2kjsl0ytlhtdzhoukgoq3o.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%9B%AA%E5%BD%B1%E5%A8%83%E5%A8%83_1.png",
+    "stats": {
+      "hp": 130,
+      "attack": 103,
+      "magic_attack": 98,
+      "defense": 66,
+      "magic_defense": 130,
+      "speed": 90,
+      "total": 617
+    },
+    "height": "0.64~0.92",
+    "weight": "31.8~36.6"
+  },
+  {
+    "id": 145,
+    "name": "权杖-Ⅱ",
+    "attribute": "机械",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/29/36ojm8e9bg86sdwvq2lru4guexscjpm.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%9D%83%E6%9D%96-%E2%85%A1_1.png",
+    "stats": {
+      "hp": 82,
+      "attack": 84,
+      "magic_attack": 78,
+      "defense": 109,
+      "magic_defense": 109,
+      "speed": 60,
+      "total": 522
+    },
+    "height": "0.45~0.55",
+    "weight": "28.5~35.7"
+  },
+  {
+    "id": 146,
+    "name": "权杖-Ⅴ",
+    "attribute": "机械",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/13/t0s6mddc58b2nr8ezmolme9pn86uty5.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%9D%83%E6%9D%96-%E2%85%A4_1.png",
+    "stats": {
+      "hp": 103,
+      "attack": 105,
+      "magic_attack": 97,
+      "defense": 136,
+      "magic_defense": 136,
+      "speed": 75,
+      "total": 652
+    },
+    "height": "0.95~1.05",
+    "weight": "98.0~108.0"
+  },
+  {
+    "id": 147,
+    "name": "灵狐",
+    "attribute": "火/冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/0a/nmkg7ux0y9xb2o2q92ircdz5t11die4.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%81%B5%E7%8B%90_1.png",
+    "stats": {
+      "hp": 69,
+      "attack": 52,
+      "magic_attack": 52,
+      "defense": 50,
+      "magic_defense": 64,
+      "speed": 60,
+      "total": 347
+    },
+    "height": "0.56~0.8",
+    "weight": "7.4~8.9"
+  },
+  {
+    "id": 148,
+    "name": "九尾狐",
+    "attribute": "火/冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/04/6aatpzw69pbptt2uju04hv2tod4ypc9.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%B9%9D%E5%B0%BE%E7%8B%90_1.png",
+    "stats": {
+      "hp": 92,
+      "attack": 70,
+      "magic_attack": 70,
+      "defense": 67,
+      "magic_defense": 86,
+      "speed": 80,
+      "total": 465
+    },
+    "height": "0.77~1.11",
+    "weight": "13.08~21.05"
+  },
+  {
+    "id": 149,
+    "name": "尖嘴狐仙",
+    "attribute": "火/冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/b1/gqbvamoe1ljcd3be988hlopoxdo44ak.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%96%E5%98%B4%E7%8B%90%E4%BB%99_1.png",
+    "stats": {
+      "hp": 115,
+      "attack": 87,
+      "magic_attack": 87,
+      "defense": 84,
+      "magic_defense": 107,
+      "speed": 100,
+      "total": 580
+    },
+    "height": "1.34~1.92",
+    "weight": "69.5~78.5"
+  },
+  {
+    "id": 150,
+    "name": "里奥",
+    "attribute": "翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/62/mwlzc3o7mx5a5oo646nljqm8jsuhypa.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%87%8C%E5%A5%A5_1.png",
+    "stats": {
+      "hp": 79,
+      "attack": 65,
+      "magic_attack": 65,
+      "defense": 77,
+      "magic_defense": 50,
+      "speed": 75,
+      "total": 411
+    },
+    "height": "0.35~0.45",
+    "weight": "4.8~5.9"
+  },
+  {
+    "id": 151,
+    "name": "灵羽勇士",
+    "attribute": "翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/44/tmhilmz97pggub3yrsredfnuv5e2jd2.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%81%B5%E7%BE%BD%E5%8B%87%E5%A3%AB_1.png",
+    "stats": {
+      "hp": 105,
+      "attack": 87,
+      "magic_attack": 87,
+      "defense": 102,
+      "magic_defense": 66,
+      "speed": 100,
+      "total": 547
+    },
+    "height": "0.55~0.65",
+    "weight": "11.5~14.2"
+  },
+  {
+    "id": 152,
+    "name": "圣羽翼王",
+    "attribute": "翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/40/lbxi6r2yicliuipn8dp7n5pk90xfjo4.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%9C%A3%E7%BE%BD%E7%BF%BC%E7%8E%8B_1.png",
+    "stats": {
+      "hp": 132,
+      "attack": 109,
+      "magic_attack": 109,
+      "defense": 128,
+      "magic_defense": 83,
+      "speed": 125,
+      "total": 686
+    },
+    "height": "2.1~2.55",
+    "weight": "195.0~296.0"
+  },
+  {
+    "id": 153,
+    "name": "松仔",
+    "attribute": "草/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/ce/mx2ffpj0hb4meeslt3zqap12rr2empf.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%9D%BE%E4%BB%94_1.png",
+    "stats": {
+      "hp": 63,
+      "attack": 83,
+      "magic_attack": 34,
+      "defense": 77,
+      "magic_defense": 60,
+      "speed": 63,
+      "total": 380
+    },
+    "height": "0.52~0.68",
+    "weight": "6.25~7.85"
+  },
+  {
+    "id": 154,
+    "name": "松叶羊",
+    "attribute": "草/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/10/jyqtkp0noekyg69k59jbsmgjv6gjwmz.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%9D%BE%E5%8F%B6%E7%BE%8A_1.png",
+    "stats": {
+      "hp": 84,
+      "attack": 111,
+      "magic_attack": 46,
+      "defense": 102,
+      "magic_defense": 80,
+      "speed": 84,
+      "total": 507
+    },
+    "height": "1.08~1.33",
+    "weight": "19.09~28.06"
+  },
+  {
+    "id": 155,
+    "name": "针叶巡林",
+    "attribute": "草/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/ea/3rpguccru3cfly322suefeqa3oy62vv.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%92%88%E5%8F%B6%E5%B7%A1%E6%9E%97_1.png",
+    "stats": {
+      "hp": 105,
+      "attack": 139,
+      "magic_attack": 57,
+      "defense": 128,
+      "magic_defense": 100,
+      "speed": 105,
+      "total": 634
+    },
+    "height": "1.86~2.14",
+    "weight": "56.8~69.02"
+  },
+  {
+    "id": 156,
+    "name": "小勇狮",
+    "attribute": "火/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/ae/h52qsm9zkr20bazu590ccljhin1f5ci.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E5%8B%87%E7%8B%AE_1.png",
+    "stats": {
+      "hp": 82,
+      "attack": 31,
+      "magic_attack": 66,
+      "defense": 53,
+      "magic_defense": 78,
+      "speed": 48,
+      "total": 358
+    },
+    "height": "0.67~0.81",
+    "weight": "8.5~12.05"
+  },
+  {
+    "id": 157,
+    "name": "炽焰狮",
+    "attribute": "火/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/f0/rxu5mpa797fea42tmp0o0prbnkfl9ke.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%82%BD%E7%84%B0%E7%8B%AE_1.png",
+    "stats": {
+      "hp": 110,
+      "attack": 41,
+      "magic_attack": 89,
+      "defense": 70,
+      "magic_defense": 104,
+      "speed": 64,
+      "total": 478
+    },
+    "height": "1.12~1.45",
+    "weight": "46.02~67.05"
+  },
+  {
+    "id": 158,
+    "name": "炽心勇狮",
+    "attribute": "火/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/98/1jj3iwg4l6yjpl6zfizm3jz7rmbqe7q.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%82%BD%E5%BF%83%E5%8B%87%E7%8B%AE_1.png",
+    "stats": {
+      "hp": 137,
+      "attack": 51,
+      "magic_attack": 111,
+      "defense": 88,
+      "magic_defense": 130,
+      "speed": 80,
+      "total": 597
+    },
+    "height": "1.78~1.97",
+    "weight": "94.7~118.05"
+  },
+  {
+    "id": 159,
+    "name": "水滴蛇",
+    "attribute": "水/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/f5/77ajklz8fw3oeg6kncdco7txsg5jtv0.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B0%B4%E6%BB%B4%E8%9B%87_1.png",
+    "stats": {
+      "hp": 63,
+      "attack": 66,
+      "magic_attack": 62,
+      "defense": 62,
+      "magic_defense": 62,
+      "speed": 63,
+      "total": 378
+    },
+    "height": "0.53~0.69",
+    "weight": "2.25~4.1"
+  },
+  {
+    "id": 160,
+    "name": "水蛇锁",
+    "attribute": "水/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/78/ignv9i4pxcmru908q7s197mn0vlquug.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B0%B4%E8%9B%87%E9%94%81_1.png",
+    "stats": {
+      "hp": 84,
+      "attack": 88,
+      "magic_attack": 83,
+      "defense": 83,
+      "magic_defense": 83,
+      "speed": 84,
+      "total": 505
+    },
+    "height": "0.94~1.2",
+    "weight": "18.07~27.05"
+  },
+  {
+    "id": 161,
+    "name": "游蛇魔使",
+    "attribute": "水/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/bf/oggcovajukek3g37v0dti0t7dguqkw2.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B8%B8%E8%9B%87%E9%AD%94%E4%BD%BF_1.png",
+    "stats": {
+      "hp": 105,
+      "attack": 110,
+      "magic_attack": 104,
+      "defense": 103,
+      "magic_defense": 103,
+      "speed": 105,
+      "total": 630
+    },
+    "height": "2.15~3.0",
+    "weight": "71.05~86.05"
+  },
+  {
+    "id": 162,
+    "name": "公平鸽",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/14/mfnm7m1309w6i464sm5kuagyb6yzxoi.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%85%AC%E5%B9%B3%E9%B8%BD_1.png",
+    "stats": {
+      "hp": 113,
+      "attack": 93,
+      "magic_attack": 93,
+      "defense": 125,
+      "magic_defense": 125,
+      "speed": 100,
+      "total": 649
+    },
+    "height": "0.45~0.6",
+    "weight": "2.5~3.94"
+  },
+  {
+    "id": 163,
+    "name": "小怂猫",
+    "attribute": "武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/14/5se74tvs12feru1mjsfsvfq8c0mr1gg.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E6%80%82%E7%8C%AB_1.png",
+    "stats": {
+      "hp": 74,
+      "attack": 106,
+      "magic_attack": 101,
+      "defense": 89,
+      "magic_defense": 76,
+      "speed": 76,
+      "total": 522
+    },
+    "height": "0.59~0.84",
+    "weight": "19.6~22.5"
+  },
+  {
+    "id": 164,
+    "name": "怒目怂猫",
+    "attribute": "武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/08/0jj0vlt3qpo3dp9gha2nj5tbnydfvjp.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%80%92%E7%9B%AE%E6%80%82%E7%8C%AB_1.png",
+    "stats": {
+      "hp": 92,
+      "attack": 132,
+      "magic_attack": 126,
+      "defense": 111,
+      "magic_defense": 95,
+      "speed": 95,
+      "total": 651
+    },
+    "height": "1.3~1.65",
+    "weight": "64.5~78.5"
+  },
+  {
+    "id": 165,
+    "name": "小狮鹫（崖间地的样子）",
+    "attribute": "翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/5c/6s8lzcshdpyujwzub5zz1wk94d16vp2.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E7%8B%AE%E9%B9%AB%EF%BC%88%E5%B4%96%E9%97%B4%E5%9C%B0%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 61,
+      "attack": 69,
+      "magic_attack": 39,
+      "defense": 64,
+      "magic_defense": 33,
+      "speed": 72,
+      "total": 338
+    },
+    "height": "0.71~1.02",
+    "weight": "11.5~17.5"
+  },
+  {
+    "id": 166,
+    "name": "神圣狮鹫（崖间地的样子）",
+    "attribute": "翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d9/3mwu2jzht3bpapm9p9u6imj8tspjz6z.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%A5%9E%E5%9C%A3%E7%8B%AE%E9%B9%AB%EF%BC%88%E5%B4%96%E9%97%B4%E5%9C%B0%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 82,
+      "attack": 92,
+      "magic_attack": 51,
+      "defense": 86,
+      "magic_defense": 44,
+      "speed": 96,
+      "total": 451
+    },
+    "height": "1.01~1.44",
+    "weight": "49.5~56.8"
+  },
+  {
+    "id": 167,
+    "name": "皇家狮鹫（崖间地的样子）",
+    "attribute": "翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/09/nji78x7xa58n2ye2yhkqgedpywia239.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%9A%87%E5%AE%B6%E7%8B%AE%E9%B9%AB%EF%BC%88%E5%B4%96%E9%97%B4%E5%9C%B0%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 102,
+      "attack": 116,
+      "magic_attack": 64,
+      "defense": 107,
+      "magic_defense": 55,
+      "speed": 120,
+      "total": 564
+    },
+    "height": "1.72~2.45",
+    "weight": "125.0~170.5"
+  },
+  {
+    "id": 168,
+    "name": "圆眼蜘蛛",
+    "attribute": "虫",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/58/rjtkumy4o5iea035omnat6k7rsy4gpj.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%9C%86%E7%9C%BC%E8%9C%98%E8%9B%9B_1.png",
+    "stats": {
+      "hp": 55,
+      "attack": 37,
+      "magic_attack": 37,
+      "defense": 55,
+      "magic_defense": 55,
+      "speed": 66,
+      "total": 305
+    },
+    "height": "0.48~0.68",
+    "weight": "3.5~5.0"
+  },
+  {
+    "id": 169,
+    "name": "尖角蜘蛛",
+    "attribute": "虫/毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/25/3n27a5qdo9pkbpn9ukwq7ibk8y9b8hs.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%96%E8%A7%92%E8%9C%98%E8%9B%9B_1.png",
+    "stats": {
+      "hp": 74,
+      "attack": 49,
+      "magic_attack": 49,
+      "defense": 73,
+      "magic_defense": 73,
+      "speed": 88,
+      "total": 406
+    },
+    "height": "0.68~0.98",
+    "weight": "7.75~9.6"
+  },
+  {
+    "id": 170,
+    "name": "芋香巨角蛛",
+    "attribute": "虫/毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/78/7wig6sc6qf6fh5la1u2ykbxe5wv4f85.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%8A%8B%E9%A6%99%E5%B7%A8%E8%A7%92%E8%9B%9B_1.png",
+    "stats": {
+      "hp": 92,
+      "attack": 61,
+      "magic_attack": 61,
+      "defense": 91,
+      "magic_defense": 91,
+      "speed": 110,
+      "total": 506
+    },
+    "height": "0.9~1.29",
+    "weight": "31.75~43.6"
+  },
+  {
+    "id": 171,
+    "name": "波波螺",
+    "attribute": "地/水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/00/n1wjd2lnqi3s5qqgpetirog1lcu6y3o.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B3%A2%E6%B3%A2%E8%9E%BA_1.png",
+    "stats": {
+      "hp": 67,
+      "attack": 59,
+      "magic_attack": 59,
+      "defense": 87,
+      "magic_defense": 66,
+      "speed": 42,
+      "total": 380
+    },
+    "height": "0.32~0.42",
+    "weight": "4.85~5.65"
+  },
+  {
+    "id": 172,
+    "name": "消波螺",
+    "attribute": "地/水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/13/nk6gil7o7hxap4a1cbmksobdxh2rvvp.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B6%88%E6%B3%A2%E8%9E%BA_1.png",
+    "stats": {
+      "hp": 89,
+      "attack": 78,
+      "magic_attack": 78,
+      "defense": 116,
+      "magic_defense": 88,
+      "speed": 56,
+      "total": 505
+    },
+    "height": "0.68~0.82",
+    "weight": "46.5~69.9"
+  },
+  {
+    "id": 173,
+    "name": "嗜波螺",
+    "attribute": "地/水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/97/sk3qfoelkzy6xlawmknc5svbmwiepqg.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%97%9C%E6%B3%A2%E8%9E%BA_1.png",
+    "stats": {
+      "hp": 112,
+      "attack": 98,
+      "magic_attack": 98,
+      "defense": 146,
+      "magic_defense": 110,
+      "speed": 70,
+      "total": 634
+    },
+    "height": "1.2~1.6",
+    "weight": "86.8~113.0"
+  },
+  {
+    "id": 174,
+    "name": "菇菇丁",
+    "attribute": "地/草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/df/t98utjcp899ymqdm8bvpapuoajiri1k.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%8F%87%E8%8F%87%E4%B8%81_1.png",
+    "stats": {
+      "hp": 89,
+      "attack": 61,
+      "magic_attack": 57,
+      "defense": 70,
+      "magic_defense": 57,
+      "speed": 42,
+      "total": 376
+    },
+    "height": "0.25~0.35",
+    "weight": "1.1~2.76"
+  },
+  {
+    "id": 175,
+    "name": "多菇丁",
+    "attribute": "地/草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/54/5zfiphchqveime7yps9honw4eh4x82b.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A4%9A%E8%8F%87%E4%B8%81_1.png",
+    "stats": {
+      "hp": 119,
+      "attack": 81,
+      "magic_attack": 76,
+      "defense": 93,
+      "magic_defense": 76,
+      "speed": 56,
+      "total": 501
+    },
+    "height": "0.6~0.7",
+    "weight": "5.4~6.8"
+  },
+  {
+    "id": 176,
+    "name": "九幽菇",
+    "attribute": "地/草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/7a/n1t0h2rav7kjmjssgf2ctnahj8vaf0u.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%B9%9D%E5%B9%BD%E8%8F%87_1.png",
+    "stats": {
+      "hp": 149,
+      "attack": 102,
+      "magic_attack": 95,
+      "defense": 116,
+      "magic_defense": 95,
+      "speed": 70,
+      "total": 627
+    },
+    "height": "1.55~1.65",
+    "weight": "42.0~58.0"
+  },
+  {
+    "id": 177,
+    "name": "斑斑",
+    "attribute": "翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a7/9yzfpa9tuduznirix7p82i40nqlkfep.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%96%91%E6%96%91_1.png",
+    "stats": {
+      "hp": 71,
+      "attack": 90,
+      "magic_attack": 90,
+      "defense": 71,
+      "magic_defense": 80,
+      "speed": 92,
+      "total": 494
+    },
+    "height": "0.47~0.6",
+    "weight": "4.79~6.17"
+  },
+  {
+    "id": 178,
+    "name": "斑枭",
+    "attribute": "翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a7/hnf5vk2e32l7c5s4rozuy2iuopkykoq.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%96%91%E6%9E%AD_1.png",
+    "stats": {
+      "hp": 89,
+      "attack": 112,
+      "magic_attack": 112,
+      "defense": 89,
+      "magic_defense": 100,
+      "speed": 115,
+      "total": 617
+    },
+    "height": "0.68~0.81",
+    "weight": "15.9~23.8"
+  },
+  {
+    "id": 179,
+    "name": "草头鸭",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/e3/23v62tjddaret7a0jlqww40noorvmir.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%8D%89%E5%A4%B4%E9%B8%AD_1.png",
+    "stats": {
+      "hp": 92,
+      "attack": 79,
+      "magic_attack": 24,
+      "defense": 66,
+      "magic_defense": 50,
+      "speed": 92,
+      "total": 403
+    },
+    "height": "0.5~0.72",
+    "weight": "4.9~6.57"
+  },
+  {
+    "id": 180,
+    "name": "卷毛鸭",
+    "attribute": "草/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/0f/pzglsihj4tscuiypshxtjxq7x9u9bwp.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8D%B7%E6%AF%9B%E9%B8%AD_1.png",
+    "stats": {
+      "hp": 116,
+      "attack": 98,
+      "magic_attack": 29,
+      "defense": 83,
+      "magic_defense": 63,
+      "speed": 115,
+      "total": 504
+    },
+    "height": "0.9~1.29",
+    "weight": "35.8~48.06"
+  },
+  {
+    "id": 181,
+    "name": "海豹战士",
+    "attribute": "武/水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/b5/n6mz568m7fofwz1w3lkc5qk6bsxfy9s.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B5%B7%E8%B1%B9%E6%88%98%E5%A3%AB_1.png",
+    "stats": {
+      "hp": 72,
+      "attack": 91,
+      "magic_attack": 87,
+      "defense": 89,
+      "magic_defense": 62,
+      "speed": 80,
+      "total": 481
+    },
+    "height": "0.64~0.92",
+    "weight": "69.5~87.6"
+  },
+  {
+    "id": 182,
+    "name": "海豹船长",
+    "attribute": "武/水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/fc/nrbg9xhvigh963cwi1nyqt6kl6t68zv.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B5%B7%E8%B1%B9%E8%88%B9%E9%95%BF_1.png",
+    "stats": {
+      "hp": 90,
+      "attack": 113,
+      "magic_attack": 109,
+      "defense": 111,
+      "magic_defense": 77,
+      "speed": 100,
+      "total": 600
+    },
+    "height": "1.26~1.8",
+    "weight": "145.0~165.0"
+  },
+  {
+    "id": 183,
+    "name": "号儿鱼",
+    "attribute": "水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a1/b8v1gy6rvsqs6g02hko4oa7bj0z04gk.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8F%B7%E5%84%BF%E9%B1%BC_1.png",
+    "stats": {
+      "hp": 109,
+      "attack": 27,
+      "magic_attack": 76,
+      "defense": 76,
+      "magic_defense": 88,
+      "speed": 84,
+      "total": 460
+    },
+    "height": "0.31~0.42",
+    "weight": "3.9~5.25"
+  },
+  {
+    "id": 184,
+    "name": "圆号鱼",
+    "attribute": "水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/ed/7zahvzx6o4jiedrqiqa1q6rp8wbdyso.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%9C%86%E5%8F%B7%E9%B1%BC_1.png",
+    "stats": {
+      "hp": 136,
+      "attack": 34,
+      "magic_attack": 95,
+      "defense": 95,
+      "magic_defense": 110,
+      "speed": 105,
+      "total": 575
+    },
+    "height": "0.79~0.98",
+    "weight": "10.9~15.8"
+  },
+  {
+    "id": 185,
+    "name": "甜田螺",
+    "attribute": "水/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/55/bck3l95dm5ub49vdc3ung79bh0edirl.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%94%9C%E7%94%B0%E8%9E%BA_1.png",
+    "stats": {
+      "hp": 68,
+      "attack": 61,
+      "magic_attack": 64,
+      "defense": 49,
+      "magic_defense": 74,
+      "speed": 54,
+      "total": 370
+    },
+    "height": "0.41~0.58",
+    "weight": "7.5~9.4"
+  },
+  {
+    "id": 186,
+    "name": "壳乙螺",
+    "attribute": "水/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/9e/tefnpfeeyu3n93u9gp0d9sfk11s5tol.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A3%B3%E4%B9%99%E8%9E%BA_1.png",
+    "stats": {
+      "hp": 91,
+      "attack": 81,
+      "magic_attack": 86,
+      "defense": 66,
+      "magic_defense": 99,
+      "speed": 72,
+      "total": 495
+    },
+    "height": "0.68~0.97",
+    "weight": "11.05~19.04"
+  },
+  {
+    "id": 187,
+    "name": "卡洛儿",
+    "attribute": "水/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/c9/t773ll421ypqybexg7xzjb3qs2rt2m0.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8D%A1%E6%B4%9B%E5%84%BF_1.png",
+    "stats": {
+      "hp": 114,
+      "attack": 102,
+      "magic_attack": 107,
+      "defense": 82,
+      "magic_defense": 124,
+      "speed": 90,
+      "total": 619
+    },
+    "height": "0.7~1.0",
+    "weight": "21.4~25.6"
+  },
+  {
+    "id": 188,
+    "name": "棋棋（白子）",
+    "attribute": "武/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/b5/26ff3g1g1g5v1yzt8la359hajhaxyuo.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%A3%8B%E6%A3%8B%EF%BC%88%E7%99%BD%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 72,
+      "attack": 100,
+      "magic_attack": 36,
+      "defense": 70,
+      "magic_defense": 56,
+      "speed": 100,
+      "total": 434
+    },
+    "height": "0.35~0.47",
+    "weight": "10.7~14.5"
+  },
+  {
+    "id": 189,
+    "name": "棋骑士（白子）",
+    "attribute": "武/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/6c/8vu1ju9uu71aux8unhdyq9gcfw9if5p.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%A3%8B%E9%AA%91%E5%A3%AB%EF%BC%88%E7%99%BD%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 90,
+      "attack": 126,
+      "magic_attack": 45,
+      "defense": 88,
+      "magic_defense": 69,
+      "speed": 125,
+      "total": 543
+    },
+    "height": "0.98~1.35",
+    "weight": "43.06~60.09"
+  },
+  {
+    "id": 190,
+    "name": "棋齐垒（白子）",
+    "attribute": "武/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/9d/7ysj4q3d5kvymcqo698ygpsbfzi5m7d.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%A3%8B%E9%BD%90%E5%9E%92%EF%BC%88%E7%99%BD%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 89,
+      "attack": 94,
+      "magic_attack": 38,
+      "defense": 116,
+      "magic_defense": 77,
+      "speed": 75,
+      "total": 489
+    },
+    "height": "1.45~1.71",
+    "weight": "58.01~70.05"
+  },
+  {
+    "id": 191,
+    "name": "棋祈督（白子）",
+    "attribute": "武/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/69/o85fkrungproeat6rco9guv5ptjw80t.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%A3%8B%E7%A5%88%E7%9D%A3%EF%BC%88%E7%99%BD%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 126,
+      "attack": 87,
+      "magic_attack": 87,
+      "defense": 90,
+      "magic_defense": 72,
+      "speed": 85,
+      "total": 547
+    },
+    "height": "0.98~1.35",
+    "weight": "38.07~47.05"
+  },
+  {
+    "id": 192,
+    "name": "棋绮后（白子）",
+    "attribute": "武/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/34/9sv0ivcdr9sp5dkfk9miyjnqhf60di8.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%A3%8B%E7%BB%AE%E5%90%8E%EF%BC%88%E7%99%BD%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 93,
+      "attack": 84,
+      "magic_attack": 84,
+      "defense": 82,
+      "magic_defense": 75,
+      "speed": 90,
+      "total": 508
+    },
+    "height": "1.66~1.81",
+    "weight": "30.01~41.02"
+  },
+  {
+    "id": 193,
+    "name": "奔波鼠",
+    "attribute": "地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d0/qc6wa2f2bpo8uv28uf5hmgw5lmy3evv.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A5%94%E6%B3%A2%E9%BC%A0_1.png",
+    "stats": {
+      "hp": 72,
+      "attack": 37,
+      "magic_attack": 93,
+      "defense": 67,
+      "magic_defense": 90,
+      "speed": 92,
+      "total": 451
+    },
+    "height": "0.46~0.6",
+    "weight": "3.71~6.4"
+  },
+  {
+    "id": 194,
+    "name": "流浪鼠",
+    "attribute": "地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/e7/1ewnn289ny2ksdz247u2i3ytq7xnv03.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B5%81%E6%B5%AA%E9%BC%A0_1.png",
+    "stats": {
+      "hp": 90,
+      "attack": 46,
+      "magic_attack": 116,
+      "defense": 84,
+      "magic_defense": 112,
+      "speed": 115,
+      "total": 563
+    },
+    "height": "0.88~1.23",
+    "weight": "59.6~74.3"
+  },
+  {
+    "id": 195,
+    "name": "呆小路",
+    "attribute": "草/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/be/4zu0yqt23bt4cva2bswky1q5ivje1tw.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%91%86%E5%B0%8F%E8%B7%AF_1.png",
+    "stats": {
+      "hp": 52,
+      "attack": 60,
+      "magic_attack": 64,
+      "defense": 68,
+      "magic_defense": 79,
+      "speed": 57,
+      "total": 380
+    },
+    "height": "0.58~0.83",
+    "weight": "4.5~5.8"
+  },
+  {
+    "id": 196,
+    "name": "舞动路路",
+    "attribute": "草/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/5b/plclzvr15shbkq90l2yrk23783kh3e7.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%88%9E%E5%8A%A8%E8%B7%AF%E8%B7%AF_1.png",
+    "stats": {
+      "hp": 69,
+      "attack": 80,
+      "magic_attack": 86,
+      "defense": 91,
+      "magic_defense": 105,
+      "speed": 76,
+      "total": 507
+    },
+    "height": "0.69~0.99",
+    "weight": "7.4~9.1"
+  },
+  {
+    "id": 197,
+    "name": "白发路路",
+    "attribute": "草/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/9a/hx21iweu65ojmeo4ws3ucpbsngknrv9.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%99%BD%E5%8F%91%E8%B7%AF%E8%B7%AF_1.png",
+    "stats": {
+      "hp": 86,
+      "attack": 100,
+      "magic_attack": 107,
+      "defense": 113,
+      "magic_defense": 132,
+      "speed": 95,
+      "total": 633
+    },
+    "height": "0.89~1.27",
+    "weight": "15.5~21.6"
+  },
+  {
+    "id": 198,
+    "name": "逗逗",
+    "attribute": "萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/27/5mkpc1wb4947ua7m9efws2u0sdgfgvq.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%80%97%E9%80%97_1.png",
+    "stats": {
+      "hp": 48,
+      "attack": 70,
+      "magic_attack": 64,
+      "defense": 68,
+      "magic_defense": 68,
+      "speed": 66,
+      "total": 384
+    },
+    "height": "0.3~0.4",
+    "weight": "0.45~1.53"
+  },
+  {
+    "id": 199,
+    "name": "气球猫",
+    "attribute": "萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/31/rt7jxpcoc6msmzccuxw2vlait3poir9.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B0%94%E7%90%83%E7%8C%AB_1.png",
+    "stats": {
+      "hp": 64,
+      "attack": 93,
+      "magic_attack": 86,
+      "defense": 90,
+      "magic_defense": 90,
+      "speed": 88,
+      "total": 511
+    },
+    "height": "0.41~0.59",
+    "weight": "0.95~2.15"
+  },
+  {
+    "id": 200,
+    "name": "梦想三三",
+    "attribute": "萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a5/embzuzv9e1h1sp3btykrnthnsvqzwwh.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%A2%A6%E6%83%B3%E4%B8%89%E4%B8%89_1.png",
+    "stats": {
+      "hp": 81,
+      "attack": 117,
+      "magic_attack": 107,
+      "defense": 113,
+      "magic_defense": 113,
+      "speed": 110,
+      "total": 641
+    },
+    "height": "1.18~1.45",
+    "weight": "12.04~19.04"
+  },
+  {
+    "id": 201,
+    "name": "花怨鳗",
+    "attribute": "地/草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/02/167gulpq7gmilrurzc4r0yattm4ai8z.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%8A%B1%E6%80%A8%E9%B3%97_1.png",
+    "stats": {
+      "hp": 232,
+      "attack": 73,
+      "magic_attack": 73,
+      "defense": 110,
+      "magic_defense": 90,
+      "speed": 52,
+      "total": 630
+    },
+    "height": "0.58~0.68",
+    "weight": "2.9~4.0"
+  },
+  {
+    "id": 202,
+    "name": "鳗尾兽",
+    "attribute": "地/草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/dd/74c75nqv3qyl9jwto5rvywya5suqd2d.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%B3%97%E5%B0%BE%E5%85%BD_1.png",
+    "stats": {
+      "hp": 290,
+      "attack": 91,
+      "magic_attack": 91,
+      "defense": 138,
+      "magic_defense": 113,
+      "speed": 65,
+      "total": 788
+    },
+    "height": "0.79~0.92",
+    "weight": "19.8~36.5"
+  },
+  {
+    "id": 203,
+    "name": "伊雷龙",
+    "attribute": "龙",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/66/iq3mle7m6g6cwmo5u0xh5afcf6fzsmd.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%BC%8A%E9%9B%B7%E9%BE%99_1.png",
+    "stats": {
+      "hp": 90,
+      "attack": 73,
+      "magic_attack": 152,
+      "defense": 55,
+      "magic_defense": 79,
+      "speed": 72,
+      "total": 521
+    },
+    "height": "0.72~0.94",
+    "weight": "27.2~34.0"
+  },
+  {
+    "id": 204,
+    "name": "伊兰亚龙",
+    "attribute": "龙",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/df/o0eh3mugruyhxfjm57xlzjqq4y1hki3.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%BC%8A%E5%85%B0%E4%BA%9A%E9%BE%99_1.png",
+    "stats": {
+      "hp": 112,
+      "attack": 91,
+      "magic_attack": 190,
+      "defense": 69,
+      "magic_defense": 99,
+      "speed": 90,
+      "total": 651
+    },
+    "height": "3.65~4.0",
+    "weight": "168.0~195.0"
+  },
+  {
+    "id": 205,
+    "name": "拉特",
+    "attribute": "电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a1/4pqv1u751dss8ff0u87y747ot29b4m9.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%8B%89%E7%89%B9_1.png",
+    "stats": {
+      "hp": 67,
+      "attack": 80,
+      "magic_attack": 80,
+      "defense": 62,
+      "magic_defense": 78,
+      "speed": 100,
+      "total": 467
+    },
+    "height": "0.49~0.61",
+    "weight": "7.7~8.6"
+  },
+  {
+    "id": 206,
+    "name": "酷拉",
+    "attribute": "电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/8e/f72t0l1mbisw4ehkivz7pdpbcqkosus.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%85%B7%E6%8B%89_1.png",
+    "stats": {
+      "hp": 83,
+      "attack": 100,
+      "magic_attack": 100,
+      "defense": 78,
+      "magic_defense": 97,
+      "speed": 125,
+      "total": 583
+    },
+    "height": "0.99~1.24",
+    "weight": "19.5~23.5"
+  },
+  {
+    "id": 207,
+    "name": "闪电环",
+    "attribute": "电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/b8/o9no3jygnit09u4bsn3o7ezrji62524.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%97%AA%E7%94%B5%E7%8E%AF_1.png",
+    "stats": {
+      "hp": 64,
+      "attack": 49,
+      "magic_attack": 49,
+      "defense": 51,
+      "magic_defense": 50,
+      "speed": 72,
+      "total": 335
+    },
+    "height": "0.37~0.46",
+    "weight": "2.4~3.1"
+  },
+  {
+    "id": 208,
+    "name": "刺电环",
+    "attribute": "电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/6e/3alwgp99gzkftk2qf4l1khkrfduszql.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%88%BA%E7%94%B5%E7%8E%AF_1.png",
+    "stats": {
+      "hp": 85,
+      "attack": 65,
+      "magic_attack": 65,
+      "defense": 68,
+      "magic_defense": 67,
+      "speed": 96,
+      "total": 446
+    },
+    "height": "0.58~0.73",
+    "weight": "10.16~16.74"
+  },
+  {
+    "id": 209,
+    "name": "荆棘电环",
+    "attribute": "电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/57/jpk5furnkwy92gmzsrbhmlk1i6tok09.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%8D%86%E6%A3%98%E7%94%B5%E7%8E%AF_1.png",
+    "stats": {
+      "hp": 106,
+      "attack": 81,
+      "magic_attack": 81,
+      "defense": 85,
+      "magic_defense": 84,
+      "speed": 120,
+      "total": 557
+    },
+    "height": "0.78~0.98",
+    "weight": "29.5~34.3"
+  },
+  {
+    "id": 210,
+    "name": "小箱怪",
+    "attribute": "机械/幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/0a/ocy3pzt2cn0mmx85cm8is2ulwy8s2ii.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E7%AE%B1%E6%80%AA_1.png",
+    "stats": {
+      "hp": 111,
+      "attack": 103,
+      "magic_attack": 103,
+      "defense": 122,
+      "magic_defense": 122,
+      "speed": 64,
+      "total": 625
+    },
+    "height": "0.34~0.46",
+    "weight": "4.45~6.81"
+  },
+  {
+    "id": 211,
+    "name": "迷迷箱怪",
+    "attribute": "机械/幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/01/g7z9d41f10oqqtxn42417tov8gcg4bo.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%BF%B7%E8%BF%B7%E7%AE%B1%E6%80%AA_1.png",
+    "stats": {
+      "hp": 138,
+      "attack": 129,
+      "magic_attack": 129,
+      "defense": 153,
+      "magic_defense": 153,
+      "speed": 80,
+      "total": 782
+    },
+    "height": "0.64~0.72",
+    "weight": "18.02~24.4"
+  },
+  {
+    "id": 212,
+    "name": "古钟蛇（本来的样子）",
+    "attribute": "萌/毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/16/hix4wlbyi39s3zqqpruq1n8z6rg7sc0.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8F%A4%E9%92%9F%E8%9B%87%EF%BC%88%E6%9C%AC%E6%9D%A5%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 85,
+      "attack": 63,
+      "magic_attack": 63,
+      "defense": 64,
+      "magic_defense": 91,
+      "speed": 80,
+      "total": 446
+    },
+    "height": "0.95~1.1",
+    "weight": "6.9~7.8"
+  },
+  {
+    "id": 213,
+    "name": "寒音蛇（本来的样子）",
+    "attribute": "萌/毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/9b/pij7rej26vdekdc90n4xaep64r1011l.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%AF%92%E9%9F%B3%E8%9B%87%EF%BC%88%E6%9C%AC%E6%9D%A5%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 106,
+      "attack": 79,
+      "magic_attack": 79,
+      "defense": 80,
+      "magic_defense": 114,
+      "speed": 100,
+      "total": 558
+    },
+    "height": "1.85~2.0",
+    "weight": "65.0~78.0"
+  },
+  {
+    "id": 214,
+    "name": "矮脚爬爬",
+    "attribute": "虫",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/4f/40765c203k2jjtugv9tbciczhr4jmxv.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%9F%AE%E8%84%9A%E7%88%AC%E7%88%AC_1.png",
+    "stats": {
+      "hp": 80,
+      "attack": 117,
+      "magic_attack": 110,
+      "defense": 74,
+      "magic_defense": 59,
+      "speed": 92,
+      "total": 532
+    },
+    "height": "0.28~0.44",
+    "weight": "3.3~4.2"
+  },
+  {
+    "id": 215,
+    "name": "恶魔红钻",
+    "attribute": "虫/恶",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/14/ow13sxw8jyv8sq7bhtvxn7yjl8mo88m.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%81%B6%E9%AD%94%E7%BA%A2%E9%92%BB_1.png",
+    "stats": {
+      "hp": 100,
+      "attack": 147,
+      "magic_attack": 137,
+      "defense": 93,
+      "magic_defense": 74,
+      "speed": 115,
+      "total": 666
+    },
+    "height": "1.32~1.55",
+    "weight": "42.5~62.0"
+  },
+  {
+    "id": 216,
+    "name": "火尾瓦特",
+    "attribute": "火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/1d/9mmja7l04ln5fe2fn5dhql2nrh0tq4f.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%81%AB%E5%B0%BE%E7%93%A6%E7%89%B9_1.png",
+    "stats": {
+      "hp": 63,
+      "attack": 70,
+      "magic_attack": 29,
+      "defense": 81,
+      "magic_defense": 56,
+      "speed": 39,
+      "total": 338
+    },
+    "height": "0.64~0.92",
+    "weight": "18.5~21.2"
+  },
+  {
+    "id": 217,
+    "name": "火尾战士",
+    "attribute": "火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/27/b2edc64erww7plxlp97ex8cc31jtsku.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%81%AB%E5%B0%BE%E6%88%98%E5%A3%AB_1.png",
+    "stats": {
+      "hp": 84,
+      "attack": 94,
+      "magic_attack": 39,
+      "defense": 108,
+      "magic_defense": 74,
+      "speed": 52,
+      "total": 451
+    },
+    "height": "0.76~1.09",
+    "weight": "48.5~58.6"
+  },
+  {
+    "id": 218,
+    "name": "烈火守护",
+    "attribute": "火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/36/8wp59h53ob7gllbz8yewg91ppibly6x.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%83%88%E7%81%AB%E5%AE%88%E6%8A%A4_1.png",
+    "stats": {
+      "hp": 105,
+      "attack": 117,
+      "magic_attack": 49,
+      "defense": 135,
+      "magic_defense": 93,
+      "speed": 65,
+      "total": 564
+    },
+    "height": "0.99~1.42",
+    "weight": "76.5~87.5"
+  },
+  {
+    "id": 219,
+    "name": "里拉鳐",
+    "attribute": "水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/80/13gxjtrh4mt3mhyoc1is69gz7vfm3tv.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%87%8C%E6%8B%89%E9%B3%90_1.png",
+    "stats": {
+      "hp": 118,
+      "attack": 82,
+      "magic_attack": 89,
+      "defense": 103,
+      "magic_defense": 147,
+      "speed": 105,
+      "total": 644
+    },
+    "height": "0.94~1.1",
+    "weight": "38.6~49.5"
+  },
+  {
+    "id": 220,
+    "name": "海枝枝（碧蓝珊瑚）",
+    "attribute": "水/幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/5b/efwbtnaynmpx9y85y1obfzoch17c5do.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B5%B7%E6%9E%9D%E6%9E%9D%EF%BC%88%E7%A2%A7%E8%93%9D%E7%8F%8A%E7%91%9A%EF%BC%89_1.png",
+    "stats": {
+      "hp": 78,
+      "attack": 58,
+      "magic_attack": 148,
+      "defense": 96,
+      "magic_defense": 120,
+      "speed": 110,
+      "total": 610
+    },
+    "height": "0.75~0.85",
+    "weight": "3.51~6.82"
+  },
+  {
+    "id": 221,
+    "name": "多西",
+    "attribute": "机械/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/94/hsqyxfmg0p0gz8s36uzb1b7ldd6etb1.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A4%9A%E8%A5%BF_1.png",
+    "stats": {
+      "hp": 64,
+      "attack": 73,
+      "magic_attack": 26,
+      "defense": 82,
+      "magic_defense": 70,
+      "speed": 30,
+      "total": 345
+    },
+    "height": "0.65~0.94",
+    "weight": "5.7~7.1"
+  },
+  {
+    "id": 222,
+    "name": "库多西",
+    "attribute": "机械/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/32/dfflnxnm50nqc08865hk3xkx7bgn2hj.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%BA%93%E5%A4%9A%E8%A5%BF_1.png",
+    "stats": {
+      "hp": 85,
+      "attack": 98,
+      "magic_attack": 34,
+      "defense": 109,
+      "magic_defense": 93,
+      "speed": 40,
+      "total": 459
+    },
+    "height": "0.99~1.42",
+    "weight": "115.8~175.02"
+  },
+  {
+    "id": 223,
+    "name": "波多西",
+    "attribute": "机械/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/9b/hxurck559b80j25wgnn3rnydhoupa4z.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B3%A2%E5%A4%9A%E8%A5%BF_1.png",
+    "stats": {
+      "hp": 106,
+      "attack": 122,
+      "magic_attack": 43,
+      "defense": 136,
+      "magic_defense": 116,
+      "speed": 50,
+      "total": 573
+    },
+    "height": "1.43~2.05",
+    "weight": "265.0~295.0"
+  },
+  {
+    "id": 224,
+    "name": "小翼龙",
+    "attribute": "龙/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/18/4gm8dv39vje80wb9f9ri66pmdmb5zzw.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E7%BF%BC%E9%BE%99_1.png",
+    "stats": {
+      "hp": 66,
+      "attack": 91,
+      "magic_attack": 24,
+      "defense": 73,
+      "magic_defense": 63,
+      "speed": 92,
+      "total": 409
+    },
+    "height": "0.61~0.87",
+    "weight": "25.1~36.5"
+  },
+  {
+    "id": 225,
+    "name": "翼龙",
+    "attribute": "龙/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/55/bb3dr6l4zb07mt2rpg6euok2j54m82n.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%BF%BC%E9%BE%99_1.png",
+    "stats": {
+      "hp": 83,
+      "attack": 114,
+      "magic_attack": 31,
+      "defense": 91,
+      "magic_defense": 79,
+      "speed": 115,
+      "total": 513
+    },
+    "height": "1.79~1.99",
+    "weight": "240.0~265.0"
+  },
+  {
+    "id": 226,
+    "name": "电动长颈鹿",
+    "attribute": "电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/95/hf6exuai3em02ggnvi6068tatwsg1co.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%94%B5%E5%8A%A8%E9%95%BF%E9%A2%88%E9%B9%BF_1.png",
+    "stats": {
+      "hp": 55,
+      "attack": 59,
+      "magic_attack": 20,
+      "defense": 65,
+      "magic_defense": 47,
+      "speed": 72,
+      "total": 318
+    },
+    "height": "0.7~1.0",
+    "weight": "29.8~36.8"
+  },
+  {
+    "id": 227,
+    "name": "奔乐鹿",
+    "attribute": "电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/38/2ggk766trhcl4o1ubr9f26mtv4l32y2.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A5%94%E4%B9%90%E9%B9%BF_1.png",
+    "stats": {
+      "hp": 73,
+      "attack": 79,
+      "magic_attack": 27,
+      "defense": 86,
+      "magic_defense": 63,
+      "speed": 96,
+      "total": 424
+    },
+    "height": "0.85~1.22",
+    "weight": "68.0~77.5"
+  },
+  {
+    "id": 228,
+    "name": "爵士鹿",
+    "attribute": "电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a6/jcxy6nsrryijb047juj3qhxe55oi58z.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%88%B5%E5%A3%AB%E9%B9%BF_1.png",
+    "stats": {
+      "hp": 92,
+      "attack": 99,
+      "magic_attack": 34,
+      "defense": 108,
+      "magic_defense": 79,
+      "speed": 120,
+      "total": 532
+    },
+    "height": "1.38~1.98",
+    "weight": "135.0~185.06"
+  },
+  {
+    "id": 229,
+    "name": "缇塔",
+    "attribute": "机械",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/3a/lhlbu3zg39lvfpso57ww4iks9u2snxm.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%BC%87%E5%A1%94_1.png",
+    "stats": {
+      "hp": 73,
+      "attack": 99,
+      "magic_attack": 38,
+      "defense": 98,
+      "magic_defense": 74,
+      "speed": 72,
+      "total": 454
+    },
+    "height": "0.65~0.75",
+    "weight": "38.2~45.2"
+  },
+  {
+    "id": 230,
+    "name": "声波缇塔",
+    "attribute": "机械",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/74/4k4r9jprm32qjya3epducxn4m8q79al.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A3%B0%E6%B3%A2%E7%BC%87%E5%A1%94_1.png",
+    "stats": {
+      "hp": 92,
+      "attack": 124,
+      "magic_attack": 48,
+      "defense": 122,
+      "magic_defense": 92,
+      "speed": 90,
+      "total": 568
+    },
+    "height": "1.05~1.2",
+    "weight": "71.5~78.5"
+  },
+  {
+    "id": 231,
+    "name": "小鹬",
+    "attribute": "翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/63/f0h0ppr6wbkwlg961g5mnqenog6ai1j.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E9%B9%AC_1.png",
+    "stats": {
+      "hp": 56,
+      "attack": 38,
+      "magic_attack": 38,
+      "defense": 67,
+      "magic_defense": 52,
+      "speed": 69,
+      "total": 320
+    },
+    "height": "0.25~0.36",
+    "weight": "1.4~2.2"
+  },
+  {
+    "id": 232,
+    "name": "鄙目鹬",
+    "attribute": "翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/06/sufpzi1hnwdcjr06orzhbmb9zkfve3p.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%84%99%E7%9B%AE%E9%B9%AC_1.png",
+    "stats": {
+      "hp": 75,
+      "attack": 51,
+      "magic_attack": 51,
+      "defense": 90,
+      "magic_defense": 70,
+      "speed": 92,
+      "total": 429
+    },
+    "height": "0.67~0.96",
+    "weight": "6.75~8.9"
+  },
+  {
+    "id": 233,
+    "name": "高脚鹬",
+    "attribute": "翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/b5/3wf0lz4sibzzvc7xc2c9t5c7oyyg4m4.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%AB%98%E8%84%9A%E9%B9%AC_1.png",
+    "stats": {
+      "hp": 94,
+      "attack": 63,
+      "magic_attack": 63,
+      "defense": 112,
+      "magic_defense": 87,
+      "speed": 115,
+      "total": 534
+    },
+    "height": "0.81~1.16",
+    "weight": "18.0~24.91"
+  },
+  {
+    "id": 234,
+    "name": "脆筒甜甜",
+    "attribute": "冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/99/hkgrj5vqlslmwxcq1hw8rkaoijy2wc9.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%84%86%E7%AD%92%E7%94%9C%E7%94%9C_1.png",
+    "stats": {
+      "hp": 72,
+      "attack": 67,
+      "magic_attack": 72,
+      "defense": 42,
+      "magic_defense": 55,
+      "speed": 60,
+      "total": 368
+    },
+    "height": "0.3~0.4",
+    "weight": "1.8~3.8"
+  },
+  {
+    "id": 235,
+    "name": "香草甜甜",
+    "attribute": "冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/ab/3dmpl7qddfrhwbooues79boe1ndw1en.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%A6%99%E8%8D%89%E7%94%9C%E7%94%9C_1.png",
+    "stats": {
+      "hp": 96,
+      "attack": 90,
+      "magic_attack": 95,
+      "defense": 56,
+      "magic_defense": 74,
+      "speed": 80,
+      "total": 491
+    },
+    "height": "0.4~0.6",
+    "weight": "5.15~7.8"
+  },
+  {
+    "id": 236,
+    "name": "圣代甜甜",
+    "attribute": "冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/ca/73y6hx9ejbcli53vysobr9g1wty7utz.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%9C%A3%E4%BB%A3%E7%94%9C%E7%94%9C_1.png",
+    "stats": {
+      "hp": 119,
+      "attack": 112,
+      "magic_attack": 119,
+      "defense": 70,
+      "magic_defense": 92,
+      "speed": 100,
+      "total": 612
+    },
+    "height": "0.7~1.0",
+    "weight": "16.5~22.75"
+  },
+  {
+    "id": 237,
+    "name": "刺轮砣（上弦的样子）",
+    "attribute": "毒/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/20/2xrf1upw8x8qbmtj94s02yesvzter32.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%88%BA%E8%BD%AE%E7%A0%A3%EF%BC%88%E4%B8%8A%E5%BC%A6%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 100,
+      "attack": 80,
+      "magic_attack": 78,
+      "defense": 80,
+      "magic_defense": 65,
+      "speed": 84,
+      "total": 487
+    },
+    "height": "0.18~0.31",
+    "weight": "2.7~4.0"
+  },
+  {
+    "id": 238,
+    "name": "月亮砣（上弦的样子）",
+    "attribute": "毒/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/57/g05gs80tzawvv41wkfo6r8cuf1tuue9.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%9C%88%E4%BA%AE%E7%A0%A3%EF%BC%88%E4%B8%8A%E5%BC%A6%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 125,
+      "attack": 100,
+      "magic_attack": 98,
+      "defense": 100,
+      "magic_defense": 81,
+      "speed": 105,
+      "total": 609
+    },
+    "height": "1.85~2.1",
+    "weight": "137.5~182.4"
+  },
+  {
+    "id": 239,
+    "name": "豆丁鱼",
+    "attribute": "水/龙",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/84/l03hb24992kdwomhy0qfjjynend0qdc.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%B1%86%E4%B8%81%E9%B1%BC_1.png",
+    "stats": {
+      "hp": 45,
+      "attack": 70,
+      "magic_attack": 74,
+      "defense": 67,
+      "magic_defense": 70,
+      "speed": 75,
+      "total": 401
+    },
+    "height": "0.31~0.44",
+    "weight": "1.2~3.4"
+  },
+  {
+    "id": 240,
+    "name": "快鳍鱼",
+    "attribute": "水/龙",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/63/408ag6ovu931hssd7kstv1bemj4ltgc.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%BF%AB%E9%B3%8D%E9%B1%BC_1.png",
+    "stats": {
+      "hp": 60,
+      "attack": 93,
+      "magic_attack": 99,
+      "defense": 89,
+      "magic_defense": 93,
+      "speed": 100,
+      "total": 534
+    },
+    "height": "0.27~0.39",
+    "weight": "14.5~16.8"
+  },
+  {
+    "id": 241,
+    "name": "龙鱼",
+    "attribute": "水/龙",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/1b/9pwwn6fecfi32vefzwgmfcpftbkfvxi.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%BE%99%E9%B1%BC_1.png",
+    "stats": {
+      "hp": 75,
+      "attack": 116,
+      "magic_attack": 123,
+      "defense": 112,
+      "magic_defense": 116,
+      "speed": 125,
+      "total": 667
+    },
+    "height": "0.69~0.99",
+    "weight": "39.5~44.5"
+  },
+  {
+    "id": 242,
+    "name": "胆小鳗鱼",
+    "attribute": "电/水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/65/sexctmvdy5pnj2fgqdue7sovqn9cw4z.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%83%86%E5%B0%8F%E9%B3%97%E9%B1%BC_1.png",
+    "stats": {
+      "hp": 68,
+      "attack": 92,
+      "magic_attack": 92,
+      "defense": 83,
+      "magic_defense": 90,
+      "speed": 92,
+      "total": 517
+    },
+    "height": "0.74~1.07",
+    "weight": "17.5~26.85"
+  },
+  {
+    "id": 243,
+    "name": "闪电鳗鱼",
+    "attribute": "电/水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/cf/tfvre4g1cbdv74tv7wydn5udn5gtdiv.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%97%AA%E7%94%B5%E9%B3%97%E9%B1%BC_1.png",
+    "stats": {
+      "hp": 85,
+      "attack": 115,
+      "magic_attack": 115,
+      "defense": 104,
+      "magic_defense": 112,
+      "speed": 115,
+      "total": 646
+    },
+    "height": "0.83~1.19",
+    "weight": "68.9~76.5"
+  },
+  {
+    "id": 244,
+    "name": "翡翠水母",
+    "attribute": "水/毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/f3/qtg8mg0mxy7370rpc9eohcwcgsw0k05.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%BF%A1%E7%BF%A0%E6%B0%B4%E6%AF%8D_1.png",
+    "stats": {
+      "hp": 108,
+      "attack": 30,
+      "magic_attack": 68,
+      "defense": 75,
+      "magic_defense": 109,
+      "speed": 76,
+      "total": 466
+    },
+    "height": "0.49~0.7",
+    "weight": "31.5~36.8"
+  },
+  {
+    "id": 245,
+    "name": "琉璃水母",
+    "attribute": "水/毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/de/k7nubtsz7deg1n4u2a960xgw7z7awlo.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%90%89%E7%92%83%E6%B0%B4%E6%AF%8D_1.png",
+    "stats": {
+      "hp": 134,
+      "attack": 37,
+      "magic_attack": 85,
+      "defense": 93,
+      "magic_defense": 136,
+      "speed": 95,
+      "total": 580
+    },
+    "height": "0.9~1.28",
+    "weight": "48.0~53.0"
+  },
+  {
+    "id": 246,
+    "name": "裘洛",
+    "attribute": "毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/9c/ai2ivunxg0fjwnzy552j6bsq1nh5qr4.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%A3%98%E6%B4%9B_1.png",
+    "stats": {
+      "hp": 44,
+      "attack": 56,
+      "magic_attack": 50,
+      "defense": 39,
+      "magic_defense": 48,
+      "speed": 75,
+      "total": 312
+    },
+    "height": "0.7~1.0",
+    "weight": "7.5~12.5"
+  },
+  {
+    "id": 247,
+    "name": "裘力",
+    "attribute": "毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d3/qw6krqyuqrdgd4nlois0j77f8ekasdu.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%A3%98%E5%8A%9B_1.png",
+    "stats": {
+      "hp": 59,
+      "attack": 74,
+      "magic_attack": 67,
+      "defense": 52,
+      "magic_defense": 64,
+      "speed": 100,
+      "total": 416
+    },
+    "height": "0.81~1.16",
+    "weight": "14.07~18.02"
+  },
+  {
+    "id": 248,
+    "name": "裘卡",
+    "attribute": "毒",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a9/1bccpd3l1t66oy3lwk44wzr3pqsj9y2.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%A3%98%E5%8D%A1_1.png",
+    "stats": {
+      "hp": 73,
+      "attack": 93,
+      "magic_attack": 83,
+      "defense": 65,
+      "magic_defense": 81,
+      "speed": 125,
+      "total": 520
+    },
+    "height": "1.25~1.79",
+    "weight": "49.5~58.6"
+  },
+  {
+    "id": 249,
+    "name": "可爱猿",
+    "attribute": "火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/e0/1xsbef59im08o1aui67cvgqp9nr1a58.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8F%AF%E7%88%B1%E7%8C%BF_1.png",
+    "stats": {
+      "hp": 100,
+      "attack": 97,
+      "magic_attack": 43,
+      "defense": 86,
+      "magic_defense": 67,
+      "speed": 36,
+      "total": 429
+    },
+    "height": "0.69~0.98",
+    "weight": "21.0~31.5"
+  },
+  {
+    "id": 250,
+    "name": "炽热猿",
+    "attribute": "火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/ad/rbo5f373p1xc6t0e8mc6vtnxu6d1dqy.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%82%BD%E7%83%AD%E7%8C%BF_1.png",
+    "stats": {
+      "hp": 133,
+      "attack": 130,
+      "magic_attack": 57,
+      "defense": 115,
+      "magic_defense": 89,
+      "speed": 48,
+      "total": 572
+    },
+    "height": "0.71~1.02",
+    "weight": "46.5~63.5"
+  },
+  {
+    "id": 251,
+    "name": "火焰猿",
+    "attribute": "火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/49/jzlbg7v46fd5m04k2732qml7t64y3a0.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%81%AB%E7%84%B0%E7%8C%BF_1.png",
+    "stats": {
+      "hp": 167,
+      "attack": 162,
+      "magic_attack": 72,
+      "defense": 143,
+      "magic_defense": 111,
+      "speed": 60,
+      "total": 715
+    },
+    "height": "1.68~1.9",
+    "weight": "124.5~136.5"
+  },
+  {
+    "id": 252,
+    "name": "布鲁斯",
+    "attribute": "冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/03/i3lomx5rtgtrhun9j9o2cky82nj7koy.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B8%83%E9%B2%81%E6%96%AF_1.png",
+    "stats": {
+      "hp": 44,
+      "attack": 60,
+      "magic_attack": 16,
+      "defense": 68,
+      "magic_defense": 53,
+      "speed": 54,
+      "total": 295
+    },
+    "height": "0.53~0.76",
+    "weight": "2.4~4.6"
+  },
+  {
+    "id": 253,
+    "name": "雪顶布鲁斯",
+    "attribute": "冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/f2/qmr111cc6n8vcfctp3ididgmph2te4b.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%9B%AA%E9%A1%B6%E5%B8%83%E9%B2%81%E6%96%AF_1.png",
+    "stats": {
+      "hp": 58,
+      "attack": 81,
+      "magic_attack": 22,
+      "defense": 91,
+      "magic_defense": 70,
+      "speed": 72,
+      "total": 394
+    },
+    "height": "0.58~0.83",
+    "weight": "12.8~15.6"
+  },
+  {
+    "id": 254,
+    "name": "冰钻布鲁斯",
+    "attribute": "冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/bd/lqbeuvjzkbdjilyup9j54q4ocdv6yza.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%86%B0%E9%92%BB%E5%B8%83%E9%B2%81%E6%96%AF_1.png",
+    "stats": {
+      "hp": 73,
+      "attack": 101,
+      "magic_attack": 27,
+      "defense": 114,
+      "magic_defense": 88,
+      "speed": 90,
+      "total": 493
+    },
+    "height": "1.21~1.72",
+    "weight": "49.5~58.6"
+  },
+  {
+    "id": 255,
+    "name": "治愈兔",
+    "attribute": "火/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/aa/rngx23e2gk0fv954dvqfy4imdotkztj.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B2%BB%E6%84%88%E5%85%94_1.png",
+    "stats": {
+      "hp": 67,
+      "attack": 28,
+      "magic_attack": 73,
+      "defense": 60,
+      "magic_defense": 76,
+      "speed": 54,
+      "total": 358
+    },
+    "height": "0.57~0.82",
+    "weight": "12.03~14.42"
+  },
+  {
+    "id": 256,
+    "name": "红丝绒",
+    "attribute": "火/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/00/lbkgbqads9s37knw6rqxu3fuylvqwro.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%BA%A2%E4%B8%9D%E7%BB%92_1.png",
+    "stats": {
+      "hp": 90,
+      "attack": 38,
+      "magic_attack": 98,
+      "defense": 80,
+      "magic_defense": 101,
+      "speed": 72,
+      "total": 479
+    },
+    "height": "0.68~0.97",
+    "weight": "22.4~28.6"
+  },
+  {
+    "id": 257,
+    "name": "红绒十字",
+    "attribute": "火/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/c1/1i2n00tjjxrhc3x9p39hrg4kxujapoh.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%BA%A2%E7%BB%92%E5%8D%81%E5%AD%97_1.png",
+    "stats": {
+      "hp": 112,
+      "attack": 47,
+      "magic_attack": 122,
+      "defense": 100,
+      "magic_defense": 127,
+      "speed": 90,
+      "total": 598
+    },
+    "height": "1.04~1.49",
+    "weight": "32.5~36.8"
+  },
+  {
+    "id": 258,
+    "name": "乌达（极昼的样子）",
+    "attribute": "恶/火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/74/4646tw9mipskzlalsx2u7ujdaa067iu.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%B9%8C%E8%BE%BE%EF%BC%88%E6%9E%81%E6%98%BC%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 80,
+      "attack": 95,
+      "magic_attack": 49,
+      "defense": 70,
+      "magic_defense": 42,
+      "speed": 33,
+      "total": 369
+    },
+    "height": "0.44~0.58",
+    "weight": "4.6~6.1"
+  },
+  {
+    "id": 259,
+    "name": "迷你乌（极昼的样子）",
+    "attribute": "恶/火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/4a/herfyv2d6y7yvyv02hnk8kkmp84ogsm.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%BF%B7%E4%BD%A0%E4%B9%8C%EF%BC%88%E6%9E%81%E6%98%BC%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 107,
+      "attack": 126,
+      "magic_attack": 66,
+      "defense": 93,
+      "magic_defense": 56,
+      "speed": 44,
+      "total": 492
+    },
+    "height": "0.97~1.2",
+    "weight": "27.9~39.1"
+  },
+  {
+    "id": 260,
+    "name": "乌拉塔（极昼的样子）",
+    "attribute": "恶/火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/e9/2j3t5mjcljnsc1hw72btjrebq8td3ug.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%B9%8C%E6%8B%89%E5%A1%94%EF%BC%88%E6%9E%81%E6%98%BC%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 134,
+      "attack": 158,
+      "magic_attack": 82,
+      "defense": 116,
+      "magic_defense": 70,
+      "speed": 55,
+      "total": 615
+    },
+    "height": "1.85~2.1",
+    "weight": "48.8~63.29"
+  },
+  {
+    "id": 261,
+    "name": "螺旋帕帕",
+    "attribute": "机械/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/2e/8sya38cbx002fydqgo0u3z0r4wzcmh9.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%9E%BA%E6%97%8B%E5%B8%95%E5%B8%95_1.png",
+    "stats": {
+      "hp": 88,
+      "attack": 55,
+      "magic_attack": 8,
+      "defense": 79,
+      "magic_defense": 67,
+      "speed": 80,
+      "total": 377
+    },
+    "height": "0.35~0.45",
+    "weight": "2.08~4.35"
+  },
+  {
+    "id": 262,
+    "name": "帕帕斯卡",
+    "attribute": "机械/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/48/0go6kjyt43jmyphx2po4l7j8g5jdh98.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B8%95%E5%B8%95%E6%96%AF%E5%8D%A1_1.png",
+    "stats": {
+      "hp": 110,
+      "attack": 68,
+      "magic_attack": 10,
+      "defense": 99,
+      "magic_defense": 84,
+      "speed": 100,
+      "total": 471
+    },
+    "height": "1.05~1.47",
+    "weight": "48.7~60.1"
+  },
+  {
+    "id": 263,
+    "name": "机械方方",
+    "attribute": "机械",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/0b/pgpg5oimlp3vj22sforlyu0o5mlenw8.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%9C%BA%E6%A2%B0%E6%96%B9%E6%96%B9_1.png",
+    "stats": {
+      "hp": 62,
+      "attack": 81,
+      "magic_attack": 32,
+      "defense": 76,
+      "magic_defense": 60,
+      "speed": 51,
+      "total": 362
+    },
+    "height": "0.42~0.6",
+    "weight": "8.0~11.0"
+  },
+  {
+    "id": 264,
+    "name": "多彩方方",
+    "attribute": "机械",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/28/7xmi4mrr7xy8rbxu5td2uptxfax5fhj.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A4%9A%E5%BD%A9%E6%96%B9%E6%96%B9_1.png",
+    "stats": {
+      "hp": 82,
+      "attack": 108,
+      "magic_attack": 43,
+      "defense": 101,
+      "magic_defense": 80,
+      "speed": 68,
+      "total": 482
+    },
+    "height": "0.68~0.97",
+    "weight": "23.77~34.6"
+  },
+  {
+    "id": 265,
+    "name": "立方人",
+    "attribute": "机械",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/09/fnsx2e888qucax28zooe75tenxxgmkx.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%AB%8B%E6%96%B9%E4%BA%BA_1.png",
+    "stats": {
+      "hp": 103,
+      "attack": 135,
+      "magic_attack": 54,
+      "defense": 127,
+      "magic_defense": 101,
+      "speed": 85,
+      "total": 605
+    },
+    "height": "1.78~2.01",
+    "weight": "106.5~139.07"
+  },
+  {
+    "id": 266,
+    "name": "可立鸡",
+    "attribute": "火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/2d/9w4l9rr13yoldnqxtppebm3tqovahde.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8F%AF%E7%AB%8B%E9%B8%A1_1.png",
+    "stats": {
+      "hp": 65,
+      "attack": 79,
+      "magic_attack": 79,
+      "defense": 55,
+      "magic_defense": 52,
+      "speed": 66,
+      "total": 396
+    },
+    "height": "0.39~0.56",
+    "weight": "4.6~7.4"
+  },
+  {
+    "id": 267,
+    "name": "晕晕鸡",
+    "attribute": "火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/46/5euq737ld77bkp75nukdt3mrwa11xrq.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%99%95%E6%99%95%E9%B8%A1_1.png",
+    "stats": {
+      "hp": 86,
+      "attack": 106,
+      "magic_attack": 106,
+      "defense": 74,
+      "magic_defense": 70,
+      "speed": 88,
+      "total": 530
+    },
+    "height": "0.68~0.91",
+    "weight": "12.03~18.06"
+  },
+  {
+    "id": 268,
+    "name": "绅士鸡",
+    "attribute": "火/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/fc/tlu25qyk7b26q2d2fpv5mkuwafz4tv3.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%BB%85%E5%A3%AB%E9%B8%A1_1.png",
+    "stats": {
+      "hp": 108,
+      "attack": 132,
+      "magic_attack": 132,
+      "defense": 92,
+      "magic_defense": 87,
+      "speed": 110,
+      "total": 661
+    },
+    "height": "1.31~1.87",
+    "weight": "46.8~58.2"
+  },
+  {
+    "id": 269,
+    "name": "武者鸡",
+    "attribute": "火/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d5/j89f9kespq4zwjb6h67ew9wvsnd88g0.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%AD%A6%E8%80%85%E9%B8%A1_1.png",
+    "stats": {
+      "hp": 121,
+      "attack": 144,
+      "magic_attack": 58,
+      "defense": 92,
+      "magic_defense": 70,
+      "speed": 95,
+      "total": 580
+    },
+    "height": "1.46~2.09",
+    "weight": "46.8~58.2"
+  },
+  {
+    "id": 270,
+    "name": "优优",
+    "attribute": "地/光",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/b2/71ru3va03vqwr4ew76bnhqj74neqk98.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%BC%98%E4%BC%98_1.png",
+    "stats": {
+      "hp": 81,
+      "attack": 35,
+      "magic_attack": 89,
+      "defense": 84,
+      "magic_defense": 104,
+      "speed": 92,
+      "total": 485
+    },
+    "height": "0.38~0.56",
+    "weight": "3.03~4.1"
+  },
+  {
+    "id": 271,
+    "name": "绒光优优",
+    "attribute": "地/光",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/76/fyktbyiugga3qdq8gkeboear0slov69.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%BB%92%E5%85%89%E4%BC%98%E4%BC%98_1.png",
+    "stats": {
+      "hp": 101,
+      "attack": 43,
+      "magic_attack": 111,
+      "defense": 105,
+      "magic_defense": 130,
+      "speed": 115,
+      "total": 605
+    },
+    "height": "0.69~0.85",
+    "weight": "13.5~19.6"
+  },
+  {
+    "id": 272,
+    "name": "噼啪鸟",
+    "attribute": "电/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/5f/67uopai58qg98apg0dci57gi1bgxhn4.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%99%BC%E5%95%AA%E9%B8%9F_1.png",
+    "stats": {
+      "hp": 78,
+      "attack": 116,
+      "magic_attack": 109,
+      "defense": 85,
+      "magic_defense": 85,
+      "speed": 145,
+      "total": 618
+    },
+    "height": "2.0~2.15",
+    "weight": "89.5~127.5"
+  },
+  {
+    "id": 273,
+    "name": "深蓝鲸",
+    "attribute": "水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/4c/eonvrfjw5xrztsmkzmwz4eutdi7oban.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B7%B1%E8%93%9D%E9%B2%B8_1.png",
+    "stats": {
+      "hp": 129,
+      "attack": 40,
+      "magic_attack": 115,
+      "defense": 119,
+      "magic_defense": 135,
+      "speed": 50,
+      "total": 588
+    },
+    "height": "2.0~2.65",
+    "weight": "645.0~700.0"
+  },
+  {
+    "id": 274,
+    "name": "格兰种子",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d3/b3jzacefc99rb5kz2yh5ta03dq5rd2e.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%A0%BC%E5%85%B0%E7%A7%8D%E5%AD%90_1.png",
+    "stats": {
+      "hp": 65,
+      "attack": 31,
+      "magic_attack": 74,
+      "defense": 48,
+      "magic_defense": 67,
+      "speed": 36,
+      "total": 321
+    },
+    "height": "0.4~0.57",
+    "weight": "3.5~5.4"
+  },
+  {
+    "id": 275,
+    "name": "格兰花",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d7/gvd0lpur7zrkuy6lt9b86bwpj877hfv.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%A0%BC%E5%85%B0%E8%8A%B1_1.png",
+    "stats": {
+      "hp": 86,
+      "attack": 42,
+      "magic_attack": 99,
+      "defense": 64,
+      "magic_defense": 90,
+      "speed": 48,
+      "total": 429
+    },
+    "height": "0.48~0.68",
+    "weight": "6.5~7.8"
+  },
+  {
+    "id": 276,
+    "name": "格兰球",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/6c/ti7vsccgrnfmugk27891cc9726d15j5.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%A0%BC%E5%85%B0%E7%90%83_1.png",
+    "stats": {
+      "hp": 108,
+      "attack": 52,
+      "magic_attack": 124,
+      "defense": 80,
+      "magic_defense": 112,
+      "speed": 60,
+      "total": 536
+    },
+    "height": "0.81~1.16",
+    "weight": "12.5~16.5"
+  },
+  {
+    "id": 277,
+    "name": "地鼠（枯水期的样子）",
+    "attribute": "地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/ed/p13cco2es9ta74gd9w8yqdoc0va3qp6.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%9C%B0%E9%BC%A0%EF%BC%88%E6%9E%AF%E6%B0%B4%E6%9C%9F%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 66,
+      "attack": 71,
+      "magic_attack": 31,
+      "defense": 61,
+      "magic_defense": 42,
+      "speed": 66,
+      "total": 337
+    },
+    "height": "0.46~0.66",
+    "weight": "1.8~2.85"
+  },
+  {
+    "id": 278,
+    "name": "遁鼠（枯水期的样子）",
+    "attribute": "地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/04/hhyd5vj9dub1p42xrvafn2cazk3ypft.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%81%81%E9%BC%A0%EF%BC%88%E6%9E%AF%E6%B0%B4%E6%9C%9F%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 88,
+      "attack": 95,
+      "magic_attack": 41,
+      "defense": 82,
+      "magic_defense": 56,
+      "speed": 88,
+      "total": 450
+    },
+    "height": "0.48~0.69",
+    "weight": "3.4~4.8"
+  },
+  {
+    "id": 279,
+    "name": "遁地鼠（枯水期的样子）",
+    "attribute": "地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/3f/tfoq58kdykf2kzslpubl87ceyiu4c0r.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%81%81%E5%9C%B0%E9%BC%A0%EF%BC%88%E6%9E%AF%E6%B0%B4%E6%9C%9F%E7%9A%84%E6%A0%B7%E5%AD%90%EF%BC%89_1.png",
+    "stats": {
+      "hp": 110,
+      "attack": 119,
+      "magic_attack": 51,
+      "defense": 102,
+      "magic_defense": 70,
+      "speed": 110,
+      "total": 562
+    },
+    "height": "0.64~0.92",
+    "weight": "6.4~7.5"
+  },
+  {
+    "id": 280,
+    "name": "墨鱿士",
+    "attribute": "幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/ed/ekbfzkhrhoe1i26cq62zv0bdwyws7zg.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A2%A8%E9%B1%BF%E5%A3%AB_1.png",
+    "stats": {
+      "hp": 103,
+      "attack": 84,
+      "magic_attack": 34,
+      "defense": 105,
+      "magic_defense": 79,
+      "speed": 56,
+      "total": 461
+    },
+    "height": "0.35~0.46",
+    "weight": "3.25~5.02"
+  },
+  {
+    "id": 281,
+    "name": "混乱鱿彩",
+    "attribute": "幽/恶",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/89/co25joc1fbw7yk3t67uwo91xx3czmuj.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B7%B7%E4%B9%B1%E9%B1%BF%E5%BD%A9_1.png",
+    "stats": {
+      "hp": 129,
+      "attack": 105,
+      "magic_attack": 42,
+      "defense": 131,
+      "magic_defense": 99,
+      "speed": 70,
+      "total": 576
+    },
+    "height": "1.36~1.54",
+    "weight": "36.9~48.2"
+  },
+  {
+    "id": 282,
+    "name": "秩序鱿墨",
+    "attribute": "幽/萌",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/fa/hcovzifwgad156lg6jwk02nd4nhsckv.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%A7%A9%E5%BA%8F%E9%B1%BF%E5%A2%A8_1.png",
+    "stats": {
+      "hp": 78,
+      "attack": 120,
+      "magic_attack": 39,
+      "defense": 124,
+      "magic_defense": 113,
+      "speed": 130,
+      "total": 604
+    },
+    "height": "1.59~1.72",
+    "weight": "45.6~60.1"
+  },
+  {
+    "id": 283,
+    "name": "小甲虫",
+    "attribute": "虫",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/c5/gxb5ofg998pswe6vu88c1gtiiibwnro.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E7%94%B2%E8%99%AB_1.png",
+    "stats": {
+      "hp": 98,
+      "attack": 71,
+      "magic_attack": 31,
+      "defense": 97,
+      "magic_defense": 61,
+      "speed": 60,
+      "total": 418
+    },
+    "height": "0.48~0.68",
+    "weight": "6.5~8.4"
+  },
+  {
+    "id": 284,
+    "name": "铠甲虫",
+    "attribute": "虫",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/6e/c2qomiq244hfmlrgiwvd13n0pmn1znj.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%93%A0%E7%94%B2%E8%99%AB_1.png",
+    "stats": {
+      "hp": 122,
+      "attack": 88,
+      "magic_attack": 39,
+      "defense": 121,
+      "magic_defense": 77,
+      "speed": 75,
+      "total": 522
+    },
+    "height": "1.17~1.68",
+    "weight": "83.0~96.0"
+  },
+  {
+    "id": 285,
+    "name": "圣剑侍从",
+    "attribute": "机械",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/1d/6w4z6k41648qw2uagnoz0ac081trrgi.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%9C%A3%E5%89%91%E4%BE%8D%E4%BB%8E_1.png",
+    "stats": {
+      "hp": 139,
+      "attack": 116,
+      "magic_attack": 111,
+      "defense": 139,
+      "magic_defense": 139,
+      "speed": 52,
+      "total": 696
+    },
+    "height": "0.94~1.18",
+    "weight": "115.7~173.6"
+  },
+  {
+    "id": 286,
+    "name": "圣剑-X",
+    "attribute": "机械",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/8d/k36fgnkefvfbntgmo6joyjmh9ji1bt7.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%9C%A3%E5%89%91-X_1.png",
+    "stats": {
+      "hp": 174,
+      "attack": 144,
+      "magic_attack": 139,
+      "defense": 173,
+      "magic_defense": 173,
+      "speed": 65,
+      "total": 868
+    },
+    "height": "1.83~2.07",
+    "weight": "481.0~658.0"
+  },
+  {
+    "id": 287,
+    "name": "吸泥鸥",
+    "attribute": "地/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/8e/br2yi6aj77tv3j8bstqidsiuvadc0od.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%90%B8%E6%B3%A5%E9%B8%A5_1.png",
+    "stats": {
+      "hp": 99,
+      "attack": 89,
+      "magic_attack": 33,
+      "defense": 87,
+      "magic_defense": 71,
+      "speed": 76,
+      "total": 455
+    },
+    "height": "0.55~0.71",
+    "weight": "9.5~12.5"
+  },
+  {
+    "id": 288,
+    "name": "泥吼牙",
+    "attribute": "地/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/f0/imncv1vv01zbrx7tkjij3xtarmhl2id.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%B3%A5%E5%90%BC%E7%89%99_1.png",
+    "stats": {
+      "hp": 124,
+      "attack": 112,
+      "magic_attack": 41,
+      "defense": 109,
+      "magic_defense": 88,
+      "speed": 95,
+      "total": 569
+    },
+    "height": "1.05~1.45",
+    "weight": "21.5~32.5"
+  },
+  {
+    "id": 289,
+    "name": "大头骨龙",
+    "attribute": "龙/幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/dc/oaohfrfv4b6cx8elngiwarhn9phgzch.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A4%A7%E5%A4%B4%E9%AA%A8%E9%BE%99_1.png",
+    "stats": {
+      "hp": 96,
+      "attack": 109,
+      "magic_attack": 40,
+      "defense": 84,
+      "magic_defense": 65,
+      "speed": 48,
+      "total": 442
+    },
+    "height": "0.85~1.0",
+    "weight": "18.6~33.5"
+  },
+  {
+    "id": 290,
+    "name": "寂灭骨龙",
+    "attribute": "龙/幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/31/g9815x8kx47nbavj9mcolhexofrpulc.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%AF%82%E7%81%AD%E9%AA%A8%E9%BE%99_1.png",
+    "stats": {
+      "hp": 120,
+      "attack": 137,
+      "magic_attack": 50,
+      "defense": 104,
+      "magic_defense": 81,
+      "speed": 60,
+      "total": 552
+    },
+    "height": "2.25~2.45",
+    "weight": "85.7~105.0"
+  },
+  {
+    "id": 291,
+    "name": "厉毒小萝",
+    "attribute": "毒/恶",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/3e/6tk28w0xeycfxejxbtn8myiv9wsd17j.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8E%89%E6%AF%92%E5%B0%8F%E8%90%9D_1.png",
+    "stats": {
+      "hp": 67,
+      "attack": 64,
+      "magic_attack": 17,
+      "defense": 81,
+      "magic_defense": 59,
+      "speed": 108,
+      "total": 396
+    },
+    "height": "0.55~0.65",
+    "weight": "8.73~14.92"
+  },
+  {
+    "id": 292,
+    "name": "厉毒修萝",
+    "attribute": "毒/恶",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/52/fnxayt7dshqnrygae3kr64v1gs4wcws.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8E%89%E6%AF%92%E4%BF%AE%E8%90%9D_1.png",
+    "stats": {
+      "hp": 84,
+      "attack": 80,
+      "magic_attack": 21,
+      "defense": 101,
+      "magic_defense": 74,
+      "speed": 135,
+      "total": 495
+    },
+    "height": "1.45~1.55",
+    "weight": "33.75~41.6"
+  },
+  {
+    "id": 293,
+    "name": "小帕尔",
+    "attribute": "恶",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/b3/l5aj212ensdevykbe4wgsxf1c12ayxi.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E5%B8%95%E5%B0%94_1.png",
+    "stats": {
+      "hp": 78,
+      "attack": 76,
+      "magic_attack": 34,
+      "defense": 79,
+      "magic_defense": 52,
+      "speed": 60,
+      "total": 379
+    },
+    "height": "0.64~0.92",
+    "weight": "9.4~13.6"
+  },
+  {
+    "id": 294,
+    "name": "帕尔萨斯",
+    "attribute": "恶",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/cb/gteuesfklnj4acn55f3aqr0wrtlwki4.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B8%95%E5%B0%94%E8%90%A8%E6%96%AF_1.png",
+    "stats": {
+      "hp": 104,
+      "attack": 102,
+      "magic_attack": 46,
+      "defense": 105,
+      "magic_defense": 70,
+      "speed": 80,
+      "total": 507
+    },
+    "height": "1.33~1.58",
+    "weight": "46.5~61.5"
+  },
+  {
+    "id": 295,
+    "name": "龙息帕尔",
+    "attribute": "恶",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/0f/q0bwy4syzqav082nqhy9tl7i8hsirz4.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%BE%99%E6%81%AF%E5%B8%95%E5%B0%94_1.png",
+    "stats": {
+      "hp": 130,
+      "attack": 127,
+      "magic_attack": 57,
+      "defense": 131,
+      "magic_defense": 87,
+      "speed": 100,
+      "total": 632
+    },
+    "height": "1.93~2.4",
+    "weight": "96.5~115.0"
+  },
+  {
+    "id": 296,
+    "name": "毛头小蛛",
+    "attribute": "虫/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/f5/3nr9m11fcoasdyy8qcplzh21b7rbqep.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%AF%9B%E5%A4%B4%E5%B0%8F%E8%9B%9B_1.png",
+    "stats": {
+      "hp": 85,
+      "attack": 80,
+      "magic_attack": 27,
+      "defense": 93,
+      "magic_defense": 79,
+      "speed": 88,
+      "total": 452
+    },
+    "height": "0.3~0.45",
+    "weight": "0.95~2.0"
+  },
+  {
+    "id": 297,
+    "name": "捕尘长绒",
+    "attribute": "虫/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/be/nkj0ie4pek8cghl4idvgqt3m2sq5ox9.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%8D%95%E5%B0%98%E9%95%BF%E7%BB%92_1.png",
+    "stats": {
+      "hp": 106,
+      "attack": 100,
+      "magic_attack": 34,
+      "defense": 116,
+      "magic_defense": 99,
+      "speed": 110,
+      "total": 565
+    },
+    "height": "1.15~1.45",
+    "weight": "2.35~4.19"
+  },
+  {
+    "id": 298,
+    "name": "食尘短绒",
+    "attribute": "虫/地",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/56/2arovnrg3t48x4jr2zo0w7fp8axkkx9.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%A3%9F%E5%B0%98%E7%9F%AD%E7%BB%92_1.png",
+    "stats": {
+      "hp": 109,
+      "attack": 105,
+      "magic_attack": 37,
+      "defense": 113,
+      "magic_defense": 97,
+      "speed": 115,
+      "total": 576
+    },
+    "height": "0.75~0.9",
+    "weight": "2.65~5.15"
+  },
+  {
+    "id": 299,
+    "name": "画精灵",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a0/lvngsspwir7n25jd82zaz2zujxdrqs8.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%94%BB%E7%B2%BE%E7%81%B5_1.png",
+    "stats": {
+      "hp": 61,
+      "attack": 32,
+      "magic_attack": 78,
+      "defense": 56,
+      "magic_defense": 72,
+      "speed": 72,
+      "total": 371
+    },
+    "height": "0.28~0.38",
+    "weight": "0.99~2.21"
+  },
+  {
+    "id": 300,
+    "name": "画像守护",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/0e/4q1o3ztl1tdspj5lecjqzb5xvfqvhjn.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%94%BB%E5%83%8F%E5%AE%88%E6%8A%A4_1.png",
+    "stats": {
+      "hp": 81,
+      "attack": 42,
+      "magic_attack": 104,
+      "defense": 75,
+      "magic_defense": 96,
+      "speed": 96,
+      "total": 494
+    },
+    "height": "0.49~0.6",
+    "weight": "5.85~6.9"
+  },
+  {
+    "id": 301,
+    "name": "画间法师手",
+    "attribute": "普通/幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/2a/m0rnppd2iwqm9h78gft0jkwzqje5v5h.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%94%BB%E9%97%B4%E6%B3%95%E5%B8%88%E6%89%8B_1.png",
+    "stats": {
+      "hp": 101,
+      "attack": 53,
+      "magic_attack": 131,
+      "defense": 94,
+      "magic_defense": 120,
+      "speed": 120,
+      "total": 619
+    },
+    "height": "2.08~2.45",
+    "weight": "46.05~58.1"
+  },
+  {
+    "id": 302,
+    "name": "画间沉铁兽",
+    "attribute": "普通/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/61/g4rq03yecy8xudglhc96lhi5ie4zri4.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%94%BB%E9%97%B4%E6%B2%89%E9%93%81%E5%85%BD_1.png",
+    "stats": {
+      "hp": 100,
+      "attack": 160,
+      "magic_attack": 67,
+      "defense": 100,
+      "magic_defense": 76,
+      "speed": 105,
+      "total": 608
+    },
+    "height": "1.75~1.92",
+    "weight": "75.7~88.02"
+  },
+  {
+    "id": 303,
+    "name": "书魔虫",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/53/ph0kl9j7nj2m8azrrd5hpeq0b62phrl.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%B9%A6%E9%AD%94%E8%99%AB_1.png",
+    "stats": {
+      "hp": 67,
+      "attack": 75,
+      "magic_attack": 75,
+      "defense": 48,
+      "magic_defense": 73,
+      "speed": 57,
+      "total": 395
+    },
+    "height": "0.3~0.41",
+    "weight": "2.28~3.86"
+  },
+  {
+    "id": 304,
+    "name": "书卷守护",
+    "attribute": "普通",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/8e/2wi1t21j1agshuww5p50uqui9mu1b55.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%B9%A6%E5%8D%B7%E5%AE%88%E6%8A%A4_1.png",
+    "stats": {
+      "hp": 89,
+      "attack": 100,
+      "magic_attack": 100,
+      "defense": 64,
+      "magic_defense": 98,
+      "speed": 76,
+      "total": 527
+    },
+    "height": "0.82~1.01",
+    "weight": "9.8~14.8"
+  },
+  {
+    "id": 305,
+    "name": "古卷执政官",
+    "attribute": "普通/幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/dc/numbiaa5oc8iursntgrv198ay097vnk.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8F%A4%E5%8D%B7%E6%89%A7%E6%94%BF%E5%AE%98_1.png",
+    "stats": {
+      "hp": 111,
+      "attack": 125,
+      "magic_attack": 125,
+      "defense": 80,
+      "magic_defense": 122,
+      "speed": 95,
+      "total": 658
+    },
+    "height": "1.91~2.21",
+    "weight": "98.8~135.5"
+  },
+  {
+    "id": 306,
+    "name": "古卷匣魔像",
+    "attribute": "普通/武",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/18/6fhqn0ek9exvjnyj4rbdl14goi2l79m.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8F%A4%E5%8D%B7%E5%8C%A3%E9%AD%94%E5%83%8F_1.png",
+    "stats": {
+      "hp": 114,
+      "attack": 109,
+      "magic_attack": 109,
+      "defense": 134,
+      "magic_defense": 89,
+      "speed": 95,
+      "total": 650
+    },
+    "height": "1.87~2.15",
+    "weight": "119.5~180.5"
+  },
+  {
+    "id": 307,
+    "name": "绒绒",
+    "attribute": "光/虫",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/08/654ffcp524wy323uwi7k1z7rk4rejuc.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%BB%92%E7%BB%92_1.png",
+    "stats": {
+      "hp": 58,
+      "attack": 42,
+      "magic_attack": 44,
+      "defense": 49,
+      "magic_defense": 80,
+      "speed": 69,
+      "total": 342
+    },
+    "height": "0.29~0.35",
+    "weight": "1.0~2.5"
+  },
+  {
+    "id": 308,
+    "name": "小绒茧",
+    "attribute": "光/虫",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/51/fzhzu0tmqg25ud42u7z9a95msp1bphh.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E7%BB%92%E8%8C%A7_1.png",
+    "stats": {
+      "hp": 77,
+      "attack": 56,
+      "magic_attack": 58,
+      "defense": 65,
+      "magic_defense": 106,
+      "speed": 92,
+      "total": 454
+    },
+    "height": "0.59~0.84",
+    "weight": "7.6~9.2"
+  },
+  {
+    "id": 309,
+    "name": "绒仙子",
+    "attribute": "光/虫",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/2/2a/nynxiyjn07oseu31p6o5z8crn5i6dx0.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%BB%92%E4%BB%99%E5%AD%90_1.png",
+    "stats": {
+      "hp": 96,
+      "attack": 71,
+      "magic_attack": 73,
+      "defense": 81,
+      "magic_defense": 133,
+      "speed": 115,
+      "total": 569
+    },
+    "height": "1.25~1.65",
+    "weight": "37.5~42.8"
+  },
+  {
+    "id": 310,
+    "name": "犀角鸟",
+    "attribute": "光",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/6a/81qhw7nwi52la93w31dkqwhrzwgqiqw.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%8A%80%E8%A7%92%E9%B8%9F_1.png",
+    "stats": {
+      "hp": 63,
+      "attack": 88,
+      "magic_attack": 40,
+      "defense": 67,
+      "magic_defense": 44,
+      "speed": 66,
+      "total": 368
+    },
+    "height": "0.32~0.4",
+    "weight": "9.6~11.5"
+  },
+  {
+    "id": 311,
+    "name": "光纤兽",
+    "attribute": "光",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/54/b5avo6zna4cj4lvypoku4djknndvj61.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%85%89%E7%BA%A4%E5%85%BD_1.png",
+    "stats": {
+      "hp": 83,
+      "attack": 117,
+      "magic_attack": 54,
+      "defense": 90,
+      "magic_defense": 58,
+      "speed": 88,
+      "total": 490
+    },
+    "height": "0.7~0.85",
+    "weight": "31.5~37.8"
+  },
+  {
+    "id": 312,
+    "name": "疾光千兽",
+    "attribute": "光",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/ba/18st3mhvamod8xnva8rybnme9cgkc9b.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%96%BE%E5%85%89%E5%8D%83%E5%85%BD_1.png",
+    "stats": {
+      "hp": 104,
+      "attack": 146,
+      "magic_attack": 67,
+      "defense": 112,
+      "magic_defense": 73,
+      "speed": 110,
+      "total": 612
+    },
+    "height": "1.75~2.1",
+    "weight": "112.9~165.0"
+  },
+  {
+    "id": 313,
+    "name": "果冻",
+    "attribute": "水",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/9/92/5pgbduguoappstj95ppzcb6rlxzs4f1.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%9E%9C%E5%86%BB_1.png",
+    "stats": {
+      "hp": 81,
+      "attack": 26,
+      "magic_attack": 81,
+      "defense": 75,
+      "magic_defense": 78,
+      "speed": 96,
+      "total": 437
+    },
+    "height": "0.3~0.36",
+    "weight": "4.35~5.6"
+  },
+  {
+    "id": 314,
+    "name": "抹茶布丁",
+    "attribute": "水/草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/fc/gjn312cevohkc3akvtme0l266a3txb1.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%8A%B9%E8%8C%B6%E5%B8%83%E4%B8%81_1.png",
+    "stats": {
+      "hp": 101,
+      "attack": 32,
+      "magic_attack": 101,
+      "defense": 94,
+      "magic_defense": 98,
+      "speed": 120,
+      "total": 546
+    },
+    "height": "0.39~0.51",
+    "weight": "6.21~7.9"
+  },
+  {
+    "id": 315,
+    "name": "椰浆布丁",
+    "attribute": "水/冰",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/82/m4mfzkpmvl06onmtxu9sqwrpwar1jix.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%A4%B0%E6%B5%86%E5%B8%83%E4%B8%81_1.png",
+    "stats": {
+      "hp": 133,
+      "attack": 34,
+      "magic_attack": 89,
+      "defense": 81,
+      "magic_defense": 105,
+      "speed": 120,
+      "total": 562
+    },
+    "height": "0.39~0.51",
+    "weight": "6.21~7.9"
+  },
+  {
+    "id": 316,
+    "name": "熔岩布丁",
+    "attribute": "水/火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/0c/fak6xe7fad7bxuiybj40jzr2mc5yueq.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%86%94%E5%B2%A9%E5%B8%83%E4%B8%81_1.png",
+    "stats": {
+      "hp": 128,
+      "attack": 87,
+      "magic_attack": 33,
+      "defense": 112,
+      "magic_defense": 84,
+      "speed": 120,
+      "total": 564
+    },
+    "height": "0.39~0.51",
+    "weight": "6.21~7.9"
+  },
+  {
+    "id": 317,
+    "name": "星尘虫",
+    "attribute": "虫",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/c9/fgbjyux6bdbk4uikkoew7jeicbzy47t.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%98%9F%E5%B0%98%E8%99%AB_1.png",
+    "stats": {
+      "hp": 49,
+      "attack": 47,
+      "magic_attack": 47,
+      "defense": 46,
+      "magic_defense": 58,
+      "speed": 60,
+      "total": 307
+    },
+    "height": "0.15~0.2",
+    "weight": "0.45~1.4"
+  },
+  {
+    "id": 318,
+    "name": "落星虫",
+    "attribute": "虫",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/b/bc/9sbdp37at6vf4v8hbcogrr1o9jmt62g.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%90%BD%E6%98%9F%E8%99%AB_1.png",
+    "stats": {
+      "hp": 65,
+      "attack": 62,
+      "magic_attack": 62,
+      "defense": 61,
+      "magic_defense": 77,
+      "speed": 80,
+      "total": 407
+    },
+    "height": "0.35~0.4",
+    "weight": "1.25~2.25"
+  },
+  {
+    "id": 319,
+    "name": "陨星虫",
+    "attribute": "虫",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/8c/1ud7vz18esinw6e6am7k6pw2wpmiaw5.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%99%A8%E6%98%9F%E8%99%AB_1.png",
+    "stats": {
+      "hp": 81,
+      "attack": 78,
+      "magic_attack": 78,
+      "defense": 76,
+      "magic_defense": 96,
+      "speed": 100,
+      "total": 509
+    },
+    "height": "0.65~0.8",
+    "weight": "5.6~6.8"
+  },
+  {
+    "id": 320,
+    "name": "双灯鱼",
+    "attribute": "水/电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/36/5i3mvo96bopno2o7f5h1bz7oz4hpkyq.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%8F%8C%E7%81%AF%E9%B1%BC_1.png",
+    "stats": {
+      "hp": 102,
+      "attack": 55,
+      "magic_attack": 111,
+      "defense": 57,
+      "magic_defense": 93,
+      "speed": 84,
+      "total": 502
+    },
+    "height": "0.5~0.72",
+    "weight": "14.9~17.8"
+  },
+  {
+    "id": 321,
+    "name": "利灯鱼",
+    "attribute": "水/电",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/f0/q3g76bthejmlv9o6phrchq0cpdlfzhy.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%88%A9%E7%81%AF%E9%B1%BC_1.png",
+    "stats": {
+      "hp": 128,
+      "attack": 68,
+      "magic_attack": 138,
+      "defense": 71,
+      "magic_defense": 116,
+      "speed": 105,
+      "total": 626
+    },
+    "height": "0.62~0.89",
+    "weight": "26.8~31.5"
+  },
+  {
+    "id": 322,
+    "name": "月牙雪熊",
+    "attribute": "冰/幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/5d/0cskl2u4wneivk2icntkrcaiwuwv4yq.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%9C%88%E7%89%99%E9%9B%AA%E7%86%8A_1.png",
+    "stats": {
+      "hp": 126,
+      "attack": 97,
+      "magic_attack": 39,
+      "defense": 141,
+      "magic_defense": 103,
+      "speed": 80,
+      "total": 586
+    },
+    "height": "1.25~1.45",
+    "weight": "76.5~92.5"
+  },
+  {
+    "id": 323,
+    "name": "嗜光嗡嗡",
+    "attribute": "恶/光",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/6c/83k9t4acg7s1haeupl1wxml4pipklpa.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%97%9C%E5%85%89%E5%97%A1%E5%97%A1_1.png",
+    "stats": {
+      "hp": 75,
+      "attack": 83,
+      "magic_attack": 83,
+      "defense": 50,
+      "magic_defense": 90,
+      "speed": 92,
+      "total": 473
+    },
+    "height": "0.24~0.32",
+    "weight": "1.46~3.05"
+  },
+  {
+    "id": 324,
+    "name": "窃光蚊",
+    "attribute": "恶/光",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/e/ee/9ftuu9x2yo8twq5h8lthgnelas283kg.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%AA%83%E5%85%89%E8%9A%8A_1.png",
+    "stats": {
+      "hp": 93,
+      "attack": 104,
+      "magic_attack": 104,
+      "defense": 63,
+      "magic_defense": 113,
+      "speed": 115,
+      "total": 592
+    },
+    "height": "0.53~0.66",
+    "weight": "7.05~9.62"
+  },
+  {
+    "id": 325,
+    "name": "柴渣虫",
+    "attribute": "火/草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a3/t3ec092gh9ocd64wuqjewlf56yjvxhg.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%9F%B4%E6%B8%A3%E8%99%AB_1.png",
+    "stats": {
+      "hp": 108,
+      "attack": 96,
+      "magic_attack": 38,
+      "defense": 82,
+      "magic_defense": 58,
+      "speed": 80,
+      "total": 462
+    },
+    "height": "0.45~0.55",
+    "weight": "14.5~18.6"
+  },
+  {
+    "id": 326,
+    "name": "燃薪虫",
+    "attribute": "火/草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/88/h3usttwjdsh4q3vn5t2st0g24nlv4go.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%87%83%E8%96%AA%E8%99%AB_1.png",
+    "stats": {
+      "hp": 135,
+      "attack": 120,
+      "magic_attack": 48,
+      "defense": 103,
+      "magic_defense": 73,
+      "speed": 100,
+      "total": 579
+    },
+    "height": "1.1~1.25",
+    "weight": "72.5~87.5"
+  },
+  {
+    "id": 327,
+    "name": "空空颅",
+    "attribute": "幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/41/kypxrmm8mobwqs3oseltznss9iqhrh2.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%A9%BA%E7%A9%BA%E9%A2%85_1.png",
+    "stats": {
+      "hp": 70,
+      "attack": 7,
+      "magic_attack": 37,
+      "defense": 54,
+      "magic_defense": 64,
+      "speed": 48,
+      "total": 280
+    },
+    "height": "0.43~0.61",
+    "weight": "5.6~8.7"
+  },
+  {
+    "id": 328,
+    "name": "夜宿颅",
+    "attribute": "幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/a/a3/2ux5x3y3ukdzjtodlmvrt4nhmh9uycb.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A4%9C%E5%AE%BF%E9%A2%85_1.png",
+    "stats": {
+      "hp": 94,
+      "attack": 9,
+      "magic_attack": 49,
+      "defense": 72,
+      "magic_defense": 85,
+      "speed": 64,
+      "total": 373
+    },
+    "height": "0.82~1.18",
+    "weight": "27.6~34.3"
+  },
+  {
+    "id": 329,
+    "name": "夜枭",
+    "attribute": "幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/63/ff8hybk5g0efhfnva9476qaovcmdl2i.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%A4%9C%E6%9E%AD_1.png",
+    "stats": {
+      "hp": 117,
+      "attack": 10,
+      "magic_attack": 61,
+      "defense": 90,
+      "magic_defense": 106,
+      "speed": 80,
+      "total": 464
+    },
+    "height": "1.45~2.07",
+    "weight": "58.6~66.5"
+  },
+  {
+    "id": 330,
+    "name": "粉粉星",
+    "attribute": "电/幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/ca/gpnuspztb84l9jwwp1mh4up4ihxw3p2.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%B2%89%E7%B2%89%E6%98%9F_1.png",
+    "stats": {
+      "hp": 93,
+      "attack": 54,
+      "magic_attack": 102,
+      "defense": 57,
+      "magic_defense": 101,
+      "speed": 88,
+      "total": 495
+    },
+    "height": "0.53~0.76",
+    "weight": "2.1~3.0"
+  },
+  {
+    "id": 331,
+    "name": "小皮球",
+    "attribute": "电/幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/11/coplggyd0xwtvzzkw5d1say369yg1oy.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B0%8F%E7%9A%AE%E7%90%83_1.png",
+    "stats": {
+      "hp": 116,
+      "attack": 68,
+      "magic_attack": 127,
+      "defense": 71,
+      "magic_defense": 126,
+      "speed": 110,
+      "total": 618
+    },
+    "height": "0.7~1.0",
+    "weight": "6.4~8.12"
+  },
+  {
+    "id": 332,
+    "name": "贝瑟",
+    "attribute": "机械/火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/d/d1/7c8xj95wzoxszdwytae10y9cfjdevim.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%B4%9D%E7%91%9F_1.png",
+    "stats": {
+      "hp": 79,
+      "attack": 46,
+      "magic_attack": 78,
+      "defense": 51,
+      "magic_defense": 98,
+      "speed": 33,
+      "total": 385
+    },
+    "height": "0.57~0.82",
+    "weight": "24.5~34.6"
+  },
+  {
+    "id": 333,
+    "name": "贝加尔",
+    "attribute": "机械/火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/7/7c/eg9mxls8ykwv3cjpust4s74tk4d4o1z.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%B4%9D%E5%8A%A0%E5%B0%94_1.png",
+    "stats": {
+      "hp": 105,
+      "attack": 61,
+      "magic_attack": 104,
+      "defense": 68,
+      "magic_defense": 130,
+      "speed": 44,
+      "total": 512
+    },
+    "height": "0.9~1.2",
+    "weight": "87.6~97.5"
+  },
+  {
+    "id": 334,
+    "name": "贝古斯",
+    "attribute": "机械/火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/0d/8cvnsom0kdicxcvjnut1lewivnuxgr2.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%B4%9D%E5%8F%A4%E6%96%AF_1.png",
+    "stats": {
+      "hp": 132,
+      "attack": 76,
+      "magic_attack": 130,
+      "defense": 85,
+      "magic_defense": 163,
+      "speed": 55,
+      "total": 641
+    },
+    "height": "1.55~1.8",
+    "weight": "248.0~286.0"
+  },
+  {
+    "id": 335,
+    "name": "粉星仔",
+    "attribute": "幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/6/68/taalud8zowwtufk65ucpbes8xqsminq.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%B2%89%E6%98%9F%E4%BB%94_1.png",
+    "stats": {
+      "hp": 80,
+      "attack": 63,
+      "magic_attack": 119,
+      "defense": 58,
+      "magic_defense": 102,
+      "speed": 92,
+      "total": 514
+    },
+    "height": "0.39~0.5",
+    "weight": "9.8~12.8"
+  },
+  {
+    "id": 336,
+    "name": "粉耳星兔",
+    "attribute": "幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/12/dfrmcjhoft7x9ne5xiint27n3ustjzx.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%B2%89%E8%80%B3%E6%98%9F%E5%85%94_1.png",
+    "stats": {
+      "hp": 100,
+      "attack": 79,
+      "magic_attack": 148,
+      "defense": 73,
+      "magic_defense": 127,
+      "speed": 115,
+      "total": 642
+    },
+    "height": "0.55~0.75",
+    "weight": "16.82~23.81"
+  },
+  {
+    "id": 337,
+    "name": "落陨星兔",
+    "attribute": "幻/幽",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/86/jeo10wvmxho14u7cdmib8272dqfuzpr.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E8%90%BD%E9%99%A8%E6%98%9F%E5%85%94_1.png",
+    "stats": {
+      "hp": 93,
+      "attack": 61,
+      "magic_attack": 125,
+      "defense": 87,
+      "magic_defense": 141,
+      "speed": 130,
+      "total": 637
+    },
+    "height": "0.55~0.75",
+    "weight": "16.82~23.81"
+  },
+  {
+    "id": 338,
+    "name": "布瓜蝌",
+    "attribute": "幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/1/1f/cf0waszkpt8lgc5625l1bv71wgbxlrm.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B8%83%E7%93%9C%E8%9D%8C_1.png",
+    "stats": {
+      "hp": 91,
+      "attack": 84,
+      "magic_attack": 35,
+      "defense": 81,
+      "magic_defense": 55,
+      "speed": 96,
+      "total": 442
+    },
+    "height": "0.32~0.51",
+    "weight": "0.45~1.65"
+  },
+  {
+    "id": 339,
+    "name": "上岸蛙",
+    "attribute": "幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/ca/n3bvy3z45vn9j7w9cmmvceao752e7e3.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E4%B8%8A%E5%B2%B8%E8%9B%99_1.png",
+    "stats": {
+      "hp": 114,
+      "attack": 106,
+      "magic_attack": 44,
+      "defense": 101,
+      "magic_defense": 69,
+      "speed": 120,
+      "total": 554
+    },
+    "height": "0.65~0.87",
+    "weight": "5.8~8.1"
+  },
+  {
+    "id": 340,
+    "name": "火红尾",
+    "attribute": "火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/0/00/gknyb1qbbno2vnvcvyb4p9a0o9y1owp.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E7%81%AB%E7%BA%A2%E5%B0%BE_1.png",
+    "stats": {
+      "hp": 67,
+      "attack": 56,
+      "magic_attack": 129,
+      "defense": 70,
+      "magic_defense": 89,
+      "speed": 100,
+      "total": 511
+    },
+    "height": "0.72~0.98",
+    "weight": "17.5~30.5"
+  },
+  {
+    "id": 341,
+    "name": "雅丹鬃",
+    "attribute": "火",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/c/c2/1qy2ib6i9lr8p6c9gh8mfuo0df9a1tb.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E9%9B%85%E4%B8%B9%E9%AC%83_1.png",
+    "stats": {
+      "hp": 83,
+      "attack": 70,
+      "magic_attack": 162,
+      "defense": 88,
+      "magic_defense": 111,
+      "speed": 125,
+      "total": 639
+    },
+    "height": "1.7~2.06",
+    "weight": "49.5~71.2"
+  },
+  {
+    "id": 342,
+    "name": "春团",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/4/4e/geoo47p9iq6pyh1xko113u2z8bqcz09.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%98%A5%E5%9B%A2_1.png",
+    "stats": {
+      "hp": 48,
+      "attack": 51,
+      "magic_attack": 57,
+      "defense": 65,
+      "magic_defense": 57,
+      "speed": 63,
+      "total": 341
+    },
+    "height": "0.35~0.51",
+    "weight": "2.1~3.6"
+  },
+  {
+    "id": 343,
+    "name": "春兔",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/f/fd/a2plgbfeadz467zgcjlkgx1ivr27pf4.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%98%A5%E5%85%94_1.png",
+    "stats": {
+      "hp": 63,
+      "attack": 68,
+      "magic_attack": 76,
+      "defense": 87,
+      "magic_defense": 77,
+      "speed": 84,
+      "total": 455
+    },
+    "height": "0.61~0.87",
+    "weight": "6.8~8.5"
+  },
+  {
+    "id": 344,
+    "name": "春花兔",
+    "attribute": "草",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/5/5e/fnpiu6we7hyxqqa0bdca9kntxl6687m.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%98%A5%E8%8A%B1%E5%85%94_1.png",
+    "stats": {
+      "hp": 79,
+      "attack": 85,
+      "magic_attack": 95,
+      "defense": 103,
+      "magic_defense": 90,
+      "speed": 105,
+      "total": 557
+    },
+    "height": "0.85~1.15",
+    "weight": "18.5~33.5"
+  },
+  {
+    "id": 345,
+    "name": "幽星光",
+    "attribute": "幻",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/88/f8eryhmo33y1cnnw7vl63hn3khncqhe.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E5%B9%BD%E6%98%9F%E5%85%89_1.png",
+    "stats": {
+      "hp": 49,
+      "attack": 21,
+      "magic_attack": 63,
+      "defense": 48,
+      "magic_defense": 63,
+      "speed": 75,
+      "total": 319
+    },
+    "height": "0.4~0.55",
+    "weight": "0.6~1.65"
+  },
+  {
+    "id": 346,
+    "name": "曜星光",
+    "attribute": "幻/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/3/3b/mnpjdnhn6lgvc6hz6ddu4dhvo1eepzm.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%9B%9C%E6%98%9F%E5%85%89_1.png",
+    "stats": {
+      "hp": 65,
+      "attack": 28,
+      "magic_attack": 84,
+      "defense": 64,
+      "magic_defense": 84,
+      "speed": 100,
+      "total": 425
+    },
+    "height": "0.88~1.05",
+    "weight": "3.0~4.5"
+  },
+  {
+    "id": 347,
+    "name": "暮星辰",
+    "attribute": "幻/翼",
+    "image_url": "https://patchwiki.biligame.com/images/rocom/thumb/8/87/t4odr9tclj4xhuivmm3c3l9vazzsk83.png/180px-%E9%A1%B5%E9%9D%A2_%E5%AE%A0%E7%89%A9_%E7%AB%8B%E7%BB%98_%E6%9A%AE%E6%98%9F%E8%BE%B0_1.png",
+    "stats": {
+      "hp": 81,
+      "attack": 35,
+      "magic_attack": 106,
+      "defense": 80,
+      "magic_defense": 105,
+      "speed": 125,
+      "total": 532
+    },
+    "height": "1.85~2.05",
+    "weight": "7.5~10.5"
+  }
+]

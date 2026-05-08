@@ -1,0 +1,277 @@
+/* 全局背景与字体 */
+QWidget {
+    background-color: #0f0f13;
+    color: #e4e4e7;
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    font-size: 14px;
+}
+
+/* 主窗口 */
+QMainWindow {
+    background-color: #0f0f13;
+    border: none;
+}
+
+/* 顶部导航栏 */
+#header {
+    background-color: #000000;
+    border-bottom: 2px solid rgba(157, 78, 221, 0.3);
+}
+
+/* 侧边栏与面板 */
+#sidebar {
+    background-color: #1a1a22;
+    border-right: 1px solid rgba(124, 58, 237, 0.1);
+}
+
+#rightPanel {
+    background-color: #1a1a22;
+    border-left: 1px solid rgba(124, 58, 237, 0.1);
+}
+
+/* 计数器列表项 */
+#counterList {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+#counterList::item {
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin: 2px 8px;
+}
+
+#counterList::item:hover {
+    background-color: rgba(157, 78, 221, 0.1);
+}
+
+#counterList::item:selected {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+        stop:0 rgba(157, 78, 221, 0.3), stop:1 transparent);
+    border-left: 3px solid #c77dff;
+}
+
+/* 卡片容器 */
+#pokemonCard {
+    background-color: #252530;
+    border: 1px solid rgba(124, 58, 237, 0.1);
+    border-radius: 12px;
+}
+
+#pokemonCard:hover {
+    background-color: #2d2d3d;
+    border: 1px solid rgba(124, 58, 237, 0.3);
+}
+
+#detailCard, #rightCard {
+    background-color: #252530;
+    border: 1px solid rgba(124, 58, 237, 0.1);
+    border-radius: 12px;
+}
+
+#statCard {
+    background-color: #0a0a0a;
+    border-radius: 6px;
+    padding: 12px;
+}
+
+/* 按钮通用样式 */
+QPushButton {
+    background-color: #1a1a1a;
+    border: 1px solid rgba(157, 78, 221, 0.5);
+    border-radius: 6px;
+    color: #f8f0ff;
+    padding: 8px 16px;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+QPushButton:hover {
+    background-color: rgba(157, 78, 221, 0.2);
+    border: 1px solid rgba(199, 125, 255, 0.7);
+}
+
+QPushButton:pressed {
+    background-color: rgba(157, 78, 221, 0.3);
+}
+
+/* 主要按钮（实心渐变） */
+#floatingModeBtn, #rightPlusBtn {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0 #c77dff, stop:1 #9d4edd);
+    border: none;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#floatingModeBtn:hover, #rightPlusBtn:hover {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0 #d48fff, stop:1 #ad5eff);
+}
+
+#floatingModeBtn:pressed, #rightPlusBtn:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0 #b86fd4, stop:1 #8a3fb8);
+}
+
+/* 特殊按钮 */
+#floatingModeBtn {
+    background-color: #1a1a1a;
+    border: 1px solid rgba(199, 125, 255, 0.5);
+    color: #f8f0ff;
+    padding: 6px 16px;
+    border-radius: 6px;
+}
+
+#floatingModeBtn:hover {
+    background-color: rgba(199, 125, 255, 0.2);
+}
+
+/* 次要按钮（描边风格） */
+#settingsBtn, #customPokemonBtn {
+    background-color: transparent;
+    border: 1.5px solid rgba(157, 78, 221, 0.6);
+    color: #e0aaff;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+#settingsBtn:hover, #customPokemonBtn:hover {
+    background-color: rgba(157, 78, 221, 0.15);
+    border: 1.5px solid #c77dff;
+}
+
+#minusBtn {
+    background-color: rgba(157, 78, 221, 0.2);
+    border: 1px solid rgba(157, 78, 221, 0.4);
+    color: #f8f0ff;
+    padding: 8px 16px;
+    border-radius: 6px;
+}
+
+#minusBtn:hover {
+    background-color: rgba(157, 78, 221, 0.3);
+}
+
+#plusBtn {
+    background-color: rgba(199, 125, 255, 0.2);
+    border: 1px solid rgba(199, 125, 255, 0.4);
+    color: #f8f0ff;
+    padding: 8px 16px;
+    border-radius: 6px;
+}
+
+#plusBtn:hover {
+    background-color: rgba(199, 125, 255, 0.3);
+}
+
+#rightPlusBtn {
+    background-color: rgba(157, 78, 221, 0.3);
+    border: 1px solid rgba(157, 78, 221, 0.5);
+    color: #f8f0ff;
+    padding: 6px 16px;
+    border-radius: 6px;
+    margin-top: 12px;
+}
+
+#rightPlusBtn:hover {
+    background-color: rgba(157, 78, 221, 0.4);
+}
+
+#floatingToggleBtn {
+    background-color: transparent;
+    border: none;
+    color: #c084fc;
+    font-size: 13px;
+    padding: 4px 8px;
+}
+
+#floatingToggleBtn:hover {
+    color: #f8f0ff;
+}
+
+#settingsEntry {
+    background-color: transparent;
+    border: none;
+    color: #e0aaff;
+    padding: 12px 20px;
+    text-align: left;
+    border-radius: 6px;
+}
+
+#settingsEntry:hover {
+    background-color: rgba(157, 78, 221, 0.1);
+}
+
+/* 进度条 */
+QProgressBar {
+    background-color: #1a0f30;
+    border: none;
+    border-radius: 6px;
+    height: 12px;
+    text-align: center;
+}
+
+QProgressBar::chunk {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+        stop:0 #c77dff, stop:1 #9d4edd);
+    border-radius: 6px;
+}
+
+/* 滚动条美化 */
+QScrollBar:vertical {
+    background: #0f0f13;
+    width: 6px;
+    border-radius: 3px;
+}
+
+QScrollBar::handle:vertical {
+    background: #7c3aed;
+    border-radius: 3px;
+    min-height: 20px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #6d28d9;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+/* 输入框 */
+QLineEdit, QComboBox {
+    background-color: #1a1a1a;
+    border: 1px solid rgba(157, 78, 221, 0.5);
+    border-radius: 5px;
+    color: #f8f0ff;
+    padding: 5px;
+}
+
+QLineEdit:focus, QComboBox:focus {
+    border: 1px solid #c77dff;
+}
+
+/* 图表占位符 */
+#chartPlaceholder {
+    background-color: #1a1a1a;
+    border: 1px solid rgba(157, 78, 221, 0.3);
+    border-radius: 8px;
+}
+
+/* 异色图鉴项 */
+#pokedexItem {
+    background-color: #252530;
+    border: 1px solid rgba(124, 58, 237, 0.1);
+    border-radius: 12px;
+}
+
+#pokedexItem:hover {
+    background-color: #2d2d3d;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}

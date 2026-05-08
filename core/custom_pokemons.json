@@ -1,0 +1,12 @@
+[
+  {
+    "name": "星尘虫",
+    "type": "虫系",
+    "is_custom": true
+  },
+  {
+    "name": "果冻",
+    "type": "水系",
+    "is_custom": true
+  }
+]
