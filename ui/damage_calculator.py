@@ -19,6 +19,7 @@ from PySide6.QtGui import QPixmap
 import json
 import os
 import re
+import sys
 
 SCROLL_BAR_STYLE = """
 QScrollBar:vertical {
@@ -107,7 +108,7 @@ class SpriteSearchBox(QWidget):
         layout.addWidget(self.list_widget)
         
     def load_data(self):
-        data_file = 'D:/game/lkwg/image/tj/lkwg_enriched_data.json'
+        data_file = os.path.join(os.path.dirname(__file__), '..', "image", "tj", "lkwg_enriched_data.json")
         if os.path.exists(data_file):
             with open(data_file, 'r', encoding='utf-8') as f:
                 self.sprite_list = json.load(f)
@@ -164,7 +165,7 @@ class DamageCalculatorWidget(QWidget):
     def load_natures(self):
         """加载性格数据"""
         natures = {}
-        nature_file = 'D:/game/lkwg/性格.txt'
+        nature_file = os.path.join(os.path.dirname(__file__), '..', "性格.txt")
         if os.path.exists(nature_file):
             with open(nature_file, 'r', encoding='utf-8') as f:
                 for line in f:
@@ -188,7 +189,7 @@ class DamageCalculatorWidget(QWidget):
     def load_effectiveness(self):
         """加载属性克制数据"""
         effectiveness = {}
-        type_file = 'D:/game/lkwg/克制.txt'
+        type_file = os.path.join(os.path.dirname(__file__), '..', "克制.txt")
         if not os.path.exists(type_file):
             return effectiveness
         
@@ -230,32 +231,32 @@ class DamageCalculatorWidget(QWidget):
                 # 解析克制关系
                 if current_attr and section:
                     # 0.5倍伤害
-                    half_match = re.search(r'对(.+?)造成0\.5倍伤害', line)
+                    half_match = re.search(r'对(.+?)系造成0\.5倍伤害', line)
                     if half_match and section == 'attack':
                         text = half_match.group(1)
-                        attrs = [a.strip() + '系' for a in text.replace('系', '').split('/')]
+                        attrs = [a.strip() + '系' for a in text.split('/')]
                         effectiveness[current_attr]['attack_0.5x'] = attrs
                         continue
                     
-                    half_match = re.search(r'受到(.+?)的0\.5倍伤害', line)
+                    half_match = re.search(r'受到(.+?)系的0\.5倍伤害', line)
                     if half_match and section == 'defense':
                         text = half_match.group(1)
-                        attrs = [a.strip() + '系' for a in text.replace('系', '').split('/')]
+                        attrs = [a.strip() + '系' for a in text.split('/')]
                         effectiveness[current_attr]['defense_0.5x'] = attrs
                         continue
                     
                     # 2倍伤害
-                    double_match = re.search(r'对(.+?)造成2倍伤害', line)
+                    double_match = re.search(r'对(.+?)系造成2倍伤害', line)
                     if double_match and section == 'attack':
                         text = double_match.group(1)
-                        attrs = [a.strip() + '系' for a in text.replace('系', '').split('/')]
+                        attrs = [a.strip() + '系' for a in text.split('/')]
                         effectiveness[current_attr]['attack_2x'] = attrs
                         continue
                     
-                    double_match = re.search(r'受到(.+?)的2倍伤害', line)
+                    double_match = re.search(r'受到(.+?)系的2倍伤害', line)
                     if double_match and section == 'defense':
                         text = double_match.group(1)
-                        attrs = [a.strip() + '系' for a in text.replace('系', '').split('/')]
+                        attrs = [a.strip() + '系' for a in text.split('/')]
                         effectiveness[current_attr]['defense_2x'] = attrs
                         continue
         

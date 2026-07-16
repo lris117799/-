@@ -1,10 +1,39 @@
 from PySide6.QtWidgets import (
-    QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, 
-    QWidget, QScrollArea, QGroupBox, QCheckBox, QSpinBox, 
-    QDoubleSpinBox, QFormLayout, QTabWidget, QLineEdit
+    QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
+    QWidget, QScrollArea, QGroupBox, QCheckBox, QSpinBox,
+    QDoubleSpinBox, QFormLayout, QTabWidget, QLineEdit, QComboBox,
+    QMessageBox
 )
-from PySide6.QtCore import Qt, QPropertyAnimation, QEasingCurve
+from PySide6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QThread, Signal
 from PySide6.QtGui import QIcon, QPalette, QColor
+
+
+class _CheckUpdateWorker(QThread):
+    """后台检查更新线程"""
+    finished_signal = Signal(object)  # update_info dict or None
+
+    def run(self):
+        try:
+            from core.update_manager import check_for_update
+            info = check_for_update(timeout=15)
+        except Exception:
+            info = None
+        self.finished_signal.emit(info)
+
+
+class _ShowUpdateDialog(QThread):
+    """延迟显示更新弹窗（避免在设置对话框关闭前弹出）"""
+    show_signal = Signal(dict)
+
+    def __init__(self, info: dict, delay_ms: int = 200):
+        super().__init__()
+        self._info = info
+        self._delay = delay_ms
+
+    def run(self):
+        from PySide6.QtCore import QThread as _QThread
+        _QThread.msleep(self._delay)
+        self.show_signal.emit(self._info)
 
 
 class SettingsDialog(QDialog):
@@ -23,7 +52,6 @@ class SettingsDialog(QDialog):
             QWidget {
                 background-color: #121212;
                 border-radius: 16px;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             }
         """)
         main_layout = QVBoxLayout(self)
@@ -62,16 +90,13 @@ class SettingsDialog(QDialog):
                 border: none;
                 font-size: 24px;
                 border-radius: 16px;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
             QPushButton:hover {
                 color: #ffffff;
                 background-color: rgba(239, 68, 68, 0.1);
-                transform: scale(1.05);
             }
             QPushButton:pressed {
                 background-color: rgba(239, 68, 68, 0.2);
-                transform: scale(0.95);
             }
         """)
         close_btn.clicked.connect(self.reject)
@@ -98,7 +123,6 @@ class SettingsDialog(QDialog):
                 border-radius: 8px;
                 font-size: 14px;
                 font-weight: 500;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
             QTabBar::tab:hover {
                 color: #e2e8f0;
@@ -181,7 +205,94 @@ class SettingsDialog(QDialog):
         confidence_spin.setValue(0.7)
         confidence_spin.setSingleStep(0.05)
         confidence_spin.setStyleSheet(self._get_spinbox_style())
-        ocr_group_layout.addRow("识别置信度：", confidence_spin)
+        ocr_group_layout.addRow("nl识别置信度：", confidence_spin)
+
+        # 识别比例模式
+        scale_mode_combo = QComboBox()
+        scale_mode_combo.addItems(["自动检测", "手动设置"])
+        scale_mode_combo.setStyleSheet("""
+            QComboBox {
+                background-color: #252530;
+                border: 1px solid rgba(124, 58, 237, 0.3);
+                border-radius: 8px;
+                padding: 10px 16px;
+                color: #e2e8f0;
+                font-size: 14px;
+            }
+            QComboBox:hover {
+                border-color: rgba(124, 58, 237, 0.6);
+            }
+            QComboBox::drop-down {
+                border: none;
+                width: 30px;
+            }
+            QComboBox::down-arrow {
+                image: none;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 6px solid #94a3b8;
+                margin-right: 10px;
+            }
+            QComboBox QAbstractItemView {
+                background-color: #252530;
+                border: 1px solid rgba(124, 58, 237, 0.3);
+                color: #e2e8f0;
+                selection-background-color: rgba(124, 58, 237, 0.3);
+                padding: 8px;
+            }
+        """)
+        ocr_group_layout.addRow("识别比例模式：", scale_mode_combo)
+
+        # 识别比例（手动设置时启用）
+        recognition_scale_combo = QComboBox()
+        recognition_scale_combo.addItems(["100%", "125%", "150%"])
+        recognition_scale_combo.setCurrentText("125%")
+        recognition_scale_combo.setStyleSheet("""
+            QComboBox {
+                background-color: #252530;
+                border: 1px solid rgba(124, 58, 237, 0.3);
+                border-radius: 8px;
+                padding: 10px 16px;
+                color: #e2e8f0;
+                font-size: 14px;
+            }
+            QComboBox:hover {
+                border-color: rgba(124, 58, 237, 0.6);
+            }
+            QComboBox::drop-down {
+                border: none;
+                width: 30px;
+            }
+            QComboBox::down-arrow {
+                image: none;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 6px solid #94a3b8;
+                margin-right: 10px;
+            }
+            QComboBox QAbstractItemView {
+                background-color: #252530;
+                border: 1px solid rgba(124, 58, 237, 0.3);
+                color: #e2e8f0;
+                selection-background-color: rgba(124, 58, 237, 0.3);
+                padding: 8px;
+            }
+        """)
+        ocr_group_layout.addRow("识别比例：", recognition_scale_combo)
+
+        # 地图更新间隔
+        self.map_update_interval_spin = QSpinBox()
+        self.map_update_interval_spin.setRange(1, 10)
+        self.map_update_interval_spin.setValue(3)
+        self.map_update_interval_spin.setSuffix(" 帧")
+        self.map_update_interval_spin.setStyleSheet(self._get_spinbox_style())
+        ocr_group_layout.addRow("地图更新间隔：", self.map_update_interval_spin)
+
+        # 真实指针开关
+        self.use_real_pointer_check = QCheckBox("启用游戏真实指针（关闭后使用绿色方向指针）")
+        self.use_real_pointer_check.setChecked(True)
+        self.use_real_pointer_check.setStyleSheet(self._get_checkbox_style())
+        ocr_group_layout.addRow("", self.use_real_pointer_check)
         
         ocr_group.setLayout(ocr_group_layout)
         ocr_layout.addWidget(ocr_group)
@@ -277,7 +388,66 @@ class SettingsDialog(QDialog):
         tab_widget.addTab(roi_tab, "框选")
         
         inner_layout.addWidget(tab_widget)
-        
+
+        # 版本信息区
+        version_bar = QWidget()
+        version_bar.setStyleSheet("""
+            QWidget {
+                background-color: #1a1a22;
+                border-top: 1px solid rgba(124, 58, 237, 0.15);
+            }
+        """)
+        vb_layout = QHBoxLayout(version_bar)
+        vb_layout.setContentsMargins(30, 12, 30, 12)
+        vb_layout.setSpacing(10)
+
+        # 当前版本号
+        try:
+            from core.update_manager import CURRENT_VERSION
+        except Exception:
+            CURRENT_VERSION = "4.6.8"
+        version_label = QLabel(f"当前版本：v{CURRENT_VERSION}")
+        version_label.setStyleSheet("color: #94a3b8; font-size: 12px;")
+        vb_layout.addWidget(version_label)
+
+        vb_layout.addStretch()
+
+        # 最新版本号（点击检查更新后显示）
+        self.latest_version_label = QLabel("")
+        self.latest_version_label.setStyleSheet("color: #94a3b8; font-size: 12px;")
+        vb_layout.addWidget(self.latest_version_label)
+
+        # 检查更新按钮
+        check_update_btn = QPushButton("检查更新")
+        check_update_btn.setObjectName("checkUpdateButton")
+        check_update_btn.setFixedHeight(32)
+        check_update_btn.setMinimumWidth(100)
+        check_update_btn.setCursor(Qt.PointingHandCursor)
+        check_update_btn.setStyleSheet("""
+            QPushButton#checkUpdateButton {
+                background-color: #252530;
+                color: #e2e8f0;
+                border: 1px solid rgba(124, 58, 237, 0.3);
+                border-radius: 8px;
+                font-size: 12px;
+                font-weight: 500;
+                padding: 0 16px;
+            }
+            QPushButton#checkUpdateButton:hover {
+                background-color: #2a2a35;
+                border-color: rgba(124, 58, 237, 0.6);
+            }
+            QPushButton#checkUpdateButton:disabled {
+                color: #64748b;
+                background-color: #1e1e26;
+            }
+        """)
+        check_update_btn.clicked.connect(self._on_check_update)
+        vb_layout.addWidget(check_update_btn)
+        self._check_update_btn = check_update_btn
+
+        inner_layout.addWidget(version_bar)
+
         # 底部按钮
         footer = QWidget()
         footer.setStyleSheet("""
@@ -331,18 +501,12 @@ class SettingsDialog(QDialog):
                 font-size: 14px;
                 font-weight: 600;
                 padding: 0 24px;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
             }
             QPushButton#pollutionButton:hover {
                 background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                     stop:0 #047857, stop:1 #059669);
-                transform: translateY(-2px);
-                box-shadow: 0 6px 16px rgba(5, 150, 105, 0.4);
             }
             QPushButton#pollutionButton:pressed {
-                transform: translateY(0);
-                box-shadow: 0 3px 8px rgba(5, 150, 105, 0.5);
             }
         """)
         pollution_btn.clicked.connect(self.on_pollution_select)
@@ -363,12 +527,9 @@ class SettingsDialog(QDialog):
                 border-radius: 12px;
                 margin-top: 8px;
                 padding: 24px 28px;
-                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
             QGroupBox:hover {
                 border-color: rgba(124, 58, 237, 0.4);
-                box-shadow: 0 6px 20px rgba(124, 58, 237, 0.1);
             }
             QGroupBox::title {
                 subcontrol-origin: margin;
@@ -399,11 +560,9 @@ class SettingsDialog(QDialog):
                 border: 2px solid rgba(124, 58, 237, 0.4);
                 border-radius: 5px;
                 background-color: #252530;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
             QCheckBox::indicator:hover {
                 border-color: rgba(124, 58, 237, 0.7);
-                transform: scale(1.05);
             }
             QCheckBox::indicator:checked {
                 background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0,
@@ -411,7 +570,6 @@ class SettingsDialog(QDialog):
                 border-color: #7c3aed;
             }
             QCheckBox::indicator:checked:hover {
-                transform: scale(1.1);
             }
         """
     
@@ -425,7 +583,6 @@ class SettingsDialog(QDialog):
                 padding: 10px 16px;
                 color: #e2e8f0;
                 font-size: 14px;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
             QSpinBox:hover, QDoubleSpinBox:hover {
                 border-color: rgba(124, 58, 237, 0.6);
@@ -434,7 +591,6 @@ class SettingsDialog(QDialog):
             QSpinBox:focus, QDoubleSpinBox:focus {
                 border-color: #7c3aed;
                 background-color: #2a2a35;
-                box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
             }
             QSpinBox::up-button,
             QSpinBox::down-button,
@@ -443,7 +599,6 @@ class SettingsDialog(QDialog):
                 width: 24px;
                 background-color: rgba(124, 58, 237, 0.1);
                 border-radius: 4px;
-                transition: all 0.2s ease;
             }
             QSpinBox::up-button:hover,
             QSpinBox::down-button:hover,
@@ -465,18 +620,12 @@ class SettingsDialog(QDialog):
                 font-size: 14px;
                 font-weight: 600;
                 padding: 0 24px;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
             }
             QPushButton#primaryButton:hover {
                 background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                     stop:0 #9333ea, stop:1 #c084fc);
-                transform: translateY(-2px);
-                box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
             }
             QPushButton#primaryButton:pressed {
-                transform: translateY(0);
-                box-shadow: 0 3px 8px rgba(124, 58, 237, 0.5);
             }
         """
     
@@ -491,15 +640,12 @@ class SettingsDialog(QDialog):
                 font-size: 14px;
                 font-weight: 500;
                 padding: 0 24px;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
             QPushButton#secondaryButton:hover {
                 background-color: #2a2a35;
                 border-color: rgba(124, 58, 237, 0.6);
-                transform: translateY(-2px);
             }
             QPushButton#secondaryButton:pressed {
-                transform: translateY(0);
             }
         """
     
@@ -526,6 +672,62 @@ class SettingsDialog(QDialog):
             self.move(event.globalPos() - self.drag_pos)
             event.accept()
     
+    def _on_check_update(self):
+        """检查更新"""
+        # 禁用按钮，显示检查中
+        self._check_update_btn.setEnabled(False)
+        self._check_update_btn.setText("检查中...")
+        self.latest_version_label.setText("正在检查更新...")
+        self.latest_version_label.setStyleSheet("color: #94a3b8; font-size: 12px;")
+
+        # 启动后台检查线程
+        self._check_worker = _CheckUpdateWorker()
+        self._check_worker.finished_signal.connect(self._on_check_update_done)
+        self._check_worker.start()
+
+    def _on_check_update_done(self, info):
+        """检查更新完成"""
+        self._check_update_btn.setEnabled(True)
+        self._check_update_btn.setText("检查更新")
+
+        if info is None:
+            # 无新版本或检查失败
+            try:
+                from core.update_manager import CURRENT_VERSION
+            except Exception:
+                CURRENT_VERSION = "4.6.8"
+            self.latest_version_label.setText(f"已是最新版本 v{CURRENT_VERSION}")
+            self.latest_version_label.setStyleSheet("color: #10b981; font-size: 12px;")
+            return
+
+        # 有新版本，显示最新版本号
+        latest = info.get("latest_version", "")
+        self.latest_version_label.setText(f"检测到新版本：v{latest}")
+        self.latest_version_label.setStyleSheet("color: #f59e0b; font-size: 12px;")
+
+        # 弹出更新对话框（关闭设置对话框后弹出，避免层级冲突）
+        self._pending_update_info = info
+        self.accept()  # 关闭设置对话框
+        # 用延迟线程在主窗口上显示更新弹窗
+        from PySide6.QtWidgets import QApplication
+        parent_window = QApplication.activeWindow()
+        # 保存到属性，等待关闭后再弹
+        QTimer = None
+        try:
+            from PySide6.QtCore import QTimer
+            QTimer.singleShot(250, lambda: self._show_update_dialog(parent_window, info))
+        except Exception:
+            self._show_update_dialog(parent_window, info)
+
+    def _show_update_dialog(self, parent_window, info):
+        """显示更新弹窗"""
+        try:
+            from ui.update_dialog import UpdateDialog
+            dlg = UpdateDialog(info, parent=parent_window)
+            dlg.exec()
+        except Exception as e:
+            QMessageBox.warning(parent_window, "更新", f"显示更新弹窗失败: {e}")
+
     def on_roi_select(self):
         """框选识别区域"""
         from core.screen_selector import ScreenSelector

@@ -197,7 +197,9 @@ class LkwgPokedexSelector(QDialog):
         image_loaded = False
         
         # 从tj/images文件夹按ID加载图片
-        image_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "image", "tj", "images")
+        base_dir = os.path.join(os.path.dirname(__file__), '..')
+        
+        image_dir = os.path.join(base_dir, "image", "tj", "images")
         if pokemon_id > 0 and os.path.exists(image_dir):
             image_filename = f"{pokemon_id:03d}.png"
             image_path = os.path.join(image_dir, image_filename)

@@ -8,10 +8,11 @@ venv/
 env/
 ENV/
 
-# PyInstaller
+# PyInstaller 打包产物
 build/
 dist/
 *.spec
+*.spec.bak
 
 # IDE
 .idea/
@@ -23,20 +24,139 @@ dist/
 .DS_Store
 Thumbs.db
 
-# 临时文件
+# 临时/备份文件
 *.bak
 *.backup
+*.backup_*
 *_backup_*.py
+*_backup*.json
+*_backup*.txt
+*.json.backup*
+*.json.backup_*
 
 # 日志
 *.log
+map_debug.log
 
-# 大文件
+# 打包压缩包
 klxy.zip
 *.html
+
+# 调试图片
 image/debug_*.png
 image/tj/lkwg_enriched_data*.json
 test_*.png
 test_*.json
 image/sc/
+image/pokedex_cache/
+image/startup_screenshot.png
+
+# ─── 地图相关文件（用户要求不上传）───
+image/map.png
+image/map_full_hq.png
+image/map_full_hq_resized.png
+image/map_full_b1.png
+image/map_full_b2.png
+image/map_full_hq.png.bak*
+image/map/
+image/global_sift_features.pkl
+image/region_features_*.pkl
+
+# 内嵌地图数据模块（base64 编码的 map_full_hq.png，125MB+，由 tools/generate_embedded_map.py 生成）
+core/_map_data/
+
+# ─── 模型与缓存文件（不上传） ───
+blind_box_v5.onnx
+runs/
+*.onnx
+*.pt
+*.pkl
+
+# ─── 用户数据文件（不上传） ───
+# 根目录用户数据
+settings.json
+chests.json
+owl_stars.json
+sheet_music.json
+collect_resources_final.json
+性格.txt
+克制.txt
+启动助手.bat
+
+# core/ 目录用户数据
+core/settings.json
+core/counters.json
+core/custom_pokemons.json
+core/shiny_records.json
+core/pokemon_database.json
+core/pokemon_database_s2.json
+core/pokemon_database_s3.json
+core/pure_skill_database.json
+
+# zy/ 目录用户数据
+zy/chests.json
+zy/owl_stars.json
+zy/sheet_music.json
+zy/collect_resources_final.json
+zy/internal_resource_point.json
+
+# zc/ 目录用户数据
+zc/pet_data.json
+
+# image/tj/ 目录数据文件
+image/tj/pokemon_data*.json
+
+# ─── 用户自己看的数据目录 ───
+roco_data/
+
+# ─── 爬虫与一次性工具脚本（不上传） ───
+scraper.py
+crawl_*.py
+crawl_wiki_tiles.py
+crawl_wiki_data.py
+crawl_pokemon_complete.py
+crawl_pokemon_final.py
+crawl_b1_b2_tiles.py
+crawl_hq_tiles.py
+crawl_smart_tiles.py
+annotate_tool.py
+chroma_key.py
+create_chests_json.py
+create_region_blocks.py
+crop_mx.py
+dump_frames.py
+find_npc_resources.py
+find_resources.py
+find_sheet_music.py
+frame_packer.py
+generate_resource_coords.py
+get_wiki_tile_url.py
+mark_position_fast.py
+mark_region11_pointer.py
+mark_target.py
+merge_all_to_owl_stars.py
+merge_sheet_music.py
+mx_capture_tool.py
+precompute_global_features.py
+precompute_region_features.py
+precompute_region_features_sift.py
+precompute_tile_features.py
+resize_map.py
+stitch_b1_b2_maps.py
+train_mx.py
+calculate_from_points.py
+check_venv.py
+test_tiles.py
+core/generate_type_chart.py
+core/map_navigation_backup.py
+ui/untitled-1.py
+
+# ─── PresentMon 工具 ───
+tools/PresentMon/
+
+# ─── 未被引用的导航模块 ───
+navigation/
+
+# 通用文本文件排除（保留 README/LICENSE/.gitignore）
 *.txt
+!README.md
