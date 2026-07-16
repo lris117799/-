@@ -7,6 +7,8 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt
 import json
+import os
+import sys
 
 
 class TypeEffectivenessWidget(QWidget):
@@ -20,7 +22,10 @@ class TypeEffectivenessWidget(QWidget):
     
     def load_type_data(self):
         """加载属性克制数据"""
-        with open('D:/game/lkwg/属性克制.txt', 'r', encoding='utf-8') as f:
+        base_dir = os.path.join(os.path.dirname(__file__), '..')
+        
+        type_file = os.path.join(base_dir, '克制.txt')
+        with open(type_file, 'r', encoding='utf-8') as f:
             content = f.read()
         
         # 解析所有属性的克制关系
@@ -36,40 +41,66 @@ class TypeEffectivenessWidget(QWidget):
         
         # 按行解析
         current_attr = None
-        section = None
+        section = None  # 'attack' or 'defense'
         
+        import re
         lines = content.split('\n')
         for line_num, line in enumerate(lines):
             line = line.strip()
             
-            # 跳过空行和分隔线
-            if not line or line.startswith('===') or line.startswith('---') or line.startswith('•'):
+            # 跳过空行
+            if not line:
                 continue
             
-            # 检测属性标题 【草系】
-            if line.startswith('【') and line.endswith('】'):
-                current_attr = line[1:-1]
+            # 检测属性标题：Step2：草系
+            attr_match = re.match(r'Step\d+：(\w+)系', line)
+            if attr_match:
+                current_attr = attr_match.group(1) + '系'
                 section = None  # 重置section
                 continue
             
-            # 检测章节（不continue，让数据行继续解析）
-            if '攻击克制' in line and '2倍' in line:
-                section = 'attack_2x'
-            elif '攻击被抵抗' in line and '0.5倍' in line:
-                section = 'attack_0.5x'
-            elif '被克制' in line and '受2倍' in line:
-                section = 'defense_2x'
-            elif '抵抗' in line and '受0.5倍' in line:
-                section = 'defense_0.5x'
+            # 检测章节
+            if '作为攻击方' in line:
+                section = 'attack'
+                continue
+            elif '作为被攻击方' in line:
+                section = 'defense'
+                continue
             
-            # 解析属性列表
-            if current_attr and section and ('：' in line or ':' in line):
-                parts = line.split('：') if '：' in line else line.split(':')
-                if len(parts) >= 2:
-                    text = parts[-1].strip()
-                    if text and text != '无':
-                        attrs = [a.strip() for a in text.split('、')]
-                        self.effectiveness_data[current_attr][section] = attrs
+            # 解析克制关系
+            if current_attr and section:
+                # 0.5倍伤害（攻击被抵抗 / 受到0.5倍伤害）
+                if section == 'attack' and '0.5倍' in line:
+                    # 格式：对火/龙/毒/虫/翼/机械系造成0.5倍伤害
+                    match = re.search(r'对(.+?)系造成0\.5倍伤害', line)
+                    if match:
+                        attrs_str = match.group(1)
+                        attrs = [a.strip() + '系' for a in attrs_str.split('/')]
+                        self.effectiveness_data[current_attr]['attack_0.5x'] = attrs
+                
+                elif section == 'attack' and '2倍' in line:
+                    # 格式：对水/地/光系造成2倍伤害
+                    match = re.search(r'对(.+?)系造成2倍伤害', line)
+                    if match:
+                        attrs_str = match.group(1)
+                        attrs = [a.strip() + '系' for a in attrs_str.split('/')]
+                        self.effectiveness_data[current_attr]['attack_2x'] = attrs
+                
+                elif section == 'defense' and '0.5倍' in line:
+                    # 格式：受到水/光/地/电系的0.5倍伤害
+                    match = re.search(r'受到(.+?)系的0\.5倍伤害', line)
+                    if match:
+                        attrs_str = match.group(1)
+                        attrs = [a.strip() + '系' for a in attrs_str.split('/')]
+                        self.effectiveness_data[current_attr]['defense_0.5x'] = attrs
+                
+                elif section == 'defense' and '2倍' in line:
+                    # 格式：受到火/冰/毒/虫/翼系的2倍伤害
+                    match = re.search(r'受到(.+?)系的2倍伤害', line)
+                    if match:
+                        attrs_str = match.group(1)
+                        attrs = [a.strip() + '系' for a in attrs_str.split('/')]
+                        self.effectiveness_data[current_attr]['defense_2x'] = attrs
     
     def setup_ui(self):
         """初始化UI"""

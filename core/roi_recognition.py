@@ -4,19 +4,28 @@
 使用用户框选的固定坐标区域进行识别,与默认ROI完全隔离
 """
 import time
+import os
 import threading
 import cv2
 import numpy as np
+
+# ── OpenCV Unicode 路径支持 ──
+def _imread(path, flags=cv2.IMREAD_COLOR):
+    return cv2.imdecode(np.fromfile(path, dtype=np.uint8), flags)
+def _imwrite(path, img, params=None):
+    cv2.imencode(os.path.splitext(path)[1] or '.png', img, params or [])[1].tofile(path)
+
 from PySide6.QtCore import Signal, QObject
 from core.game_capture import GameCapture
 from core.settings_manager import SettingsManager
+from core.logger import logger
 
 
 class RoiRecognitionWorker(QObject):
     """坐标识别工作线程"""
     
     # 信号定义 - 与ScreenshotWorker保持一致
-    recognition_result = Signal(dict)  # {xt_detected, recognized_names, xt10_detected}
+    recognition_result = Signal(dict)  # {recognized_names}
     error_occurred = Signal(str)  # 错误信息
     status_changed = Signal(str)  # 状态变化
     
@@ -52,7 +61,7 @@ class RoiRecognitionWorker(QObject):
         self.is_running = True
         self.thread = threading.Thread(target=self._run_loop, daemon=True)
         self.thread.start()
-        self.status_changed.emit("✅ 坐标识别已启动")
+        self.status_changed.emit("[OK] Coordinate recognition started")
         
     def stop(self):
         """停止识别线程"""
@@ -60,7 +69,7 @@ class RoiRecognitionWorker(QObject):
         if self.thread:
             self.thread.join(timeout=2.0)
             self.thread = None
-        self.status_changed.emit("⏹️ 坐标识别已停止")
+        self.status_changed.emit("[STOP] Coordinate recognition stopped")
         
     def _run_loop(self):
         """识别主循环 - 直接调用OpenCV匹配,不使用多尺度探测"""
@@ -68,6 +77,7 @@ class RoiRecognitionWorker(QObject):
         
         # 打印启动信息
         roi_config = self.settings.get("recognition_roi")
+        logger.log(f"🎯 [坐标识别] 线程启动, ROI配置: {roi_config}")
         print(f"🎯 [坐标识别] 线程启动, ROI配置: {roi_config}")
         
         while self.is_running:
@@ -92,6 +102,7 @@ class RoiRecognitionWorker(QObject):
                     # 比例坐标: 使用capture_window截图(支持后台)
                     screenshot = self.capture.capture_window()
                     if screenshot is None:
+                        logger.log("⚠️ [坐标识别] 截图失败")
                         time.sleep(interval)
                         continue
                     
@@ -101,7 +112,7 @@ class RoiRecognitionWorker(QObject):
                     pixel_w = int(w * img_w)
                     pixel_h = int(h * img_h)
                     
-                    print(f"📐 比例坐标转换: ({x},{y},{w},{h}) -> ({pixel_x},{pixel_y},{pixel_w},{pixel_h})")
+                    logger.log(f"📐 比例坐标转换: ({x},{y},{w},{h}) -> ({pixel_x},{pixel_y},{pixel_w},{pixel_h})")
                 else:
                     # 客户区相对坐标(物理像素): 使用capture_window截图(支持后台)
                     # ScreenSelector返回的是客户区相对坐标，不是屏幕绝对坐标
@@ -125,43 +136,43 @@ class RoiRecognitionWorker(QObject):
                 
                 # 保存全图+ROI红框调试(仅首次)
                 if not self.debug_image_saved:
-                    import os
+                    base_dir = os.path.join(os.path.dirname(__file__), '..')
+                    
                     debug_full = screenshot.copy()
                     cv2.rectangle(debug_full, (pixel_x, pixel_y), (pixel_x+pixel_w, pixel_y+pixel_h), (0, 0, 255), 3)
-                    debug_full_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "image", "debug_full_with_roi.png")
-                    cv2.imwrite(debug_full_path, debug_full)
+                    debug_full_path = os.path.join(base_dir, "image", "debug_full_with_roi.png")
+                    _imwrite(debug_full_path, debug_full)
+                    logger.log(f"📸 全图+ROI红框已保存: {debug_full_path}, 尺寸: {screenshot.shape}, ROI: ({pixel_x},{pixel_y},{pixel_w},{pixel_h})")
                     print(f"📸 全图+ROI红框已保存: {debug_full_path}, 尺寸: {screenshot.shape}, ROI: ({pixel_x},{pixel_y},{pixel_w},{pixel_h})")
                     self.debug_image_saved = True
                 
-                # 关键简化：直接使用已有的 detect_xt_icon 和 detect_xt10，传入 roi 参数！
+                # 关键简化：直接使用OCR识别，传入 roi 参数！
                 roi = (pixel_x, pixel_y, pixel_w, pixel_h)
                 
-                # 识别逻辑与默认识别完全一致:
-                # 1. 先检测xt图标 - 传入roi参数，只在指定区域搜索
-                xt_detected = self.capture.detect_xt_icon(image=screenshot, roi=roi)
-                print(f"🔍 xt检测结果: {xt_detected}")
+                # 判断是否应该启用OCR
+                should_ocr, ocr_reason = self.capture.should_enable_ocr(image=screenshot)
                 
-                # 2. 战斗持续阶段：有战斗状态或xt存在时都要OCR
                 recognized_names = []
-                should_ocr = xt_detected or (self.current_battle_lkwg is not None)
                 if should_ocr:
-                    # OCR识别时也传入roi参数
+                    # 执行OCR识别
                     pokemon_names = self.capture.recognize_pokemon_name(image=screenshot, roi=roi)
                     if pokemon_names:
                         recognized_names.extend(pokemon_names)
+                        logger.log(f"📝 [坐标识别] OCR识别到: {', '.join(pokemon_names)}")
+                else:
+                    # 跳过OCR以节省资源
+                    pass
                 
-                # 3. 检测xt10（只有OCR识别到名字才检测）- 也传入roi参数
-                xt10_detected = False
-                if recognized_names:
-                    xt10_detected = self.capture.detect_xt10(image=screenshot, roi=roi)
-                
-                # 发射结果(与ScreenshotWorker完全一致的结构)
+                # 发射结果
                 result = {
-                    'xt_detected': xt_detected,
                     'recognized_names': recognized_names,
-                    'xt10_detected': xt10_detected
+                    'should_ocr': should_ocr,
+                    'ocr_reason': ocr_reason
                 }
                 self.recognition_result.emit(result)
+                
+                # 输出识别结果日志
+                logger.log(f"📸 [坐标识别] OCR={len(recognized_names)}")
                 
                 time.sleep(interval)
                 
@@ -170,36 +181,3 @@ class RoiRecognitionWorker(QObject):
                 import traceback
                 traceback.print_exc()
                 time.sleep(interval)
-    
-    def _match_xt_direct(self, image):
-        """直接匹配xt图标,不使用多尺度探测（保留用于兼容性）"""
-        if self.capture.xt_template is None:
-            return False
-        
-        threshold = 0.7
-        result = cv2.matchTemplate(image, self.capture.xt_template, cv2.TM_CCOEFF_NORMED)
-        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-        
-        if max_val >= threshold:
-            return True
-        return False
-    
-    def _match_xt10_direct(self, image):
-        """直接匹配xt10图标,不使用多尺度探测（保留用于兼容性）"""
-        if self.capture.xt10_template is None:
-            return False
-        
-        threshold = 0.65
-        result = cv2.matchTemplate(image, self.capture.xt10_template, cv2.TM_CCOEFF_NORMED)
-        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-        
-        currently_detected = max_val >= threshold
-        
-        # 防重复计数逻辑
-        if currently_detected and not self.capture.xt10_was_detected:
-            self.capture.xt10_was_detected = True
-            return True
-        elif not currently_detected and self.capture.xt10_was_detected:
-            self.capture.xt10_was_detected = False
-        
-        return False

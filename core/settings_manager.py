@@ -4,17 +4,23 @@ import os
 
 class SettingsManager:
     def __init__(self):
-        self.settings_file = os.path.join(os.path.dirname(__file__), "settings.json")
+        self.settings_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "settings.json")
         self.default_settings = {
             # 通用设置
             "auto_start": False,
             "minimize_to_tray": False,
             "show_main_on_startup": True,
+            "desktop_pet_enabled": False,  # 桌宠开关
             
             # 识别设置
-            "recognition_interval": 500,
-            "recognition_confidence": 0.7,
-            "enable_background_recognition": True,
+        "recognition_interval": 500,
+        "recognition_confidence": 0.7,  # nl 和其他识别用的置信度
+        "confidence_pollution": 0.6,  # 童话事件用的置信度
+        "ocr_confidence": 0.5,  # OCR文字识别置信度阈值
+        "enable_background_recognition": True,
+            
+            # 界面设置
+            "ui_scale": "large",  # small: 1280x750, medium: 1450x850, large: 1600x950
             
             # 计数器设置
             "default_target": 80,
@@ -28,6 +34,7 @@ class SettingsManager:
             
             # 悬浮窗设置
             "floating_window_size": "medium",  # small, medium, large
+            "floating_window_opacity": 0.7,  # 悬浮窗透明度 (0.1~1.0)
             
             # 全局追踪设置
             "enable_global_tracking": True,  # 默认开启全局污染追踪
@@ -36,7 +43,26 @@ class SettingsManager:
             "ball_calculator_data": {},  # 存储咕噜球计算数据 {球名: {before: x, after: y}}
             
             # 框选识别区域
-            "recognition_roi": None  # 框选区域 (x, y, width, height)，None表示全屏识别
+            "recognition_roi": None,  # 框选区域 (x, y, width, height)，None表示全屏识别
+            
+            # 导航地图设置
+            "map_update_interval": 3,  # 地图更新间隔（每N帧更新一次）
+            "use_real_pointer": True,  # 使用游戏真实指针（否则使用绿色方向指针）
+            
+            # 多窗口设置
+            "selected_window_index": 0,  # 多游戏窗口时，选择使用第几个窗口(从0开始)
+
+            # 热键设置
+            "hotkeys": {
+                "toggle_passthrough": {"mod": "Ctrl", "key": "N", "vk": 0x4E, "mod_code": 0x0002, "display": "Ctrl+N"},
+                "map_toggle_passthrough": {"mod": "Alt", "key": "M", "vk": 0x4D, "mod_code": 0x0001, "display": "Alt+M"},
+                "count_plus": {"mod": "", "key": "+", "vk": 0xBB, "mod_code": 0, "display": "+"},
+                "count_minus": {"mod": "", "key": "-", "vk": 0xBD, "mod_code": 0, "display": "-"},
+                "counter_prev": {"mod": "", "key": "[", "vk": 0xDB, "mod_code": 0, "display": "["},
+                "counter_next": {"mod": "", "key": "]", "vk": 0xDD, "mod_code": 0, "display": "]"},
+                "nightmare_plus": {"mod": "", "key": "》", "vk": 0xBE, "mod_code": 0, "display": "》"},
+                "nightmare_minus": {"mod": "", "key": "《", "vk": 0xBC, "mod_code": 0, "display": "《"},
+            },
         }
         self.settings = self.load_settings()
     
@@ -48,6 +74,12 @@ class SettingsManager:
                     loaded = json.load(f)
                 # 合并默认设置，确保新字段存在
                 settings = self.default_settings.copy()
+                # 深度合并热键：确保新增的热键默认值不会被旧设置覆盖
+                if "hotkeys" in loaded and "hotkeys" in settings:
+                    default_hotkeys = settings["hotkeys"]
+                    for key, value in default_hotkeys.items():
+                        if key not in loaded["hotkeys"]:
+                            loaded["hotkeys"][key] = value
                 settings.update(loaded)
                 return settings
             except Exception as e:

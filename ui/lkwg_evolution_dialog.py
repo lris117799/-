@@ -212,8 +212,11 @@ class EvolutionChainDialog(QDialog):
     
     def _load_pokemon_icon(self, icon_label, pokemon):
         """加载精灵图标"""
+        # 获取基础目录
+        base_dir = os.path.join(os.path.dirname(__file__), '..')
+        
         pokemon_id = pokemon.get('id', 0)
-        image_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "image", "tj", "images")
+        image_dir = os.path.join(base_dir, "image", "tj", "images")
         image_path = os.path.join(image_dir, f"{pokemon_id:03d}.png")
         
         if os.path.exists(image_path):

@@ -1,6 +1,7 @@
 # core/evolution_manager.py
 import os
 import json
+import sys
 
 class EvolutionManager:
     def __init__(self):
@@ -11,8 +12,8 @@ class EvolutionManager:
         self._load_custom_pokemons()  # 加载自定义精灵
     
     def _load_evolution_chains(self):
-        """加载进化链配置"""
-        names_file = os.path.join(os.path.dirname(__file__), "lkwg_names.txt")
+        """加载进化链配置 - 使用 lkwg_2.txt"""
+        names_file = os.path.join(os.path.dirname(__file__), "lkwg_2.txt")
         if not os.path.exists(names_file):
             return
         
