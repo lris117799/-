@@ -244,10 +244,17 @@ SCALE_X = MAP_BOUNDS[2] / MAP_PIXEL_W  # 8192/8192 = 1.0
 SCALE_Y = MAP_BOUNDS[3] / MAP_PIXEL_H  # 8192/8192 = 1.0
 
 # 匹配参数
-MATCH_RATIO = 0.55          # 严格比值：更高质量的匹配对
+MATCH_RATIO = 0.55          # 严格比值：更高质量匹配对
 MIN_INLIERS = 10            # 最小内点数
 RANSAC_TH = 5.0             # RANSAC阈值
 SEARCH_RADIUS = 600          # 空间过滤搜索半径（局部FLANN覆盖范围）
+
+# 回退匹配参数（标准匹配失败时使用空间先验）
+FALLBACK_RADIUS = 300        # 回退搜索半径（小半径过滤虚假匹配）
+FALLBACK_RATIO = 0.75        # 放松比率测试（应对重复纹理）
+FALLBACK_RANSAC_TH = 3.0     # 更严格RANSAC阈值
+FALLBACK_MIN_INLIERS = 6     # 回退最小内点数（已有空间先验，可降低）
+FALLBACK_MAX_JUMP = 450      # 回退允许的最大位置跳跃（半径1.5倍）
 
 CACHE_MS = 10               # 仅同帧复用（防同一帧多次调用），不跨帧缓存
 QUICK_MATCH_INTERVAL = 3      # 每3帧全匹配1次（约10Hz匹配频率）
@@ -401,6 +408,88 @@ class MapNavigationThread(QThread):
             print(f"[Nav] 局部FLANN重建失败: {e}")
             return False
 
+    def _locate_fallback(self, gray, kpm, dm):
+        """空间先验回退匹配：标准匹配失败时，使用上次位置做小半径空间过滤
+
+        应对重复纹理区域：全局/局部FLANN因虚假匹配导致RANSAC失败时，
+        通过更小的搜索半径（300px）过滤掉远处的相似纹理，仅保留附近特征。
+
+        策略：
+        1. 用KD-tree过滤全局特征到_last_known_position附近的小半径(300px)
+        2. 放松比率测试到0.75（获取更多候选匹配）
+        3. 用更严格的RANSAC阈值(3.0)剔除虚假匹配
+        4. 接受较低的inliers(6)，因为已有空间先验降低误检风险
+        5. 限制最大位置跳跃，防止异常漂移
+        """
+        if self._lpos_pixel is None or self._spatial_kdtree is None:
+            return False, 0, 0, 1.0
+
+        lx, ly = self._lpos_pixel
+        if not (MAP_BOUNDS[0] <= lx <= MAP_BOUNDS[2] and
+                MAP_BOUNDS[1] <= ly <= MAP_BOUNDS[3]):
+            return False, 0, 0, 1.0
+
+        try:
+            # ─── 1. 空间过滤：仅保留上次位置附近的特征 ───
+            indices = self._spatial_kdtree.query_ball_point([lx, ly], FALLBACK_RADIUS)
+            if len(indices) < FALLBACK_MIN_INLIERS * 2:
+                return False, 0, 0, 1.0
+
+            indices = np.array(indices, dtype=np.int32)
+            local_des = self._global_des[indices]
+            local_pts = self._global_pts[indices]
+
+            # ─── 2. BFMatcher + 放松比率测试 ───
+            bf = cv2.BFMatcher(cv2.NORM_L2)
+            ms = bf.knnMatch(dm, local_des, k=2)
+            if not ms:
+                return False, 0, 0, 1.0
+
+            good = [m for m, n in ms if m.distance < FALLBACK_RATIO * n.distance]
+            if len(good) < FALLBACK_MIN_INLIERS:
+                return False, 0, 0, 1.0
+
+            # ─── 3. RANSAC（更严格阈值） ───
+            h, w = gray.shape[:2]
+            px, py = w // 2, h // 2
+            src_pts = np.float32([kpm[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
+            dst_pts = local_pts[[m.trainIdx for m in good]].reshape(-1, 1, 2)
+            M, mask = cv2.findHomography(src_pts, dst_pts, cv2.USAC_MAGSAC, FALLBACK_RANSAC_TH)
+            if M is None:
+                return False, 0, 0, 1.0
+
+            inliers = int(mask.sum()) if mask is not None else 0
+            if inliers < FALLBACK_MIN_INLIERS:
+                return False, 0, 0, 1.0
+
+            # ─── 4. 世界坐标 + 跳跃检查 ───
+            ptr_pt = np.float32([[[px, py]]])
+            global_pixel = cv2.perspectiveTransform(ptr_pt, M)[0, 0]
+            wx = float(global_pixel[0] * SCALE_X)
+            wy = float(global_pixel[1] * SCALE_Y)
+
+            if not (MAP_BOUNDS[0] <= wx <= MAP_BOUNDS[2] and
+                    MAP_BOUNDS[1] <= wy <= MAP_BOUNDS[3]):
+                return False, 0, 0, 1.0
+
+            # 跳跃检查：防止异常位置漂移
+            dist = ((wx - lx) ** 2 + (wy - ly) ** 2) ** 0.5
+            if dist > FALLBACK_MAX_JUMP:
+                return False, 0, 0, 1.0
+
+            # ─── 5. 缓存 + 返回（置信度上限0.8，标识为回退路径） ───
+            self._lH = M
+            self._homography_angle = math.degrees(math.atan2(M[1, 0], M[0, 0]))
+            self._lmt = time.time() * 1000
+            self._lpos_pixel = (float(global_pixel[0]), float(global_pixel[1]))
+            conf = min(0.8, inliers / 20.0)
+            self._last_good_conf = conf
+
+            return True, wx, wy, conf
+        except Exception as e:
+            print(f"[Nav] _locate_fallback异常: {e}")
+            return False, 0, 0, 1.0
+
     def _get_match_flann(self, last_pos):
         """获取用于匹配的FLANN：优先使用局部FLANN，否则使用全局"""
         if last_pos is None:
@@ -465,14 +554,18 @@ class MapNavigationThread(QThread):
 
             # ─── SIFT提取 ───
             kpm, dm = self._sift.detectAndCompute(gray, None)
-            if dm is None or len(kpm) < MIN_INLIERS:
+            if dm is None or len(kpm) < FALLBACK_MIN_INLIERS:
+                # 特征数过少（连回退阈值都达不到），直接失败
                 return False, 0, 0, 1.0
+            if len(kpm) < MIN_INLIERS:
+                # 特征数不足以做标准匹配，尝试回退
+                return self._locate_fallback(gray, kpm, dm)
 
             # ─── 空间过滤FLANN匹配：优先使用局部FLANN（仅附近特征） ───
             flann, match_pts = self._get_match_flann(self._lpos_pixel)
             ms = flann.knnMatch(dm, k=2)
             if not ms:
-                return False, 0, 0, 1.0
+                return self._locate_fallback(gray, kpm, dm)
 
             # 比率测试
             good = [m for m, n in ms if m.distance < MATCH_RATIO * n.distance]
@@ -483,9 +576,9 @@ class MapNavigationThread(QThread):
                     good = [m for m, n in ms if m.distance < MATCH_RATIO * n.distance]
                     match_pts = self._global_pts
                     if len(good) < MIN_INLIERS:
-                        return False, 0, 0, 1.0
+                        return self._locate_fallback(gray, kpm, dm)
                 else:
-                    return False, 0, 0, 1.0
+                    return self._locate_fallback(gray, kpm, dm)
 
             # 构建匹配点
             src_pts = np.float32([kpm[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
@@ -494,11 +587,11 @@ class MapNavigationThread(QThread):
             # RANSAC
             M, mask = cv2.findHomography(src_pts, dst_pts, cv2.USAC_MAGSAC, RANSAC_TH)
             if M is None:
-                return False, 0, 0, 1.0
+                return self._locate_fallback(gray, kpm, dm)
 
             inliers = mask.sum() if mask is not None else 0
             if inliers < MIN_INLIERS:
-                return False, 0, 0, 1.0
+                return self._locate_fallback(gray, kpm, dm)
 
             # Homography精化（仅用内点做最小二乘）
             inlier_mask = mask.ravel().astype(bool)
@@ -519,7 +612,7 @@ class MapNavigationThread(QThread):
 
             if not (MAP_BOUNDS[0] <= wx <= MAP_BOUNDS[2] and
                     MAP_BOUNDS[1] <= wy <= MAP_BOUNDS[3]):
-                return False, 0, 0, 1.0
+                return self._locate_fallback(gray, kpm, dm)
 
             # 缓存
             self._lH = M
@@ -591,7 +684,7 @@ class MapNavigationThread(QThread):
                         # 从失败中恢复（可能是传送）：直接重置KF到新位置
                         self.kf.reset(mx, my)
                         sx, sy = mx, my
-                        print(f"[Nav] 传送恢复: 重置KF到({sx:.1f},{sy:.1f})")
+                        print(f"[Nav] 恢复定位: 重置KF到({sx:.1f},{sy:.1f})")
                     else:
                         sx, sy = self.kf.update(mx, my)
 
@@ -602,9 +695,15 @@ class MapNavigationThread(QThread):
                     self._fail_count += 1
 
                     if self._fail_count == 1:
-                        print(f"[Nav] 进入恢复模式")
-                        self._lpos_pixel = None
+                        # 首次失败：保留_lpos_pixel作为空间先验，供回退匹配使用
+                        print(f"[Nav] 进入恢复模式（保留空间先验）")
                         self._last_good_conf = 0.0
+                        self.position_updated.emit(px, py, 0.0, None)
+                    elif self._fail_count == 3:
+                        # 连续3次失败：可能是传送，清除空间先验让全局FLANN接管
+                        print(f"[Nav] 连续3次失败，重置空间先验（疑似传送）")
+                        self._lpos_pixel = None
+                        self._lH = None
                         self.kf.reset(0, 0)
                         self.position_updated.emit(px, py, 0.0, None)
                     elif self._fail_count >= MAX_CONSECUTIVE_FAILS:

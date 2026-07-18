@@ -377,52 +377,53 @@ class MapFloatingWindow(QWidget):
     def showEvent(self, event):
         """窗口显示时注册热键"""
         super().showEvent(event)
-        # 使用 ctypes 注册全局快捷键 Alt+M
+        # 使用低级键盘钩子注册全局快捷键 Alt+M（不阻塞按键传递）
         self._register_hotkey()
-    
+
     def _register_hotkey(self):
-        """注册全局快捷键 Alt+M（从设置读取配置）"""
+        """注册全局快捷键 Alt+M（使用低级键盘钩子，不阻塞按键传递）"""
         try:
-            import ctypes
             from core.settings_manager import SettingsManager
+            from core.keyboard_hook import KeyboardHook
+
             settings = SettingsManager()
             hotkeys = settings.get("hotkeys", {})
             cfg = hotkeys.get("map_toggle_passthrough", {"mod_code": 0x0001, "vk": 0x4D})
 
-            user32 = ctypes.windll.user32
+            # 销毁旧的钩子
+            self._unregister_hotkeys()
+
             self.hotkey_id = 2
-            registered = user32.RegisterHotKey(
-                int(self.winId()),
-                self.hotkey_id,
+            self._keyboard_hook = KeyboardHook(parent=self)
+            self._keyboard_hook.hotkey_triggered.connect(self._on_hotkey_triggered)
+            self._keyboard_hook.register_hotkey(
+                cfg.get("vk", 0x4D),
                 cfg.get("mod_code", 0x0001),
-                cfg.get("vk", 0x4D)
+                self.hotkey_id
             )
+            self._keyboard_hook.start()
             display = cfg.get("display", "Alt+M")
-            if registered:
-                print(f"✓ 地图全局快捷键 {display} 已注册")
-            else:
-                print(f"✗ 地图全局快捷键 {display} 注册失败")
+            print(f"✓ 地图全局快捷键 {display} 已注册")
         except Exception as e:
             pass
 
     def _unregister_hotkeys(self):
         """注销所有已注册的全局快捷键"""
         try:
-            import ctypes
-            user32 = ctypes.windll.user32
-            user32.UnregisterHotKey(int(self.winId()), self.hotkey_id)
+            if hasattr(self, '_keyboard_hook') and self._keyboard_hook is not None:
+                self._keyboard_hook.stop()
+                self._keyboard_hook.deleteLater()
+                self._keyboard_hook = None
         except Exception as e:
             pass
-    
+
+    def _on_hotkey_triggered(self, hk_id):
+        """键盘钩子触发热键时的处理（主线程）"""
+        if hk_id == self.hotkey_id:
+            self._toggle_mouse_interaction()
+
     def nativeEvent(self, eventType, message):
-        """处理Windows原生消息 - 捕获全局快捷键"""
-        if eventType == b'windows_generic_MSG':
-            import ctypes
-            msg = ctypes.wintypes.MSG.from_address(message.__int__())
-            WM_HOTKEY = 0x0312
-            if msg.message == WM_HOTKEY and msg.wParam == self.hotkey_id:
-                self._toggle_mouse_interaction()
-                return True, 0
+        """处理Windows原生消息（热键现在通过 KeyboardHook 处理，保留以兼容）"""
         return super().nativeEvent(eventType, message)
         
     def _init_ui(self):
@@ -1082,7 +1083,11 @@ class MapFloatingWindow(QWidget):
         # 连接信号
         self.navigation_thread.position_updated.connect(self._on_position_updated)
         self.navigation_thread.navigation_status.connect(self._on_navigation_status)
-        
+
+        # 重置位置更新计数和上次有效位置，确保首次定位时应用导航默认缩放
+        self.position_update_count = 0
+        self.last_valid_position = None
+
         # 启动线程
         self.navigation_thread.start()
         self.is_navigating = True
@@ -1191,6 +1196,8 @@ class MapFloatingWindow(QWidget):
             self.current_pos_label.setText(f"当前位置: ({int(map_x)}, {int(map_y)})")
 
             if self.position_update_count == 1:
+                # 首次定位：应用导航默认缩放（比 fit_scale 大，便于看清图标位置）
+                self._apply_navigation_default_zoom()
                 self._pending_center = True
                 self._pending_center_x = map_x
                 self._pending_center_y = map_y
@@ -1235,6 +1242,26 @@ class MapFloatingWindow(QWidget):
                 mx, my = self.last_valid_position
                 self._update_pointer_position(mx, my)
 
+    def _apply_navigation_default_zoom(self):
+        """应用导航默认缩放。
+
+        默认 fit_scale 会让整张地图铺满容器，图标挤在一起看不清。
+        导航开始时放大到 3 倍 fit_scale，便于看清图标在地图上的具体位置。
+        """
+        if not hasattr(self, 'original_pixmap') or self.original_pixmap.isNull():
+            return
+        if not hasattr(self, 'map_container'):
+            return
+        cw = max(1, self.map_container.width())
+        ch = max(1, self.map_container.height())
+        # fit_scale = 地图刚好铺满容器（无黑边）
+        fit_scale = max(cw / self.original_pixmap.width(),
+                        ch / self.original_pixmap.height())
+        # 导航默认：3 倍 fit_scale，图标在地图上分散开便于辨识
+        nav_default_scale = fit_scale * 3.0
+        # 限制在合理范围内（不小于 fit_scale，不大于 10 倍）
+        self.map_scale = max(fit_scale, min(nav_default_scale, 10.0))
+
     def _center_map_on_position(self, map_x, map_y):
         """将地图居中显示在指定位置"""
         container_width = self.map_container.width()
@@ -1248,6 +1275,28 @@ class MapFloatingWindow(QWidget):
 
         self._markers_needs_update = True
         self._update_map_render()
+
+    def _compute_icon_size(self, base_icon_size=16, max_size=32):
+        """计算图标大小，基于当前缩放相对于 fit_scale 的比例。
+
+        旧公式 base_icon_size * map_scale 由于 map_scale 是很小的数（约 0.04），
+        结果几乎总是 0，被钳到最小值，无法随缩放变化。
+        新公式以 fit_scale 为基准，zoom_factor = map_scale / fit_scale，
+        在 fit_scale 时图标为 base_icon_size，放大时按比例增大。
+        """
+        if not hasattr(self, 'original_pixmap') or self.original_pixmap.isNull():
+            return max(10, base_icon_size)
+        if not hasattr(self, 'map_container'):
+            return max(10, base_icon_size)
+        cw = max(1, self.map_container.width())
+        ch = max(1, self.map_container.height())
+        fit_scale = max(cw / self.original_pixmap.width(),
+                        ch / self.original_pixmap.height())
+        if fit_scale <= 0:
+            return max(10, base_icon_size)
+        zoom_factor = self.map_scale / fit_scale
+        # 最小 10 像素（项目规范），最大 max_size 像素
+        return max(10, min(int(base_icon_size * zoom_factor), max_size))
         
     def _screen_scale_x(self):
         """世界X坐标 → 屏幕像素的精确比例"""
@@ -1294,6 +1343,9 @@ class MapFloatingWindow(QWidget):
     def closeEvent(self, event):
         """窗口关闭事件"""
         self._stop_navigation()
+        # 清理键盘钩子
+        if hasattr(self, '_unregister_hotkeys'):
+            self._unregister_hotkeys()
         super().closeEvent(event)
     
     def _shrink_window(self):
@@ -1373,10 +1425,10 @@ class MapFloatingWindow(QWidget):
             self.map_offset_y = (container_height - scaled_height) // 2
             self._clamp_map_offset()
 
-            # 更新地图标签位置和大小
-            self.map_label.setFixedSize(scaled_width, scaled_height)
-
-            # 更新显示
+            # 注意：此处不再调用 setFixedSize 锁定 map_label 大小。
+            # 否则后续 Ctrl+滚轮缩放地图时，setGeometry 受固定大小约束无法放大 map_label，
+            # 会导致 map_label 不能覆盖整个容器，露出容器外的黑色背景（黑边越缩放越多）。
+            # 大小由 update_map_display -> _update_map_render 中的 setGeometry 动态设置。
             self.update_map_display()
     
     def keyPressEvent(self, event):
@@ -1543,7 +1595,7 @@ class MapFloatingWindow(QWidget):
 
         if self.collect_data and getattr(self, 'selected_resources', set()):
             base_icon_size = 16
-            icon_size = max(8, min(int(base_icon_size * self.map_scale), 32))
+            icon_size = self._compute_icon_size(base_icon_size)
             container_rect = self.map_container.rect()
             label_pos = self.map_label.pos()
             icon_cache = getattr(self, '_resource_icon_cache', {})
@@ -1705,7 +1757,7 @@ class MapFloatingWindow(QWidget):
 
         if self.owl_stars_data:
             base_icon_size = 16
-            icon_size = max(8, min(int(base_icon_size * self.map_scale), 32))
+            icon_size = self._compute_icon_size(base_icon_size)
             container_rect = self.map_container.rect()
 
             for item_name in self.selected_owl_stars:
@@ -1732,8 +1784,7 @@ class MapFloatingWindow(QWidget):
                     screen_x = self.map_offset_x + (map_x * self.map_scale)
                     screen_y = self.map_offset_y + (map_y * self.map_scale)
 
-                    item_icon_size = int(24 * self.map_scale) if '乐谱' in item_name else icon_size
-                    item_icon_size = max(8, min(item_icon_size, 40))
+                    item_icon_size = self._compute_icon_size(24, 40) if '乐谱' in item_name else icon_size
 
                     if (screen_x < -item_icon_size or screen_x > container_rect.width() + item_icon_size or
                         screen_y < -item_icon_size or screen_y > container_rect.height() + item_icon_size):
@@ -2542,7 +2593,7 @@ class MapFloatingWindow(QWidget):
                     original_y = (click_container_y - self.map_offset_y) / self._screen_scale_y()
                     
                     
-                    # 打印前3个资源标记的位置作为参考
+                    # 打印前3个资源标记的位置
                     if self.collect_data:
                         count = 0
                         for resource_name, info in self.collect_data.items():

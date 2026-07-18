@@ -40,6 +40,9 @@ def _get_resource_path(relative_path):
         return os.path.join(base_dir, relative_path)
 
 class GameCapture:
+    # 血脉类型关键字（OCR识别用）
+    BLOODLINE_TYPES = ["奇异", "污染", "混乱", "异色"]
+
     def __init__(self, window_title="洛克王国：世界"):
         self.window_title = window_title
         self.hwnd = None
@@ -614,7 +617,56 @@ class GameCapture:
             self.ocr_last_hash = None
 
         return []
-    
+
+    def recognize_bloodline(self, image=None, roi=None):
+        """
+        识别血脉类型（OCR识别框选区域内的文字）
+        :param image: 截图图像（游戏窗口客户区截图），如果为None则自动捕获
+        :param roi: 血脉识别区域 (x, y, w, h)，客户区相对物理像素坐标
+        :return: (bloodline_type, has_text)
+            - bloodline_type: 识别到的血脉类型（奇异/污染/混乱/异色），未识别到返回None
+            - has_text: 是否识别到任何文字（用于判断是否停止OCR）
+        """
+        if image is None:
+            if roi is not None:
+                image = self.capture_window()
+            else:
+                image = self.capture_window(roi)
+
+        if image is None:
+            return None, False
+
+        # 如果传入了roi参数，裁剪图像
+        if roi is not None:
+            roi_x, roi_y, roi_w, roi_h = roi
+            img_h, img_w = image.shape[:2]
+            # 边界保护
+            if roi_x < 0 or roi_y < 0 or roi_x + roi_w > img_w or roi_y + roi_h > img_h:
+                return None, False
+            image = image[roi_y:roi_y+roi_h, roi_x:roi_x+roi_w]
+
+        # 初始化OCR
+        self.init_ocr()
+
+        # 执行OCR识别
+        result, elapse = self.ocr_engine(image)
+
+        if not result:
+            return None, False
+
+        # 收集所有识别到的文字
+        all_texts = [item[1] for item in result]
+        has_text = len(all_texts) > 0
+
+        # 检查是否包含血脉类型关键字
+        for text in all_texts:
+            for bloodline in self.BLOODLINE_TYPES:
+                if bloodline in text:
+                    logger.log(f"🩸 识别到血脉: {bloodline}")
+                    return bloodline, True
+
+        return None, has_text
+
     def _match_pokemon_names(self, texts):
         """匹配宠物名称并返回基础精灵名（带缓存）"""
         matched = []
@@ -780,7 +832,7 @@ class GameCapture:
             logger.log(f"⚠️ nightmare_template模板未加载")
             return False, self.nightmare_detected_count
         
-        threshold = self.settings_manager.get("confidence_pollution", 0.6) if hasattr(self, 'settings_manager') else 0.6
+        threshold = self.settings_manager.get("confidence_pollution", 0.75) if hasattr(self, 'settings_manager') else 0.75
         
         # 如果已有缓存的缩放模板，直接使用
         if self.nightmare_cached_template is not None:
@@ -1077,6 +1129,8 @@ class ScreenshotWorker(QThread):
         self._capture_requested = False
         self.current_battle_lkwg = None  # 同步主线程的战斗状态
         self.idle_count = 0  # 空闲计数，用于动态调整频率
+        # 血脉识别状态（由主线程同步）
+        self.bloodline_check_active = False  # 是否应该执行血脉OCR
     
     def run(self):
         """线程主循环"""
@@ -1106,7 +1160,7 @@ class ScreenshotWorker(QThread):
         try:
             # 默认识别模式不使用框选ROI,直接使用默认区域
             roi = None
-            
+
             # 截图
             current_image = self.game_capture.capture_window(roi)
             if current_image is None:
@@ -1117,10 +1171,10 @@ class ScreenshotWorker(QThread):
                 }
                 self.recognition_result.emit(result)
                 return
-            
+
             # 判断是否应该启用OCR
             should_ocr, ocr_reason = self.game_capture.should_enable_ocr(image=current_image)
-            
+
             recognized_names = []
             if should_ocr:
                 h, w = current_image.shape[:2]
@@ -1130,14 +1184,35 @@ class ScreenshotWorker(QThread):
                 roi_h = int(h * 0.15)
                 roi_image = current_image[roi_y:roi_y+roi_h, roi_x:roi_x+roi_w]
                 recognized_names = self.game_capture.recognize_pokemon_name(image=roi_image, roi=(0, 0, roi_w, roi_h))
-            
+
+            # 血脉识别：当四叶草铅绘未识别到且血脉检查处于激活状态时，顺便OCR血脉框选区域
+            bloodline_result = None
+            bloodline_has_text = False
+            bloodline_checked = False  # 是否实际执行了血脉OCR
+            if (should_ocr and
+                    self.bloodline_check_active and
+                    "四叶草铅绘" not in recognized_names and
+                    hasattr(self.game_capture, 'settings_manager') and
+                    self.game_capture.settings_manager):
+                bl_enabled = self.game_capture.settings_manager.get("enable_bloodline_recognition", False)
+                bl_roi = self.game_capture.settings_manager.get("bloodline_roi")
+                if bl_enabled and bl_roi:
+                    bl_roi_tuple = (bl_roi['x'], bl_roi['y'], bl_roi['width'], bl_roi['height'])
+                    bloodline_result, bloodline_has_text = self.game_capture.recognize_bloodline(
+                        image=current_image, roi=bl_roi_tuple
+                    )
+                    bloodline_checked = True  # 标记实际执行了血脉OCR
+
             result = {
                 'recognized_names': recognized_names,
                 'should_ocr': should_ocr,
-                'ocr_reason': ocr_reason
+                'ocr_reason': ocr_reason,
+                'bloodline': bloodline_result,
+                'bloodline_has_text': bloodline_has_text,
+                'bloodline_checked': bloodline_checked
             }
             self.recognition_result.emit(result)
-            
+
         except Exception as e:
             print(f"❌ 子线程识别错误: {e}")
             import traceback

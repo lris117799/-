@@ -50,6 +50,9 @@ test_*.json
 image/sc/
 image/pokedex_cache/
 image/startup_screenshot.png
+# 运行时生成文件
+image/minimap_current.png
+image/xm.png
 
 # ─── 地图相关文件（用户要求不上传）───
 image/map.png
@@ -70,7 +73,13 @@ blind_box_v5.onnx
 runs/
 *.onnx
 *.pt
+*.pth
 *.pkl
+
+# ─── 训练数据集与模型目录（未被代码调用，不上传） ───
+dataset/
+dataset_mx/
+model/
 
 # ─── 用户数据文件（不上传） ───
 # 根目录用户数据

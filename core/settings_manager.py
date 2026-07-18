@@ -6,6 +6,9 @@ class SettingsManager:
     def __init__(self):
         self.settings_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "settings.json")
         self.default_settings = {
+            # 设置版本号（用于设置迁移）
+        "settings_version": 2,
+
             # 通用设置
             "auto_start": False,
             "minimize_to_tray": False,
@@ -15,7 +18,7 @@ class SettingsManager:
             # 识别设置
         "recognition_interval": 500,
         "recognition_confidence": 0.7,  # nl 和其他识别用的置信度
-        "confidence_pollution": 0.6,  # 童话事件用的置信度
+        "confidence_pollution": 0.75,  # 童话事件用的置信度
         "ocr_confidence": 0.5,  # OCR文字识别置信度阈值
         "enable_background_recognition": True,
             
@@ -44,10 +47,15 @@ class SettingsManager:
             
             # 框选识别区域
             "recognition_roi": None,  # 框选区域 (x, y, width, height)，None表示全屏识别
+
+            # 血脉识别设置
+            "enable_bloodline_recognition": True,  # 血脉识别开关（默认开启）
+            "bloodline_roi": None,  # 血脉识别框选区域 (x, y, width, height)，None表示未设置
             
             # 导航地图设置
             "map_update_interval": 3,  # 地图更新间隔（每N帧更新一次）
             "use_real_pointer": True,  # 使用游戏真实指针（否则使用绿色方向指针）
+            "resource_icon_size": 24,  # 资源点图标大小（基准像素，随地图缩放变化）
             
             # 多窗口设置
             "selected_window_index": 0,  # 多游戏窗口时，选择使用第几个窗口(从0开始)
@@ -80,6 +88,17 @@ class SettingsManager:
                     for key, value in default_hotkeys.items():
                         if key not in loaded["hotkeys"]:
                             loaded["hotkeys"][key] = value
+                # 版本迁移：旧版血脉识别默认为False，强制升级为True
+                # 通过 settings_version 标记，仅在首次升级时强制覆盖
+                old_version = loaded.get("settings_version", 0)
+                if old_version < 1:
+                    # 强制使用新默认值（用户后续可手动关闭）
+                    loaded["enable_bloodline_recognition"] = True
+                    loaded["settings_version"] = 1
+                if old_version < 2:
+                    # 童话事件置信度阈值从 0.6 提升到 0.75（减少误识别）
+                    loaded["confidence_pollution"] = 0.75
+                    loaded["settings_version"] = 2
                 settings.update(loaded)
                 return settings
             except Exception as e:

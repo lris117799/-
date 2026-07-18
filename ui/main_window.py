@@ -8,6 +8,7 @@ from PySide6.QtCore import Qt, Signal, QPoint, QSize, QRect, QTimer, QEvent, QPr
 from PySide6.QtGui import QFont, QIcon, QPainter, QColor, QLinearGradient, QPen, QBrush, QPainterPath, QPolygon, QPixmap, QFontMetrics, QImage
 import os
 import sys
+import time
 import cv2
 
 # ── OpenCV Unicode 路径支持 ──
@@ -58,7 +59,7 @@ NO_FOCUS_STYLE = """
 
 
 class FoldButton(QPushButton):
-    """折叠按钮 - 三角形图标（参考HTML设计）"""
+    """折叠按钮 - 三角形图标"""
     def __init__(self, parent=None):
         super().__init__(parent)
         self.is_folded = False
@@ -289,7 +290,18 @@ class MapLabel(QLabel):
         self.route_preview_point = None  # 当前绘制中的起点（地图坐标），None=未开始绘制
         self.route_preview_mouse = None  # 鼠标当前位置（屏幕坐标），用于绘制预览线
         self.route_snapped = False  # 鼠标是否吸附到资源点
-        self.selected_route_point = None  # 选中的路径点 (seg_idx, pt_idx)
+        self.selected_route_point = None  # 选中的路径点（单选时的主点，用于改名）(seg_idx, pt_idx)
+        # 多选支持：Shift+点击 可多选路径点或整条路径段
+        self.selected_route_points = set()  # 多选的路径点集合 {(seg_idx, pt_idx), ...}
+        self.selected_route_segments = set()  # 多选的整条路径段集合 {seg_idx, ...}
+        # 长按拖动支持
+        self.route_press_start_time = 0  # 鼠标按下时间戳（用于长按判定）
+        self.route_press_pos = None  # 鼠标按下位置（用于判定是否拖动）
+        self.route_dragging_point = None  # 正在拖动的路径点 (seg_idx, pt_idx)，None=未拖动
+        self.route_drag_moved = False  # 拖动是否产生实际位移
+        # 连接模式
+        self.route_connect_mode = False  # 是否在连接模式
+        self.route_connect_source = None  # 连接源点 (seg_idx, pt_idx)
 
         # 关键：设置这些属性确保鼠标事件正常工作
         self.setAttribute(Qt.WA_Hover, True)
@@ -299,6 +311,7 @@ class MapLabel(QLabel):
         
     def mousePressEvent(self, event):
         from PySide6.QtCore import QPointF
+        import time
         route_edit_mode = getattr(self.main_window, 'route_edit_mode', False)
 
         if event.button() == Qt.LeftButton:
@@ -341,6 +354,19 @@ class MapLabel(QLabel):
                 event.accept()
                 return
 
+            # 连接模式：左键点击另一个路径点完成连接
+            if self.route_connect_mode:
+                target_pt = self._detect_clicked_route_point(event.pos())
+                if target_pt and target_pt != self.route_connect_source:
+                    self._bridge_two_points(self.route_connect_source, target_pt)
+                # 退出连接模式
+                self.route_connect_mode = False
+                self.route_connect_source = None
+                self.setCursor(Qt.ArrowCursor)
+                self.update()
+                event.accept()
+                return
+
             # 路线绘制模式
             if route_edit_mode:
                 pos = event.pos()
@@ -374,13 +400,68 @@ class MapLabel(QLabel):
                 event.accept()
                 return
 
-            # 检测是否点击到已有路径点（用于选中）
+            # 检测是否点击到已有路径点（用于选中或拖动）
             clicked_pt = self._detect_clicked_route_point(event.pos())
+
+            # 检测是否点击到路径线
+            clicked_line_seg = None
+            if not clicked_pt:
+                clicked_line_seg = self._detect_clicked_route_line(event.pos())
+
+            # Shift 多选
+            shift_pressed = bool(event.modifiers() & Qt.ShiftModifier)
+
             if clicked_pt:
-                self.selected_route_point = clicked_pt
+                if shift_pressed:
+                    # Shift+点击路径点：添加到/移出多选集合
+                    if clicked_pt in self.selected_route_points:
+                        self.selected_route_points.discard(clicked_pt)
+                    else:
+                        self.selected_route_points.add(clicked_pt)
+                    # 主选中点设为最新点击的
+                    self.selected_route_point = clicked_pt
+                else:
+                    # 普通点击：设为唯一选中
+                    self.selected_route_points.clear()
+                    self.selected_route_segments.clear()
+                    self.selected_route_point = clicked_pt
+
+                # 记录按下时间和位置，用于长按拖动判定
+                self.route_press_start_time = time.time()
+                self.route_press_pos = event.pos()
+                self.route_dragging_point = None
+                self.route_drag_moved = False
                 self.update()
                 event.accept()
                 return
+
+            elif clicked_line_seg is not None:
+                # 点击路径线（clicked_line_seg 为 (seg_idx, start_pt, end_pt) 子段标识）
+                if shift_pressed:
+                    # Shift+点击路径线：添加到/移出多选集合
+                    if clicked_line_seg in self.selected_route_segments:
+                        self.selected_route_segments.discard(clicked_line_seg)
+                    else:
+                        self.selected_route_segments.add(clicked_line_seg)
+                else:
+                    # 普通点击：选中该子段
+                    self.selected_route_points.clear()
+                    self.selected_route_segments.clear()
+                    self.selected_route_segments.add(clicked_line_seg)
+                    # 主选中点设为该子段起点
+                    seg_idx, start_pt, _ = clicked_line_seg
+                    self.selected_route_point = (seg_idx, start_pt)
+                self.update()
+                event.accept()
+                return
+
+            else:
+                # 点击空白：清空选中
+                if self.selected_route_point or self.selected_route_points or self.selected_route_segments:
+                    self.selected_route_point = None
+                    self.selected_route_points.clear()
+                    self.selected_route_segments.clear()
+                    self.update()
 
             # 正常点击：拖动地图或检测资源
             self.press_pos = event.pos()
@@ -407,19 +488,64 @@ class MapLabel(QLabel):
                 self.update()
                 event.accept()
                 return
+            elif self.route_connect_mode:
+                # 右键取消连接模式
+                self.route_connect_mode = False
+                self.route_connect_source = None
+                self.setCursor(Qt.ArrowCursor)
+                self.update()
+                event.accept()
+                return
             else:
-                # 右键点击路径点 = 显示菜单（删除/改名）
+                # 区分点击路径点/路径线/空白
                 clicked_pt = self._detect_clicked_route_point(event.pos())
                 if clicked_pt:
+                    # 右键路径点 = 显示菜单（删除/改名/连接/桥接）
                     self.selected_route_point = clicked_pt
                     self.update()
                     self._show_route_point_menu(event.globalPosition().toPoint())
                     event.accept()
                     return
+
+                clicked_line_seg = self._detect_clicked_route_line(event.pos())
+                if clicked_line_seg is not None:
+                    # 右键路径线 = 显示菜单（删除此段/添加路径点）
+                    self._show_route_line_menu(event.globalPosition().toPoint(), clicked_line_seg, event.pos())
+                    event.accept()
+                    return
+
+                # 右键空白 = 显示菜单（添加路径点）
+                self._show_route_blank_menu(event.globalPosition().toPoint(), event.pos())
+                event.accept()
+                return
             super().mousePressEvent(event)
 
         else:
             super().mousePressEvent(event)
+
+    def _bridge_two_points(self, source_pt, target_pt):
+        """连接/桥接两个路径点：在两点之间创建新段"""
+        s1, p1 = source_pt
+        s2, p2 = target_pt
+        route_segments = self.main_window.route_segments
+
+        if s1 >= len(route_segments) or s2 >= len(route_segments):
+            return
+        if p1 >= len(route_segments[s1]) or p2 >= len(route_segments[s2]):
+            return
+
+        x1, y1, cp1 = route_segments[s1][p1]
+        x2, y2, cp2 = route_segments[s2][p2]
+
+        # 保存历史
+        self.main_window.route_history.append([seg.copy() for seg in route_segments])
+        # 创建新段，包含这两个点
+        route_segments.append([(x1, y1, cp1), (x2, y2, cp2)])
+        # 清空选中状态
+        self.selected_route_points.clear()
+        self.selected_route_segments.clear()
+        self.selected_route_point = None
+        self.main_window._update_map_display()
 
     def _check_resource_snap(self, screen_pos):
         """检查鼠标是否在资源点附近，返回资源点的地图坐标 (map_x, map_y) 或 None"""
@@ -480,8 +606,58 @@ class MapLabel(QLabel):
 
         return None
 
+    def _detect_clicked_route_line(self, screen_pos):
+        """检测点击是否在某条路径线段上，按检测点为分割标准返回子段
+        返回 (seg_idx, start_pt_idx, end_pt_idx) 或 None
+        start_pt_idx 和 end_pt_idx 是子段在 segment 中的起止点索引（含）
+        """
+        route_segments = getattr(self.main_window, 'route_segments', [])
+        if not route_segments:
+            return None
+
+        click_x = screen_pos.x()
+        click_y = screen_pos.y()
+
+        # 线段检测阈值（点到线段的距离）
+        threshold = max(6, int(6 * self.main_window.map_scale))
+
+        for seg_idx, segment in enumerate(route_segments):
+            if len(segment) < 2:
+                continue
+            for i in range(len(segment) - 1):
+                x1, y1, _ = segment[i]
+                x2, y2, _ = segment[i + 1]
+                sx1 = self.main_window.map_offset_x + (x1 * self.main_window.map_scale)
+                sy1 = self.main_window.map_offset_y + (y1 * self.main_window.map_scale)
+                sx2 = self.main_window.map_offset_x + (x2 * self.main_window.map_scale)
+                sy2 = self.main_window.map_offset_y + (y2 * self.main_window.map_scale)
+                dist = self._point_to_segment_distance(click_x, click_y, sx1, sy1, sx2, sy2)
+                if dist <= threshold:
+                    # 以检测点为分割标准：向前找到第一个检测点（含起点 0）
+                    start = i
+                    while start > 0 and not segment[start][2]:
+                        start -= 1
+                    # 向后找到下一个检测点（含终点 len-1）
+                    end = i + 1
+                    while end < len(segment) - 1 and not segment[end][2]:
+                        end += 1
+                    return (seg_idx, start, end)
+        return None
+
+    @staticmethod
+    def _point_to_segment_distance(px, py, x1, y1, x2, y2):
+        """计算点到线段的距离"""
+        dx = x2 - x1
+        dy = y2 - y1
+        if dx == 0 and dy == 0:
+            return ((px - x1) ** 2 + (py - y1) ** 2) ** 0.5
+        t = max(0, min(1, ((px - x1) * dx + (py - y1) * dy) / (dx * dx + dy * dy)))
+        proj_x = x1 + t * dx
+        proj_y = y1 + t * dy
+        return ((px - proj_x) ** 2 + (py - proj_y) ** 2) ** 0.5
+
     def _show_route_point_menu(self, global_pos):
-        """显示路径点右键菜单（删除/改名）"""
+        """显示路径点右键菜单（删除/改名/连接/桥接）"""
         from PySide6.QtWidgets import QMenu, QInputDialog
         from PySide6.QtGui import QAction
 
@@ -516,6 +692,13 @@ class MapLabel(QLabel):
         action_delete = menu.addAction("删除")
         # 改名
         action_rename = menu.addAction("改名")
+        # 连接：进入连接模式，点击另一个点后在两点之间创建新段
+        action_connect = menu.addAction("连接")
+
+        # 桥接：仅当多选了 2 个路径点时显示
+        action_bridge = None
+        if len(self.selected_route_points) == 2:
+            action_bridge = menu.addAction("桥接")
 
         action = menu.exec(global_pos)
 
@@ -543,6 +726,8 @@ class MapLabel(QLabel):
                     new_names[(s, p)] = name
             self.main_window.route_point_names = new_names
             self.selected_route_point = None
+            self.selected_route_points.clear()
+            self.selected_route_segments.clear()
             self.main_window._update_map_display()
 
         elif action == action_rename:
@@ -554,6 +739,249 @@ class MapLabel(QLabel):
             if ok and new_name:
                 names[(seg_idx, pt_idx)] = new_name
                 self.update()
+
+        elif action == action_connect:
+            # 进入连接模式：下次左键点击另一个路径点时创建新段
+            self.route_connect_mode = True
+            self.route_connect_source = (seg_idx, pt_idx)
+            # 退出绘制模式以避免冲突
+            if getattr(self.main_window, 'route_edit_mode', False):
+                self.main_window.draw_route_btn.setChecked(False)
+                self.main_window._toggle_route_edit_mode()
+            self.setCursor(Qt.CrossCursor)
+            self.update()
+
+        elif action_bridge is not None and action == action_bridge:
+            self._bridge_selected_points()
+
+    def _bridge_selected_points(self):
+        """桥接：在两个多选的路径点之间创建新段"""
+        if len(self.selected_route_points) != 2:
+            return
+        pts = list(self.selected_route_points)
+        (s1, p1), (s2, p2) = pts
+        route_segments = self.main_window.route_segments
+
+        if s1 >= len(route_segments) or s2 >= len(route_segments):
+            return
+        if p1 >= len(route_segments[s1]) or p2 >= len(route_segments[s2]):
+            return
+
+        # 取两个点的坐标
+        x1, y1, cp1 = route_segments[s1][p1]
+        x2, y2, cp2 = route_segments[s2][p2]
+
+        # 保存历史
+        self.main_window.route_history.append([seg.copy() for seg in route_segments])
+        # 创建新段，包含这两个点
+        route_segments.append([(x1, y1, cp1), (x2, y2, cp2)])
+        # 清空选中状态
+        self.selected_route_points.clear()
+        self.selected_route_segments.clear()
+        self.selected_route_point = None
+        self.main_window._update_map_display()
+
+    def _show_route_line_menu(self, global_pos, sub_segment, click_pos):
+        """显示路径线右键菜单（删除此子段/添加检测点）
+        sub_segment = (seg_idx, start_pt_idx, end_pt_idx) 子段标识
+        """
+        from PySide6.QtWidgets import QMenu
+        from PySide6.QtGui import QAction
+
+        seg_idx, start_pt, end_pt = sub_segment
+        route_segments = self.main_window.route_segments
+        if seg_idx >= len(route_segments):
+            return
+        segment = route_segments[seg_idx]
+        if start_pt >= len(segment) or end_pt >= len(segment):
+            return
+
+        menu = QMenu(self)
+        menu.setStyleSheet("""
+            QMenu {
+                background-color: rgba(30, 30, 38, 0.98);
+                color: #e4e4e7;
+                border: 1px solid rgba(124, 58, 237, 0.4);
+                border-radius: 6px;
+                padding: 4px;
+            }
+            QMenu::item {
+                padding: 6px 24px;
+                border-radius: 4px;
+            }
+            QMenu::item:selected {
+                background-color: rgba(124, 58, 237, 0.3);
+            }
+        """)
+
+        action_delete_seg = menu.addAction("删除此路径线")
+        action_add_point = menu.addAction("在此处添加检测点")
+
+        action = menu.exec(global_pos)
+
+        if action == action_delete_seg:
+            # 保存历史
+            self.main_window.route_history.append([seg.copy() for seg in route_segments])
+            # 仅删除被点击的那条线（i 和 i+1 之间），保留所有点
+            # 在子段 [start_pt, end_pt] 范围内找到点击位置最近的线段 i
+            click_x = click_pos.x()
+            click_y = click_pos.y()
+            best_i = start_pt
+            best_dist = float('inf')
+            for i in range(start_pt, end_pt):
+                x1, y1, _ = segment[i]
+                x2, y2, _ = segment[i + 1]
+                sx1 = self.main_window.map_offset_x + (x1 * self.main_window.map_scale)
+                sy1 = self.main_window.map_offset_y + (y1 * self.main_window.map_scale)
+                sx2 = self.main_window.map_offset_x + (x2 * self.main_window.map_scale)
+                sy2 = self.main_window.map_offset_y + (y2 * self.main_window.map_scale)
+                dist = self._point_to_segment_distance(click_x, click_y, sx1, sy1, sx2, sy2)
+                if dist < best_dist:
+                    best_dist = dist
+                    best_i = i
+
+            # 在 best_i 和 best_i+1 之间断开 segment（保留所有点，只是不连线）
+            front_part = segment[:best_i + 1]   # [0..best_i]，含点 best_i
+            back_part = segment[best_i + 1:]    # [best_i+1..]，含点 best_i+1
+
+            # 构建替换段列表（保留非空段）
+            new_segs = []
+            if front_part:
+                new_segs.append(front_part)
+            if back_part:
+                new_segs.append(back_part)
+
+            if new_segs:
+                # 用 new_segs[0] 替换原 segment，剩余的作为新 segment 插入
+                route_segments[seg_idx] = new_segs[0]
+                for i, ns in enumerate(new_segs[1:], 1):
+                    route_segments.insert(seg_idx + i, ns)
+                inserted_count = len(new_segs) - 1  # 插入的新 segment 数
+                seg_idx_delta = inserted_count  # 后续 segment 索引偏移
+            else:
+                # 两段都空，删除当前 segment
+                del route_segments[seg_idx]
+                seg_idx_delta = -1
+
+            # 更新名称字典（保留所有点的名称）
+            names = self.main_window.route_point_names
+            new_names = {}
+            has_front = bool(front_part)
+            has_back = bool(back_part)
+            for (s, p), name in names.items():
+                if s == seg_idx:
+                    if p <= best_i and has_front:
+                        # 前段保留（seg_idx 不变，pt_idx 不变）
+                        new_names[(s, p)] = name
+                    elif p > best_i and has_back:
+                        # 后段：seg_idx + (1 if has_front else 0)，pt_idx = p - (best_i + 1)
+                        new_seg_idx = s + (1 if has_front else 0)
+                        new_names[(new_seg_idx, p - (best_i + 1))] = name
+                elif s > seg_idx:
+                    # 后续 segment 索引偏移
+                    new_names[(s + seg_idx_delta, p)] = name
+                else:
+                    new_names[(s, p)] = name
+            self.main_window.route_point_names = new_names
+            # 清空选中状态
+            self.selected_route_point = None
+            self.selected_route_points.clear()
+            self.selected_route_segments.discard(sub_segment)
+            self.main_window._update_map_display()
+
+        elif action == action_add_point:
+            # 计算点击位置的地图坐标
+            map_x = (click_pos.x() - self.main_window.map_offset_x) / self.main_window.map_scale
+            map_y = (click_pos.y() - self.main_window.map_offset_y) / self.main_window.map_scale
+            # 检查吸附
+            snapped = self._check_resource_snap(click_pos)
+            if snapped:
+                map_x, map_y = snapped
+            # 保存历史
+            self.main_window.route_history.append([seg.copy() for seg in route_segments])
+            # 在路线上添加检测点：找到点击位置在哪两个相邻点之间，insert 到该位置
+            # Bug 2: 使用检测点（is_cp=True）而非普通点
+            # Bug 3: 使用 insert 到正确位置而非 append 到末尾
+            insert_idx = self._find_insert_index_in_segment(segment, click_pos, start_pt, end_pt)
+            segment.insert(insert_idx, (map_x, map_y, True))
+            # 更新名称字典：seg_idx 内 pt_idx >= insert_idx 的点 pt_idx+1
+            names = self.main_window.route_point_names
+            new_names = {}
+            for (s, p), name in names.items():
+                if s == seg_idx and p >= insert_idx:
+                    new_names[(s, p + 1)] = name
+                else:
+                    new_names[(s, p)] = name
+            self.main_window.route_point_names = new_names
+            self.main_window._update_map_display()
+
+    def _find_insert_index_in_segment(self, segment, click_pos, start_pt, end_pt):
+        """找到点击位置在 segment 的子段 [start_pt, end_pt] 中的最佳插入位置
+        返回 insert_idx（0-based）：插入后新点位于该索引
+        """
+        click_x = click_pos.x()
+        click_y = click_pos.y()
+
+        # 遍历子段中所有相邻点对，找到点击位置距哪一对最近
+        best_idx = start_pt + 1  # 默认插在子段第二个点之前
+        best_dist = float('inf')
+
+        for i in range(start_pt, end_pt):
+            x1, y1, _ = segment[i]
+            x2, y2, _ = segment[i + 1]
+            sx1 = self.main_window.map_offset_x + (x1 * self.main_window.map_scale)
+            sy1 = self.main_window.map_offset_y + (y1 * self.main_window.map_scale)
+            sx2 = self.main_window.map_offset_x + (x2 * self.main_window.map_scale)
+            sy2 = self.main_window.map_offset_y + (y2 * self.main_window.map_scale)
+            dist = self._point_to_segment_distance(click_x, click_y, sx1, sy1, sx2, sy2)
+            if dist < best_dist:
+                best_dist = dist
+                best_idx = i + 1  # 插入到点 i 和 i+1 之间，即新点索引为 i+1
+
+        return best_idx
+
+    def _show_route_blank_menu(self, global_pos, click_pos):
+        """显示空白处右键菜单（添加路径点）"""
+        from PySide6.QtWidgets import QMenu
+        from PySide6.QtGui import QAction
+
+        menu = QMenu(self)
+        menu.setStyleSheet("""
+            QMenu {
+                background-color: rgba(30, 30, 38, 0.98);
+                color: #e4e4e7;
+                border: 1px solid rgba(124, 58, 237, 0.4);
+                border-radius: 6px;
+                padding: 4px;
+            }
+            QMenu::item {
+                padding: 6px 24px;
+                border-radius: 4px;
+            }
+            QMenu::item:selected {
+                background-color: rgba(124, 58, 237, 0.3);
+            }
+        """)
+
+        action_add_point = menu.addAction("在此处添加路径点")
+
+        action = menu.exec(global_pos)
+
+        if action == action_add_point:
+            # 在空白处创建新段，并添加路径点
+            map_x = (click_pos.x() - self.main_window.map_offset_x) / self.main_window.map_scale
+            map_y = (click_pos.y() - self.main_window.map_offset_y) / self.main_window.map_scale
+            # 检查吸附
+            snapped = self._check_resource_snap(click_pos)
+            if snapped:
+                map_x, map_y = snapped
+            # 保存历史
+            route_segments = self.main_window.route_segments
+            self.main_window.route_history.append([seg.copy() for seg in route_segments])
+            is_cp = getattr(self.main_window, 'is_placing_checkpoint', False)
+            # 新段包含这个点
+            route_segments.append([(map_x, map_y, is_cp)])
+            self.main_window._update_map_display()
 
     def _detect_clicked_resource(self, pos):
         """检测点击位置是否在某个资源标记上"""
@@ -635,6 +1063,47 @@ class MapLabel(QLabel):
             self.update()
             event.accept()
             return
+
+        # 长按拖动路径点
+        if (self.route_press_start_time > 0 and self.route_press_pos is not None
+                and self.selected_route_point is not None
+                and self.route_connect_mode is False):
+            # 判断是否进入拖动模式：超过 400ms 且未移动太远（避免误触）
+            elapsed = current_time - self.route_press_start_time
+            dx = event.pos().x() - self.route_press_pos.x()
+            dy = event.pos().y() - self.route_press_pos.y()
+            move_dist = (dx * dx + dy * dy) ** 0.5
+
+            if self.route_dragging_point is None:
+                # 未进入拖动：超过 400ms 后开始拖动
+                if elapsed >= 0.4 and move_dist <= 8:
+                    seg_idx, pt_idx = self.selected_route_point
+                    route_segments = self.main_window.route_segments
+                    if seg_idx < len(route_segments) and pt_idx < len(route_segments[seg_idx]):
+                        # 保存历史用于撤回
+                        self.main_window.route_history.append([seg.copy() for seg in route_segments])
+                        self.route_dragging_point = self.selected_route_point
+                        self.route_drag_moved = False
+                        self.setCursor(Qt.SizeAllCursor)
+            else:
+                # 已在拖动：更新路径点位置
+                seg_idx, pt_idx = self.route_dragging_point
+                route_segments = self.main_window.route_segments
+                if seg_idx < len(route_segments) and pt_idx < len(route_segments[seg_idx]):
+                    # 检查吸附
+                    snapped = self._check_resource_snap(event.pos())
+                    if snapped:
+                        new_map_x, new_map_y = snapped
+                    else:
+                        new_map_x = (event.pos().x() - self.main_window.map_offset_x) / self.main_window.map_scale
+                        new_map_y = (event.pos().y() - self.main_window.map_offset_y) / self.main_window.map_scale
+                    # 保留原 is_checkpoint
+                    _, _, is_cp = route_segments[seg_idx][pt_idx]
+                    route_segments[seg_idx][pt_idx] = (new_map_x, new_map_y, is_cp)
+                    self.route_drag_moved = True
+                    self.main_window._update_map_display()
+                event.accept()
+                return
 
         if self.is_selecting:
             if self.circle_center:
@@ -720,6 +1189,25 @@ class MapLabel(QLabel):
                 self.update()
                 event.accept()
                 return
+
+            # 结束长按拖动
+            if self.route_dragging_point is not None:
+                # 如果没有实际移动（短按），保持选中状态（不撤销）
+                if not self.route_drag_moved:
+                    # 撤回刚才保存的历史（因为没移动）
+                    if self.main_window.route_history:
+                        self.main_window.route_history.pop()
+                self.route_dragging_point = None
+                self.route_drag_moved = False
+                self.route_press_start_time = 0
+                self.route_press_pos = None
+                self.setCursor(Qt.ArrowCursor)
+                event.accept()
+                return
+
+            # 清除长按记录
+            self.route_press_start_time = 0
+            self.route_press_pos = None
 
             if self.pending_resource_to_show and not self.is_dragging:
                 self._show_resource_tooltip(self.pending_resource_to_show, event.globalPosition().toPoint())
@@ -883,8 +1371,14 @@ class MapLabel(QLabel):
                         screen_y = self.main_window.map_offset_y + (y * self.main_window.map_scale)
 
                         if current_pixmap and not current_pixmap.isNull():
-                            # 图标稍微放大：最小20像素，随缩放增长
-                            icon_size = max(20, int(24 * self.main_window.map_scale))
+                            # 资源点大小：从设置读取基准值（默认24），随地图缩放等比放大，最小20像素保证可见
+                            base_size = 24
+                            try:
+                                if hasattr(self.main_window, 'settings_manager'):
+                                    base_size = self.main_window.settings_manager.get("resource_icon_size", 24)
+                            except Exception:
+                                pass
+                            icon_size = max(20, int(base_size * self.main_window.map_scale))
                             scaled_icon = current_pixmap.scaled(icon_size, icon_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
                             painter.drawPixmap(int(screen_x - icon_size/2), int(screen_y - icon_size/2), scaled_icon)
                         else:
@@ -925,10 +1419,14 @@ class MapLabel(QLabel):
                     screen_x = self.main_window.map_offset_x + (x * self.main_window.map_scale)
                     screen_y = self.main_window.map_offset_y + (y * self.main_window.map_scale)
 
-                    if '乐谱' in item_name:
-                        icon_size = int(24 * self.main_window.map_scale)
-                    else:
-                        icon_size = int(16 * self.main_window.map_scale)
+                    # 与"资源"栏图标大小一致：从设置读取基准值（默认24），随地图缩放等比放大
+                    base_size = 24
+                    try:
+                        if hasattr(self.main_window, 'settings_manager'):
+                            base_size = self.main_window.settings_manager.get("resource_icon_size", 24)
+                    except Exception:
+                        pass
+                    icon_size = max(20, int(base_size * self.main_window.map_scale))
                     scaled_icon = current_pixmap.scaled(icon_size, icon_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
                     painter.drawPixmap(int(screen_x - icon_size/2), int(screen_y - icon_size/2), scaled_icon)
 
@@ -936,6 +1434,9 @@ class MapLabel(QLabel):
             route_segments = getattr(self.main_window, 'route_segments', [])
             route_names = getattr(self.main_window, 'route_point_names', {})
             selected_pt = self.selected_route_point
+            # 多选集合
+            selected_pts_set = getattr(self, 'selected_route_points', set())
+            selected_segs_set = getattr(self, 'selected_route_segments', set())
 
             if route_segments:
                 display_points = []
@@ -950,7 +1451,7 @@ class MapLabel(QLabel):
                 # 绘制线段
                 if len(display_points) >= 2:
                     route_line_color = getattr(self.main_window, 'route_color', QColor(34, 197, 94, 255))
-                    painter.setPen(QPen(route_line_color, max(3, int(3 * self.main_window.map_scale)), Qt.SolidLine))
+                    selected_line_color = QColor(255, 255, 0, 255)  # 选中段用黄色高亮
                     painter.setBrush(Qt.NoBrush)
 
                     segment_start = 0
@@ -958,12 +1459,52 @@ class MapLabel(QLabel):
                         if display_points[i] is None or i == len(display_points) - 1:
                             segment_end = i if display_points[i] is None else i + 1
 
-                            if segment_end - segment_start >= 2:
-                                for j in range(segment_start, segment_end - 1):
+                            # 当前 segment 在 route_segments 中的 seg_idx
+                            seg_idx_cur = display_points[segment_start][3] if display_points[segment_start] is not None else -1
+
+                            # 按检测点拆分该 segment 为子段，分别判断是否被选中
+                            sub_start = segment_start
+                            while sub_start < segment_end - 1:
+                                # 子段起点：sub_start
+                                # 子段终点：下一个检测点 或 segment_end-1
+                                sub_end = sub_start + 1
+                                while sub_end < segment_end - 1:
+                                    # display_points[sub_end] 是子段中间点
+                                    # 检查是否为检测点（即作为下一段的起点）
+                                    if display_points[sub_end][2]:  # is_checkpoint
+                                        break
+                                    sub_end += 1
+                                # sub_end 是子段最后一个点的索引（含），且 sub_end < segment_end
+                                # 判断该子段是否被选中：selected_segs_set 中存的是 (seg_idx, start_pt, end_pt)
+                                is_sub_selected = False
+                                for sel_seg_idx, sel_start, sel_end in selected_segs_set:
+                                    if sel_seg_idx == seg_idx_cur:
+                                        # 把 display_points 索引转回 pt_idx
+                                        sub_start_pt = display_points[sub_start][4]
+                                        sub_end_pt = display_points[sub_end][4]
+                                        if sel_start == sub_start_pt and sel_end == sub_end_pt:
+                                            is_sub_selected = True
+                                            break
+
+                                line_color = selected_line_color if is_sub_selected else route_line_color
+                                line_width = max(4, int(4 * self.main_window.map_scale)) if is_sub_selected else max(3, int(3 * self.main_window.map_scale))
+                                painter.setPen(QPen(line_color, line_width, Qt.SolidLine))
+                                # 画子段内的所有相邻线段（j 从 sub_start 到 sub_end-1）
+                                for j in range(sub_start, sub_end):
+                                    # 双重保险：确保 j+1 不越界
+                                    if j + 1 >= segment_end:
+                                        break
                                     if display_points[j] is not None and display_points[j + 1] is not None:
                                         x1, y1, _, _, _ = display_points[j]
                                         x2, y2, _, _, _ = display_points[j + 1]
                                         painter.drawLine(int(x1), int(y1), int(x2), int(y2))
+
+                                # 下一个子段从当前 sub_end 开始（检测点同时是子段终点和下一段起点）
+                                # 若 sub_end == sub_start 则说明没前进，强制 +1 避免死循环
+                                if sub_end == sub_start:
+                                    sub_start = sub_end + 1
+                                else:
+                                    sub_start = sub_end
 
                             segment_start = i + 1
 
@@ -976,8 +1517,15 @@ class MapLabel(QLabel):
                     x, y, is_checkpoint, seg_idx, pt_idx = point
                     point_counter += 1
 
-                    # 判断是否选中
-                    is_selected = (selected_pt == (seg_idx, pt_idx))
+                    # 判断是否选中（单选或属于多选集合）
+                    is_selected = (selected_pt == (seg_idx, pt_idx) or
+                                   (seg_idx, pt_idx) in selected_pts_set)
+                    # 判断该点是否在被选中的子段范围内
+                    if not is_selected:
+                        for sel_seg_idx, sel_start, sel_end in selected_segs_set:
+                            if sel_seg_idx == seg_idx and sel_start <= pt_idx <= sel_end:
+                                is_selected = True
+                                break
 
                     if is_checkpoint:
                         point_radius = max(10, int(10 * self.main_window.map_scale))
@@ -1511,7 +2059,7 @@ class PieChartWidget(QWidget):
 
 
 class CustomPokemonDialog(QDialog):
-    """自定义精灵对话框（完全参考HTML设计）"""
+    """自定义精灵对话框"""
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("新增自定义精灵")
@@ -2541,6 +3089,11 @@ class MainWindow(QMainWindow):
         self.xt100_detected = False  # 是否检测到xt100
         self.current_battle_lkwg = None  # 当前战斗中的洛克王国精灵名
         self._breakthrough_counted_for_current_battle = False  # 当前战斗是否已计数(防重复)
+        # 血脉识别状态：检测到四叶草铅绘后激活，2秒内识别到血脉关键字则显示对应颜色，否则显示"普通"
+        self._bloodline_check_active = False
+        self._bloodline_check_start_time = 0  # 血脉检查开始时间（time.time()）
+        self._bloodline_check_timeout = 2.0  # 血脉检查2秒超时
+        self._prev_battle_lkwg_for_bloodline = None  # 上一帧的战斗状态（用于检测战斗结束过渡）
         
         
         # 启动时截图
@@ -3186,6 +3739,11 @@ class MainWindow(QMainWindow):
                 
                 if old_battle != "四叶草铅绘":
                     logger.log(f"✅ 检测到四叶草铅绘，进入战斗")
+                    # 激活血脉识别检查（配合童话事件使用）
+                    bl_enabled = self.settings_manager.get("enable_bloodline_recognition", False)
+                    bl_roi = self.settings_manager.get("bloodline_roi")
+                    if bl_enabled and bl_roi:
+                        self._set_bloodline_check_active(True)
                 
                 # 触发童话事件计数（原污染击破）
                 active_counter = self.manager.get_active()
@@ -3286,7 +3844,43 @@ class MainWindow(QMainWindow):
                             self.game_capture.nl_trigger_time = 0
                             self.game_capture.battle_start_time = 0
                             self.game_capture.last_valid_recognition_time = 0
-            
+
+            # 血脉识别结果处理
+            # 逻辑：四叶草铅绘检测到时激活检查（但不开始计时）；
+            #       四叶草铅绘消失后子线程开始OCR血脉区域，此时开始2秒计时；
+            #       2秒内识别到 奇异/污染/混乱/异色 显示对应颜色并立即停止OCR；
+            #       2秒超时未识别到关键字，显示"普通"并立即停止OCR；
+            #       血脉显示会一直保留在悬浮窗上直到战斗结束。
+            if self._bloodline_check_active:
+                bl_checked = result.get('bloodline_checked', False)
+                bl_type = result.get('bloodline') if bl_checked else None
+                if bl_type:
+                    # 识别到血脉关键字，显示对应颜色并立即停止OCR
+                    if hasattr(self, 'floating_window') and self.floating_window is not None:
+                        self.floating_window.update_bloodline(bl_type)
+                    self._set_bloodline_check_active(False)
+                elif bl_checked:
+                    # 子线程执行了血脉OCR但未命中关键字
+                    # 首次执行血脉OCR时开始计时
+                    if self._bloodline_check_start_time == 0:
+                        self._bloodline_check_start_time = time.time()
+                        logger.log(f"🩸 四叶草铅绘消失，开始2秒血脉识别计时")
+                    elapsed = time.time() - self._bloodline_check_start_time
+                    if elapsed >= self._bloodline_check_timeout:
+                        # 2秒超时，显示"普通"并立即停止OCR
+                        if hasattr(self, 'floating_window') and self.floating_window is not None:
+                            self.floating_window.update_bloodline("普通")
+                        self._set_bloodline_check_active(False)
+
+            # 战斗结束（current_battle_lkwg从非None变为None）时关闭血脉OCR并清空显示
+            if not self.current_battle_lkwg and self._prev_battle_lkwg_for_bloodline is not None:
+                if self._bloodline_check_active:
+                    self._set_bloodline_check_active(False)
+                # 清空悬浮窗血脉显示
+                self._clear_bloodline_display()
+            # 更新上一帧战斗状态
+            self._prev_battle_lkwg_for_bloodline = self.current_battle_lkwg
+
             # 输出战斗状态日志
             if self.current_battle_lkwg:
                 log_msg = f"🎯 当前状态: {self.current_battle_lkwg}"
@@ -3301,6 +3895,31 @@ class MainWindow(QMainWindow):
         """更新悬浮窗当前洛克王国精灵显示"""
         if hasattr(self, 'floating_window'):
             self.floating_window.update_current_lkwg(lkwg_name)
+
+    def _set_bloodline_check_active(self, active):
+        """同步血脉识别检查状态到子线程
+        注意：关闭检查时不清空悬浮窗显示，血脉会一直显示直到战斗结束
+        """
+        if self._bloodline_check_active == active:
+            return
+        self._bloodline_check_active = active
+        if active:
+            # 激活时重置开始时间（等待四叶草铅绘消失后才开始计时）
+            self._bloodline_check_start_time = 0
+            # 激活新事件时清空上一次的血脉显示
+            if hasattr(self, 'floating_window') and self.floating_window is not None:
+                self.floating_window.update_bloodline(None)
+        # 同步到ScreenshotWorker
+        if hasattr(self, 'screenshot_worker') and self.screenshot_worker is not None:
+            self.screenshot_worker.bloodline_check_active = active
+        # 同步到RoiRecognitionWorker
+        if hasattr(self, 'roi_worker') and self.roi_worker is not None:
+            self.roi_worker.set_bloodline_check_active(active)
+
+    def _clear_bloodline_display(self):
+        """清空悬浮窗血脉显示（仅在战斗结束时调用）"""
+        if hasattr(self, 'floating_window') and self.floating_window is not None:
+            self.floating_window.update_bloodline(None)
 
     
     
@@ -3789,7 +4408,7 @@ class MainWindow(QMainWindow):
         """)
         layout.addWidget(separator1)
 
-        # 主导航菜单（参考HTML设计）
+        # 主导航菜单
         nav_container = QWidget()
         nav_layout = QVBoxLayout(nav_container)
         nav_layout.setContentsMargins(12, 8, 12, 8)
@@ -4889,7 +5508,7 @@ class MainWindow(QMainWindow):
         scroll.setWidget(container)
         return scroll
 
-    # ================= 右侧面板（参考HTML设计）=================
+    # ================= 右侧面板 =================
     def _create_right_panel(self):
         panel = QFrame()
         panel.setObjectName("rightPanel")
@@ -7205,8 +7824,12 @@ class MainWindow(QMainWindow):
         
         if reply == QMessageBox.Yes:
             active.count = 0
+            active.nightmare_count = 0  # 清空童话事件提示计数
             active.battle_pokemon_stats = {}  # 清空童话事件精灵统计
             active.breakthrough_notified = False  # 重置保底通知标记
+            # 同步重置 game_capture 的 nightmare_detected_count
+            if hasattr(self, 'game_capture') and self.game_capture:
+                self.game_capture.reset_nightmare_count()
             self.manager.save_counters()
             self._refresh_all()
             QMessageBox.information(self, "成功", "计数器已重置！")
@@ -7220,12 +7843,13 @@ class MainWindow(QMainWindow):
         # 识别设置
         self.recognition_interval_spin.setValue(self.settings_manager.get("recognition_interval", 500))
         self.confidence_xt_spin.setValue(self.settings_manager.get("recognition_confidence", 0.7))
-        self.confidence_pollution_spin.setValue(self.settings_manager.get("confidence_pollution", 0.6))
+        self.confidence_pollution_spin.setValue(self.settings_manager.get("confidence_pollution", 0.75))
         self.ocr_confidence_spin.setValue(self.settings_manager.get("ocr_confidence", 0.5))
         
         # 地图设置
         self.map_update_interval_spin.setValue(self.settings_manager.get("map_update_interval", 3))
         self.use_real_pointer_switch.setChecked(self.settings_manager.get("use_real_pointer", True))
+        self.resource_icon_size_spin.setValue(self.settings_manager.get("resource_icon_size", 24))
         
         
         
@@ -7280,6 +7904,18 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'roi_recognition_switch'):
             self.roi_recognition_switch.setChecked(self.settings_manager.get("enable_roi_recognition", False))
 
+        # 血脉识别设置
+        if hasattr(self, 'bloodline_recognition_switch'):
+            self.bloodline_recognition_switch.setChecked(self.settings_manager.get("enable_bloodline_recognition", False))
+        if hasattr(self, 'bloodline_roi_label'):
+            bl_roi = self.settings_manager.get("bloodline_roi")
+            if bl_roi and all(k in bl_roi for k in ("x", "y", "width", "height")):
+                self.bloodline_roi_label.setText(
+                    f"当前血脉框选区域: x={bl_roi['x']}, y={bl_roi['y']}, w={bl_roi['width']}, h={bl_roi['height']}"
+                )
+            else:
+                self.bloodline_roi_label.setText("当前未设置血脉框选区域")
+
         # 热键标签刷新
         if hasattr(self, 'hotkey_labels'):
             hotkeys = self.settings_manager.get("hotkeys", {})
@@ -7303,6 +7939,7 @@ class MainWindow(QMainWindow):
         # 地图设置
         self.settings_manager.set("map_update_interval", self.map_update_interval_spin.value())
         self.settings_manager.set("use_real_pointer", self.use_real_pointer_switch.isChecked())
+        self.settings_manager.set("resource_icon_size", self.resource_icon_size_spin.value())
         
         
         
@@ -7339,6 +7976,10 @@ class MainWindow(QMainWindow):
         # 坐标识别设置
         if hasattr(self, 'roi_recognition_switch'):
             self.settings_manager.set("enable_roi_recognition", self.roi_recognition_switch.isChecked())
+
+        # 血脉识别设置
+        if hasattr(self, 'bloodline_recognition_switch'):
+            self.settings_manager.set("enable_bloodline_recognition", self.bloodline_recognition_switch.isChecked())
     
     def _on_check_update(self):
         """检查更新"""
@@ -7409,7 +8050,7 @@ class MainWindow(QMainWindow):
             try:
                 from core.update_manager import CURRENT_VERSION
             except Exception:
-                CURRENT_VERSION = "4.6.8"
+                CURRENT_VERSION = "4.6.9"
             self.latest_version_label.setText(f"✅ 已是最新版本 v{CURRENT_VERSION}")
             self.latest_version_label.setStyleSheet("color: #10b981; font-size: 13px;")
             return
@@ -7542,32 +8183,132 @@ class MainWindow(QMainWindow):
         """框选识别区域"""
         from ui.roi_selector import ROISelector
         from PySide6.QtWidgets import QApplication
-        
+
         self.hide()
-        
+
         app = QApplication.instance()
         selector = ROISelector()
-        
+
         finished = False
-        
+
         def on_region_selected(x, y, w, h):
             nonlocal finished
             self.settings_manager.set("recognition_roi", {"x": x, "y": y, "width": w, "height": h})
             self.settings_manager.save_settings()
             finished = True
-            
+
         def on_cancelled():
             nonlocal finished
             finished = True
-        
+
         selector.region_selected.connect(on_region_selected)
         selector.selection_cancelled.connect(on_cancelled)
         selector.show()
-        
+
         # 等待框选完成
         while not finished and selector.isVisible():
             app.processEvents()
-        
+
+        self.show()
+
+    def on_bloodline_select(self):
+        """框选血脉识别区域（使用全屏覆盖框选工具，返回屏幕坐标转换为客户区相对坐标）"""
+        from core.rectangle_selector import RectangleSelector
+        from PySide6.QtWidgets import QApplication
+        import win32gui
+
+        self.hide()
+
+        app = QApplication.instance()
+        selector = RectangleSelector()
+
+        finished = False
+
+        def on_region_selected(x, y, w, h):
+            nonlocal finished
+            # RectangleSelector 返回的是屏幕逻辑坐标（Qt坐标系）
+            # 需要转换为物理坐标（与capture_window()截图坐标系一致）
+            # 先乘以dpi_scale转为物理像素，再减去窗口物理偏移
+            client_x, client_y, phys_w, phys_h = x, y, w, h
+            conversion_ok = False
+            try:
+                if hasattr(self, 'game_capture') and self.game_capture and self.game_capture.hwnd:
+                    hwnd = self.game_capture.hwnd
+                    # 获取DPI缩放因子（与ROISelector相同的方法）
+                    import ctypes
+                    try:
+                        dpi = ctypes.windll.user32.GetDpiForWindow(hwnd)
+                        dpi_scale = dpi / 96.0
+                    except:
+                        try:
+                            scale_factor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
+                            dpi_scale = scale_factor / 100.0
+                        except:
+                            dpi_scale = 1.0
+
+                    # 将逻辑坐标转换为物理坐标
+                    phys_x = int(x * dpi_scale)
+                    phys_y = int(y * dpi_scale)
+                    phys_w = int(w * dpi_scale)
+                    phys_h = int(h * dpi_scale)
+
+                    # 获取窗口客户区的屏幕物理坐标
+                    client_origin = win32gui.ClientToScreen(hwnd, (0, 0))
+                    # 转换为窗口客户区相对物理坐标（与截图坐标系一致）
+                    client_x = phys_x - client_origin[0]
+                    client_y = phys_y - client_origin[1]
+                    conversion_ok = True
+            except Exception:
+                pass
+
+            if not conversion_ok:
+                finished = True
+                return
+
+            # 保存客户区相对物理坐标到设置
+            self.settings_manager.set("bloodline_roi", {"x": client_x, "y": client_y, "width": phys_w, "height": phys_h})
+            self.settings_manager.save_settings()
+            if hasattr(self, 'bloodline_roi_label'):
+                self.bloodline_roi_label.setText(
+                    f"当前血脉框选区域: x={client_x}, y={client_y}, w={phys_w}, h={phys_h}"
+                )
+
+            # 保存框选区域截图到 image/xm.png（覆盖旧文件）
+            try:
+                if hasattr(self, 'game_capture') and self.game_capture:
+                    full_screenshot = self.game_capture.capture_window()  # 无ROI，返回完整客户区截图
+                    if full_screenshot is not None and full_screenshot.size > 0:
+                        img_h, img_w = full_screenshot.shape[:2]
+                        # 边界保护
+                        cx = max(0, min(client_x, img_w - 1))
+                        cy = max(0, min(client_y, img_h - 1))
+                        cw = min(phys_w, img_w - cx)
+                        ch = min(phys_h, img_h - cy)
+                        if cw > 0 and ch > 0:
+                            roi_image = full_screenshot[cy:cy+ch, cx:cx+cw]
+                            image_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'image')
+                            if not os.path.exists(image_dir):
+                                os.makedirs(image_dir)
+                            # 保存xm.png（只有框选区域）
+                            save_path = os.path.join(image_dir, "xm.png")
+                            _imwrite(save_path, roi_image)
+            except Exception:
+                pass
+
+            finished = True
+
+        def on_cancelled():
+            nonlocal finished
+            finished = True
+
+        selector.region_selected.connect(on_region_selected)
+        selector.selection_cancelled.connect(on_cancelled)
+        selector.show()
+
+        # 等待框选完成
+        while not finished and selector.isVisible():
+            app.processEvents()
+
         self.show()
 
     def _refresh_window_list(self):
@@ -8927,7 +9668,7 @@ class MainWindow(QMainWindow):
         # 识别设置
         self.recognition_interval_spin = self._create_spin_input(100, 5000, 500, " ms")
         self.confidence_xt_spin = self._create_spin_input(0.5, 1.0, 0.7, "", 0.05, True)
-        self.confidence_pollution_spin = self._create_spin_input(0.5, 1.0, 0.6, "", 0.05, True)
+        self.confidence_pollution_spin = self._create_spin_input(0.5, 1.0, 0.75, "", 0.05, True)
         self.ocr_confidence_spin = self._create_spin_input(0.3, 1.0, 0.5, "", 0.05, True)
         
         # 识别间隔输入验证
@@ -8956,12 +9697,14 @@ class MainWindow(QMainWindow):
         self.map_update_interval_spin = self._create_spin_input(1, 10, 3, " 帧")
         self.use_real_pointer_switch = ToggleSwitch()
         self.use_real_pointer_switch.setChecked(True)
+        self.resource_icon_size_spin = self._create_spin_input(8, 64, 24, " px", step=2)
 
         map_section = self._create_clean_section(
             "🗺️ 地图导航设置",
             [
                 ("地图更新间隔", "每N帧更新一次地图识别，帧数越小更新越快但CPU占用越高（范围1-10帧）", self.map_update_interval_spin),
-                ("启用真实指针", "开启后使用游戏真实指针图标；关闭后使用绿色方向指针（朝移动方向）", self.use_real_pointer_switch)
+                ("启用真实指针", "开启后使用游戏真实指针图标；关闭后使用绿色方向指针（朝移动方向）", self.use_real_pointer_switch),
+                ("资源点大小", "资源栏与其余栏资源图标的基准大小（8-64px，随地图缩放等比放大）", self.resource_icon_size_spin)
             ]
         )
         content_layout.addWidget(map_section)
@@ -9289,7 +10032,89 @@ class MainWindow(QMainWindow):
         )
         content_layout.addWidget(roi_section)
 
-        
+        # 血脉识别设置（配合童话事件使用）
+        bloodline_section = QWidget()
+        bloodline_section_layout = QVBoxLayout(bloodline_section)
+        bloodline_section_layout.setContentsMargins(0, 0, 0, 0)
+        bloodline_section_layout.setSpacing(16)
+
+        bloodline_title = QLabel("血脉识别设置")
+        bloodline_title.setStyleSheet("color: #ffffff; font-size: 18px; font-weight: 600;")
+        bloodline_section_layout.addWidget(bloodline_title)
+
+        bloodline_card = QFrame()
+        bloodline_card.setStyleSheet("""
+            QFrame {
+                background-color: #1e1e26;
+                border: none;
+                border-radius: 8px;
+            }
+            QFrame:hover {
+                background-color: #252530;
+            }
+        """)
+        bloodline_card_layout = QVBoxLayout(bloodline_card)
+        bloodline_card_layout.setContentsMargins(24, 18, 24, 18)
+        bloodline_card_layout.setSpacing(12)
+
+        # 血脉识别开关
+        bloodline_toggle_row = QHBoxLayout()
+        bloodline_toggle_row.setContentsMargins(0, 0, 0, 0)
+
+        bloodline_toggle_title = QLabel("启用血脉识别")
+        bloodline_toggle_title.setStyleSheet("color: #e2e8f0; font-size: 14px; font-weight: 500;")
+        bloodline_toggle_row.addWidget(bloodline_toggle_title)
+        bloodline_toggle_row.addStretch()
+
+        self.bloodline_recognition_switch = ToggleSwitch()
+        bloodline_toggle_row.addWidget(self.bloodline_recognition_switch)
+
+        bloodline_card_layout.addLayout(bloodline_toggle_row)
+
+        # 分隔线
+        bloodline_separator = QFrame()
+        bloodline_separator.setFrameShape(QFrame.HLine)
+        bloodline_separator.setStyleSheet("background-color: #2a2a35; max-height: 1px;")
+        bloodline_card_layout.addWidget(bloodline_separator)
+
+        # 框选按钮（蓝色）
+        bloodline_select_btn = QPushButton("血脉识别框选")
+        bloodline_select_btn.setFixedHeight(44)
+        bloodline_select_btn.setCursor(Qt.PointingHandCursor)
+        bloodline_select_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #2563eb;
+                color: #ffffff;
+                border: 2px solid #3b82f6;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 600;
+                padding: 0 20px;
+            }
+            QPushButton:hover {
+                background-color: #1d4ed8;
+                border-color: #60a5fa;
+            }
+            QPushButton:pressed {
+                background-color: #1e40af;
+            }
+        """)
+        bloodline_select_btn.clicked.connect(self.on_bloodline_select)
+
+        bloodline_info = QLabel("框选血脉识别区域，配合童话事件自动识别 奇异/污染/混乱/异色 血脉")
+        bloodline_info.setStyleSheet("color: #71717a; font-size: 13px;")
+        bloodline_info.setWordWrap(True)
+
+        # 显示当前血脉框选区域
+        self.bloodline_roi_label = QLabel("当前未设置血脉框选区域")
+        self.bloodline_roi_label.setStyleSheet("color: #e2e8f0; font-size: 13px; padding: 12px; background-color: #252530; border-radius: 6px;")
+
+        bloodline_card_layout.addWidget(bloodline_info)
+        bloodline_card_layout.addWidget(bloodline_select_btn)
+        bloodline_card_layout.addWidget(self.bloodline_roi_label)
+
+        bloodline_section_layout.addWidget(bloodline_card)
+        content_layout.addWidget(bloodline_section)
 
         # 热键设置
         hotkey_section = QWidget()
@@ -9442,7 +10267,7 @@ class MainWindow(QMainWindow):
         try:
             from core.update_manager import CURRENT_VERSION
         except Exception:
-            CURRENT_VERSION = "4.6.8"
+            CURRENT_VERSION = "4.6.9"
 
         version_section = QWidget()
         version_section_layout = QVBoxLayout(version_section)
@@ -9798,23 +10623,20 @@ class MainWindow(QMainWindow):
             with open(data_file, 'r', encoding='utf-8') as f:
                 pokemons = json.load(f)
             
-            # 加载基础形态列表（只有这些精灵可以从蛋中孵化）
-            base_form_file = os.path.join(self._base_dir, "core", "base_form_pokemons.txt")
+            # 自动从进化链判断基础形态（进化链第一个就是基础形态）
             base_forms = set()
-            if os.path.exists(base_form_file):
-                with open(base_form_file, 'r', encoding='utf-8') as f:
-                    for line in f:
-                        line = line.strip()
-                        if line and not line.startswith('#'):
-                            base_forms.add(line)
+            for pokemon in pokemons:
+                chain = pokemon.get('evolution_chain', [])
+                if chain and chain[0].get('name') == pokemon.get('name', ''):
+                    base_forms.add(pokemon['name'])
             
             # 计算匹配度并筛选
             results = []
             for pokemon in pokemons:
                 name = pokemon['name']
                 
-                # 只保留基础形态
-                if base_forms and name not in base_forms:
+                # 只保留基础形态（可以从蛋中孵化的精灵）
+                if name not in base_forms:
                     continue
                 
                 height_range = pokemon.get('height', '')
@@ -10613,7 +11435,7 @@ class MainWindow(QMainWindow):
         
         layout.addWidget(title_bar)
         
-        # 筛选器（参考HTML设计）
+        # 筛选器
         filter_bar = QWidget()
         filter_layout = QHBoxLayout(filter_bar)
         filter_layout.setContentsMargins(0, 8, 0, 8)
@@ -10845,7 +11667,7 @@ class MainWindow(QMainWindow):
                 item = self._create_pokedex_list_item(pokemon)
                 self.pokemon_grid_layout.addWidget(item, idx, 0, 1, 3)
         
-        # 添加"新增自定义精灵"卡片（参考HTML设计）
+        # 添加"新增自定义精灵"卡片
         total_items = len(filtered)
         if self.pokedex_view_mode == "grid":
             last_row = (total_items + 2) // columns  # 计算最后一行
@@ -11238,7 +12060,7 @@ class MainWindow(QMainWindow):
         self._refresh_pokedex()
     
     def _create_add_custom_card(self):
-        """创建新增自定义精灵卡片（参考HTML虚线设计）"""
+        """创建新增自定义精灵卡片"""
         card = QFrame()
         card.setObjectName("addCustomCard")
         card.setCursor(Qt.PointingHandCursor)
@@ -11923,10 +12745,10 @@ class MainWindow(QMainWindow):
         copyright_label.setAlignment(Qt.AlignCenter)
         layout.addWidget(copyright_label)
         
-        # 加载采集资源数据（使用完整版 internal_resource_point.json）
+        # 加载采集资源数据（使用 image/map/resource_configs.json）
         self.collect_data = {}
         self.selected_resources = set()  # 选中的资源集合
-        collect_file = os.path.join(os.path.dirname(__file__), '..', 'zy', 'internal_resource_point.json')
+        collect_file = os.path.join(os.path.dirname(__file__), '..', 'image', 'map', 'resource_configs.json')
         if os.path.exists(collect_file):
             try:
                 with open(collect_file, 'r', encoding='utf-8') as f:
@@ -11956,16 +12778,24 @@ class MainWindow(QMainWindow):
                     self.collect_data = tmp
 
                     # 预加载资源图标到缓存（从 image/sc/ 目录加载每个资源对应的图标）
+                    # 图标缺失映射：资源名在 sc 目录中无对应图标时，回退到指定文件
+                    _ICON_FALLBACK = {
+                        '蝠蝶兰': '蝴蝶兰.png',  # sc 目录中是"蝴蝶兰.png"而非"蝠蝶兰.png"
+                    }
                     self._resource_icon_cache = {}
                     sc_dir = os.path.join(os.path.dirname(__file__), '..', 'image', 'sc')
                     for rname, rinfo in tmp.items():
                         icon_file = rinfo.get('icon', '')
-                        if icon_file:
-                            icon_path = os.path.join(sc_dir, icon_file)
-                            if os.path.exists(icon_path):
-                                pix = QPixmap(icon_path)
-                                if not pix.isNull():
-                                    self._resource_icon_cache[rname] = pix
+                        if not icon_file:
+                            continue
+                        icon_path = os.path.join(sc_dir, icon_file)
+                        # 缺失则尝试回退映射
+                        if not os.path.exists(icon_path) and rname in _ICON_FALLBACK:
+                            icon_path = os.path.join(sc_dir, _ICON_FALLBACK[rname])
+                        if os.path.exists(icon_path):
+                            pix = QPixmap(icon_path)
+                            if not pix.isNull():
+                                self._resource_icon_cache[rname] = pix
 
                     # 填充资源菜单（多选复选框）
                     self.resource_checkboxes = {}
@@ -12739,6 +13569,8 @@ class MainWindow(QMainWindow):
             self.map_label.route_preview_point = None
             self.map_label.route_preview_mouse = None
             self.map_label.route_snapped = False
+            self.map_label.route_connect_mode = False
+            self.map_label.route_connect_source = None
             self.map_label.setCursor(Qt.ArrowCursor)
         self.map_label.update()
     
@@ -12758,8 +13590,12 @@ class MainWindow(QMainWindow):
         self.route_point_names = {}
         if hasattr(self, 'map_label'):
             self.map_label.selected_route_point = None
+            self.map_label.selected_route_points.clear()
+            self.map_label.selected_route_segments.clear()
             self.map_label.route_preview_point = None
             self.map_label.route_preview_mouse = None
+            self.map_label.route_connect_mode = False
+            self.map_label.route_connect_source = None
         self._update_map_display()
     
     def _undo_last_point(self):

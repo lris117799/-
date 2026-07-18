@@ -37,10 +37,16 @@ class RoiRecognitionWorker(QObject):
         self.thread = None
         self.current_battle_lkwg = None  # 当前战斗中的精灵名（由主窗口同步）
         self.debug_image_saved = False  # 标记调试图是否已保存
-    
+        # 血脉识别状态（由主线程同步）
+        self.bloodline_check_active = False  # 是否应该执行血脉OCR
+
     def set_current_battle(self, battle_name):
         """设置当前战斗状态（与ScreenshotWorker保持一致）"""
         self.current_battle_lkwg = battle_name
+
+    def set_bloodline_check_active(self, active):
+        """设置血脉识别检查是否激活（由主线程同步）"""
+        self.bloodline_check_active = active
         
     def start(self):
         """启动识别线程"""
@@ -151,7 +157,7 @@ class RoiRecognitionWorker(QObject):
                 
                 # 判断是否应该启用OCR
                 should_ocr, ocr_reason = self.capture.should_enable_ocr(image=screenshot)
-                
+
                 recognized_names = []
                 if should_ocr:
                     # 执行OCR识别
@@ -162,12 +168,31 @@ class RoiRecognitionWorker(QObject):
                 else:
                     # 跳过OCR以节省资源
                     pass
-                
+
+                # 血脉识别：当四叶草铅绘未识别到且血脉检查处于激活状态时，顺便OCR血脉框选区域
+                bloodline_result = None
+                bloodline_has_text = False
+                bl_checked = False
+                if (should_ocr and
+                        self.bloodline_check_active and
+                        "四叶草铅绘" not in recognized_names):
+                    bl_enabled = self.settings.get("enable_bloodline_recognition", False)
+                    bl_roi = self.settings.get("bloodline_roi")
+                    if bl_enabled and bl_roi:
+                        bl_roi_tuple = (bl_roi['x'], bl_roi['y'], bl_roi['width'], bl_roi['height'])
+                        bloodline_result, bloodline_has_text = self.capture.recognize_bloodline(
+                            image=screenshot, roi=bl_roi_tuple
+                        )
+                        bl_checked = True
+
                 # 发射结果
                 result = {
                     'recognized_names': recognized_names,
                     'should_ocr': should_ocr,
-                    'ocr_reason': ocr_reason
+                    'ocr_reason': ocr_reason,
+                    'bloodline': bloodline_result,
+                    'bloodline_has_text': bloodline_has_text,
+                    'bloodline_checked': bl_checked
                 }
                 self.recognition_result.emit(result)
                 
