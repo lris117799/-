@@ -288,6 +288,15 @@ class SettingsDialog(QDialog):
         self.map_update_interval_spin.setStyleSheet(self._get_spinbox_style())
         ocr_group_layout.addRow("地图更新间隔：", self.map_update_interval_spin)
 
+        # 资源点大小
+        self.resource_icon_size_spin = QSpinBox()
+        self.resource_icon_size_spin.setRange(8, 64)
+        self.resource_icon_size_spin.setValue(24)
+        self.resource_icon_size_spin.setSingleStep(2)
+        self.resource_icon_size_spin.setSuffix(" px")
+        self.resource_icon_size_spin.setStyleSheet(self._get_spinbox_style())
+        ocr_group_layout.addRow("资源点大小：", self.resource_icon_size_spin)
+
         # 真实指针开关
         self.use_real_pointer_check = QCheckBox("启用游戏真实指针（关闭后使用绿色方向指针）")
         self.use_real_pointer_check.setChecked(True)
@@ -405,7 +414,7 @@ class SettingsDialog(QDialog):
         try:
             from core.update_manager import CURRENT_VERSION
         except Exception:
-            CURRENT_VERSION = "4.6.8"
+            CURRENT_VERSION = "4.6.9"
         version_label = QLabel(f"当前版本：v{CURRENT_VERSION}")
         version_label.setStyleSheet("color: #94a3b8; font-size: 12px;")
         vb_layout.addWidget(version_label)
@@ -695,7 +704,7 @@ class SettingsDialog(QDialog):
             try:
                 from core.update_manager import CURRENT_VERSION
             except Exception:
-                CURRENT_VERSION = "4.6.8"
+                CURRENT_VERSION = "4.6.9"
             self.latest_version_label.setText(f"已是最新版本 v{CURRENT_VERSION}")
             self.latest_version_label.setStyleSheet("color: #10b981; font-size: 12px;")
             return

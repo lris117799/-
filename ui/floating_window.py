@@ -596,7 +596,8 @@ class FloatingWindow(QWidget):
         # 童话事件计数（本地缓存）
         self.current_breakthrough_count = 0
         
-        # 注册全局快捷键 Ctrl+N
+        # 注册全局快捷键 Ctrl+N（使用低级键盘钩子，不阻塞按键传递）
+        self._keyboard_hook = None
         self._register_hotkey()
         
         # 悬浮窗尺寸配置
@@ -617,6 +618,9 @@ class FloatingWindow(QWidget):
         """关闭前清理 QProcess，避免 'Destroyed while process is still running' 警告"""
         self.performance_monitor._stop_ps_poll()
         self.performance_monitor._stop_fps_monitor()
+        # 清理键盘钩子
+        if hasattr(self, '_unregister_hotkeys'):
+            self._unregister_hotkeys()
         super().closeEvent(event)
         
     def _init_ui(self):
@@ -742,6 +746,14 @@ class FloatingWindow(QWidget):
 
         current_lkwg_row.addStretch()
 
+        # 血脉显示标签（奇异/污染/混乱/异色/普通）- 右对齐，空文本时隐藏
+        self.bloodline_label = QLabel("")
+        self.bloodline_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.bloodline_label.setStyleSheet("color: #9ca3af; font-size: 12px; font-weight: bold; margin-top: 4px;")
+        self.bloodline_label.setMaximumWidth(0)
+        self.bloodline_label.setMinimumWidth(0)
+        current_lkwg_row.addWidget(self.bloodline_label)
+
         main_layout.addLayout(current_lkwg_row)
         
         # 大数字计数
@@ -803,46 +815,48 @@ class FloatingWindow(QWidget):
         main_layout.addLayout(status_bar)
     
     def _register_hotkey(self):
-        """注册全局快捷键（从设置读取配置）"""
+        """注册全局快捷键（使用低级键盘钩子，不阻塞按键传递）"""
         try:
             from core.settings_manager import SettingsManager
+            from core.keyboard_hook import KeyboardHook
+
             settings = SettingsManager()
             hotkeys = settings.get("hotkeys", {})
 
-            user32 = ctypes.windll.user32
+            # 销毁旧的钩子
+            self._unregister_hotkeys()
 
-            # 注册所有热键，使用固定ID: 1-7
-            self._hotkey_ids = {}
+            # 创建新的键盘钩子
+            self._keyboard_hook = KeyboardHook(parent=self)
+            self._keyboard_hook.hotkey_triggered.connect(self._on_hotkey_triggered)
 
+            # 热键配置：ID -> 配置 key
             hotkey_map = [
-                (1, "toggle_passthrough", self._toggle_mouse_interaction),
-                (2, "count_plus", lambda: self._adjust_nightmare_count(1)),
-                (3, "count_minus", lambda: self._adjust_nightmare_count(-1)),
-                (4, "counter_prev", lambda: self.counter_navigate.emit(-1)),
-                (5, "counter_next", lambda: self.counter_navigate.emit(1)),
-                (6, "nightmare_plus", lambda: self._emit_nightmare_adjust(1)),
-                (7, "nightmare_minus", lambda: self._emit_nightmare_adjust(-1)),
+                (1, "toggle_passthrough"),
+                (2, "count_plus"),
+                (3, "count_minus"),
+                (4, "counter_prev"),
+                (5, "counter_next"),
+                (6, "nightmare_plus"),
+                (7, "nightmare_minus"),
             ]
 
-            for hk_id_num, hk_config_key, _ in hotkey_map:
+            # 保留原 _hotkey_ids 字典以兼容
+            self._hotkey_ids = {}
+
+            for hk_id_num, hk_config_key in hotkey_map:
                 cfg = hotkeys.get(hk_config_key, {})
                 mod_code = cfg.get("mod_code", 0)
                 vk = cfg.get("vk", 0)
                 if vk == 0:
                     continue
 
-                registered = user32.RegisterHotKey(
-                    int(self.winId()),
-                    hk_id_num,
-                    mod_code,
-                    vk
-                )
+                self._keyboard_hook.register_hotkey(vk, mod_code, hk_id_num)
+                self._hotkey_ids[hk_id_num] = hk_config_key
                 display = cfg.get("display", hk_config_key)
-                if registered:
-                    self._hotkey_ids[hk_id_num] = hk_config_key
-                    print(f"✓ 全局快捷键 {display} 已注册")
-                else:
-                    print(f"✗ 全局快捷键 {display} 注册失败")
+                print(f"✓ 全局快捷键 {display} 已注册")
+
+            self._keyboard_hook.start()
 
         except Exception as e:
             print(f"✗ 注册快捷键异常: {e}")
@@ -850,42 +864,34 @@ class FloatingWindow(QWidget):
     def _unregister_hotkeys(self):
         """注销所有已注册的全局快捷键"""
         try:
-            user32 = ctypes.windll.user32
-            for hk_id in list(self._hotkey_ids.keys()):
-                user32.UnregisterHotKey(int(self.winId()), hk_id)
-            self._hotkey_ids.clear()
+            if self._keyboard_hook is not None:
+                self._keyboard_hook.stop()
+                self._keyboard_hook.deleteLater()
+                self._keyboard_hook = None
+            self._hotkey_ids = {}
         except Exception as e:
             print(f"✗ 注销快捷键异常: {e}")
+
+    def _on_hotkey_triggered(self, hk_id):
+        """键盘钩子触发热键时的处理（主线程）"""
+        hk_name = self._hotkey_ids.get(hk_id, "")
+        if hk_name == "toggle_passthrough":
+            self._toggle_mouse_interaction()
+        elif hk_name == "count_plus":
+            self._adjust_nightmare_count(1)
+        elif hk_name == "count_minus":
+            self._adjust_nightmare_count(-1)
+        elif hk_name == "counter_prev":
+            self.counter_navigate.emit(-1)
+        elif hk_name == "counter_next":
+            self.counter_navigate.emit(1)
+        elif hk_name == "nightmare_plus":
+            self._emit_nightmare_adjust(1)
+        elif hk_name == "nightmare_minus":
+            self._emit_nightmare_adjust(-1)
     
     def nativeEvent(self, eventType, message):
-        """处理Windows原生消息 - 捕获全局快捷键"""
-        if eventType == b'windows_generic_MSG':
-            msg = ctypes.wintypes.MSG.from_address(message.__int__())
-            WM_HOTKEY = 0x0312
-            if msg.message == WM_HOTKEY:
-                hk_id = msg.wParam
-                hk_name = self._hotkey_ids.get(hk_id, "")
-                if hk_name == "toggle_passthrough":
-                    self._toggle_mouse_interaction()
-                    return True, 0
-                elif hk_name == "count_plus":
-                    self._adjust_nightmare_count(1)
-                    return True, 0
-                elif hk_name == "count_minus":
-                    self._adjust_nightmare_count(-1)
-                    return True, 0
-                elif hk_name == "counter_prev":
-                    self.counter_navigate.emit(-1)
-                    return True, 0
-                elif hk_name == "counter_next":
-                    self.counter_navigate.emit(1)
-                    return True, 0
-                elif hk_name == "nightmare_plus":
-                    self._emit_nightmare_adjust(1)
-                    return True, 0
-                elif hk_name == "nightmare_minus":
-                    self._emit_nightmare_adjust(-1)
-                    return True, 0
+        """处理Windows原生消息（热键现在通过 KeyboardHook 处理，保留以兼容）"""
         return super().nativeEvent(eventType, message)
     
     def _toggle_mouse_interaction(self):
@@ -982,6 +988,31 @@ class FloatingWindow(QWidget):
             # OCR识别不到时，清空精灵名字，但保留“当前精灵：”
             self.current_lkwg_label.setText("当前精灵：")
             print(f"❌ OCR未识别到精灵，重置标签")
+
+    def update_bloodline(self, bloodline_type):
+        """更新血脉显示
+        :param bloodline_type: 血脉类型（奇异/污染/混乱/异色/普通），None则清空显示
+        """
+        if bloodline_type:
+            color_map = {
+                "奇异": "#a855f7",  # 紫色
+                "污染": "#ef4444",  # 红色
+                "混乱": "#f59e0b",  # 橙色
+                "异色": "#22d3ee",  # 青色
+                "普通": "#9ca3af",  # 灰色（默认/未识别到血脉关键字）
+            }
+            color = color_map.get(bloodline_type, "#9ca3af")
+            self.bloodline_label.setStyleSheet(
+                f"color: {color}; font-size: 12px; font-weight: bold; margin-top: 4px;"
+            )
+            self.bloodline_label.setText(bloodline_type)
+            self.bloodline_label.setMaximumWidth(120)
+            self.bloodline_label.setMinimumWidth(0)
+        else:
+            self.bloodline_label.setText("")
+            self.bloodline_label.setMaximumWidth(0)
+            self.bloodline_label.setMinimumWidth(0)
+        self.bloodline_label.repaint()
 
     def _load_pokemon_icon(self, pokemon_name, icon_id=0):
         """加载精灵图标"""

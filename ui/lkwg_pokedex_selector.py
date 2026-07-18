@@ -174,7 +174,7 @@ class LkwgPokedexSelector(QDialog):
         return container
     
     def _create_pokemon_card(self, pokemon):
-        """创建精灵卡片（参考异色图鉴样式）"""
+        """创建精灵卡片"""
         card = QFrame()
         card.setObjectName("pokedexItem")
         card.setFixedWidth(180)
