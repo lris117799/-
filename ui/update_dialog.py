@@ -37,9 +37,9 @@ class _DownloadWorker(QThread):
             if ok:
                 self.finished_signal.emit(True, self._dest)
             else:
-                self.finished_signal.emit(False, "下载失败，请检查网络后重试")
+                self.finished_signal.emit(False, "下载失败，请检查网络后重试；如多次失败请加 QQ 群 1105048691 获取下载")
         except Exception as e:
-            self.finished_signal.emit(False, f"下载失败: {e}")
+            self.finished_signal.emit(False, f"下载失败: {e}；如多次失败请加 QQ 群 1105048691 获取下载")
 
     def _on_progress(self, downloaded: int, total: int):
         self.progress.emit(downloaded, total)
@@ -289,7 +289,8 @@ class UpdateDialog(QDialog):
             # 没有可下载的 zip，提示用户手动下载
             html_url = self._info.get("html_url", "")
             self.status_label.setText(
-                f"未找到可下载的更新包，请前往 GitHub 手动下载：{html_url}"
+                f"未找到可下载的更新包，请前往 GitHub 手动下载：{html_url}\n"
+                f"或加 QQ 群 1105048691 获取下载"
             )
             self.status_label.setStyleSheet("color: #f59e0b; font-size: 12px;")
             return
@@ -363,7 +364,7 @@ class UpdateDialog(QDialog):
             self.update_btn.setEnabled(True)
             self.update_btn.setText("立即更新")
             self.progress_bar.setFormat("应用更新失败")
-            self.status_label.setText(f"应用更新失败：{msg}")
+            self.status_label.setText(f"应用更新失败：{msg}；如多次失败请加 QQ 群 1105048691 获取下载")
             self.status_label.setStyleSheet("color: #ef4444; font-size: 12px;")
 
     # ────────── 窗口拖动 ──────────
