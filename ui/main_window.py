@@ -8044,7 +8044,8 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(
                 self, "检测到新版本",
                 f"检测到新版本 v{latest}，但更新弹窗加载失败：\n{e}\n\n"
-                f"请前往 GitHub 手动下载：\n{html_url}"
+                f"请前往 GitHub 手动下载：\n{html_url}\n"
+                f"或加 QQ 群 1105048691 获取下载"
             )
 
     def _on_check_update_done(self, info):
@@ -8058,7 +8059,7 @@ class MainWindow(QMainWindow):
             try:
                 from core.update_manager import CURRENT_VERSION
             except Exception:
-                CURRENT_VERSION = "4.6.10"
+                CURRENT_VERSION = "4.6.9"
             self.latest_version_label.setText(f"✅ 已是最新版本 v{CURRENT_VERSION}")
             self.latest_version_label.setStyleSheet("color: #10b981; font-size: 13px;")
             return
@@ -8079,7 +8080,8 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(
                 self, "更新",
                 f"检测到新版本 v{latest}，但更新弹窗加载失败：\n{e}\n\n"
-                f"请前往 GitHub 手动下载：\n{html_url}"
+                f"请前往 GitHub 手动下载：\n{html_url}\n"
+                f"或加 QQ 群 1105048691 获取下载"
             )
 
     def on_save_settings(self):
@@ -10281,7 +10283,7 @@ class MainWindow(QMainWindow):
         try:
             from core.update_manager import CURRENT_VERSION
         except Exception:
-            CURRENT_VERSION = "4.6.10"
+            CURRENT_VERSION = "4.6.9"
 
         version_section = QWidget()
         version_section_layout = QVBoxLayout(version_section)
