@@ -414,7 +414,7 @@ class SettingsDialog(QDialog):
         try:
             from core.update_manager import CURRENT_VERSION
         except Exception:
-            CURRENT_VERSION = "4.6.9"
+            CURRENT_VERSION = "4.6.10"
         version_label = QLabel(f"当前版本：v{CURRENT_VERSION}")
         version_label.setStyleSheet("color: #94a3b8; font-size: 12px;")
         vb_layout.addWidget(version_label)
@@ -704,7 +704,7 @@ class SettingsDialog(QDialog):
             try:
                 from core.update_manager import CURRENT_VERSION
             except Exception:
-                CURRENT_VERSION = "4.6.9"
+                CURRENT_VERSION = "4.6.10"
             self.latest_version_label.setText(f"已是最新版本 v{CURRENT_VERSION}")
             self.latest_version_label.setStyleSheet("color: #10b981; font-size: 12px;")
             return
@@ -735,7 +735,13 @@ class SettingsDialog(QDialog):
             dlg = UpdateDialog(info, parent=parent_window)
             dlg.exec()
         except Exception as e:
-            QMessageBox.warning(parent_window, "更新", f"显示更新弹窗失败: {e}")
+            html_url = info.get("html_url", "") if info else ""
+            latest = info.get("latest_version", "") if info else ""
+            QMessageBox.warning(
+                parent_window, "更新",
+                f"检测到新版本 v{latest}，但更新弹窗加载失败：\n{e}\n\n"
+                f"请前往 GitHub 手动下载：\n{html_url}"
+            )
 
     def on_roi_select(self):
         """框选识别区域"""

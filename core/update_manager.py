@@ -25,7 +25,7 @@ from typing import Callable, Optional
 # ──────────────────────────────────────────────────────────────
 # 基础配置
 # ──────────────────────────────────────────────────────────────
-CURRENT_VERSION = "4.6.9"  # 当前程序版本号
+CURRENT_VERSION = "4.6.10"  # 当前程序版本号
 GITHUB_OWNER = "lris117799"
 GITHUB_REPO = "-"  # 仓库名称为 "-"
 
@@ -48,13 +48,11 @@ USER_PRESERVE_FILES = [
     # 根目录的 settings.json（兼容旧版）
     "settings.json",
     # 根目录的存档数据
-    "chests.json",
     "owl_stars.json",
     "sheet_music.json",
     # 桌宠数据
     os.path.join("zc", "pet_data.json"),
     # 收集资源数据
-    os.path.join("zy", "chests.json"),
     os.path.join("zy", "owl_stars.json"),
     os.path.join("zy", "sheet_music.json"),
     os.path.join("zy", "collect_resources_final.json"),

@@ -8036,8 +8036,16 @@ class MainWindow(QMainWindow):
             from ui.update_dialog import UpdateDialog
             dlg = UpdateDialog(info, parent=self)
             dlg.exec()
-        except Exception:
-            pass
+        except Exception as e:
+            # 弹窗失败时降级提示，避免静默吞掉异常导致用户不知有新版本
+            from PySide6.QtWidgets import QMessageBox
+            html_url = info.get("html_url", "")
+            latest = info.get("latest_version", "")
+            QMessageBox.warning(
+                self, "检测到新版本",
+                f"检测到新版本 v{latest}，但更新弹窗加载失败：\n{e}\n\n"
+                f"请前往 GitHub 手动下载：\n{html_url}"
+            )
 
     def _on_check_update_done(self, info):
         """检查更新完成"""
@@ -8050,7 +8058,7 @@ class MainWindow(QMainWindow):
             try:
                 from core.update_manager import CURRENT_VERSION
             except Exception:
-                CURRENT_VERSION = "4.6.9"
+                CURRENT_VERSION = "4.6.10"
             self.latest_version_label.setText(f"✅ 已是最新版本 v{CURRENT_VERSION}")
             self.latest_version_label.setStyleSheet("color: #10b981; font-size: 13px;")
             return
@@ -8066,7 +8074,13 @@ class MainWindow(QMainWindow):
             dlg = UpdateDialog(info, parent=self)
             dlg.exec()
         except Exception as e:
-            QMessageBox.warning(self, "更新", f"显示更新弹窗失败: {e}")
+            html_url = info.get("html_url", "") if info else ""
+            latest = info.get("latest_version", "") if info else ""
+            QMessageBox.warning(
+                self, "更新",
+                f"检测到新版本 v{latest}，但更新弹窗加载失败：\n{e}\n\n"
+                f"请前往 GitHub 手动下载：\n{html_url}"
+            )
 
     def on_save_settings(self):
         """保存设置"""
@@ -10267,7 +10281,7 @@ class MainWindow(QMainWindow):
         try:
             from core.update_manager import CURRENT_VERSION
         except Exception:
-            CURRENT_VERSION = "4.6.9"
+            CURRENT_VERSION = "4.6.10"
 
         version_section = QWidget()
         version_section_layout = QVBoxLayout(version_section)
@@ -12827,26 +12841,7 @@ class MainWindow(QMainWindow):
                         self.owl_stars_checkboxes[star_name] = action
             except Exception as e:
                 pass  # 静默失败
-        
-        # 加载宝箱数据并合并到owl_stars_data
-        chests_file = os.path.join(os.path.dirname(__file__), '..', 'chests.json')
-        if os.path.exists(chests_file):
-            try:
-                with open(chests_file, 'r', encoding='utf-8') as f:
-                    chests_data = json.load(f)
-                    # 将宝箱数据合并到owl_stars_data中
-                    self.owl_stars_data.update(chests_data)
-                    
-                    # 填充宝箱菜单（多选复选框）
-                    for chest_name in sorted(chests_data.keys()):
-                        action = self.owl_stars_menu.addAction(chest_name)
-                        action.setCheckable(True)
-                        action.setChecked(False)  # 默认不选中
-                        action.triggered.connect(lambda checked, name=chest_name: self._on_owl_star_toggled(name, checked))
-                        self.owl_stars_checkboxes[chest_name] = action
-            except Exception as e:
-                pass  # 静默失败
-        
+
         # 创建地图显示标签（使用自定义MapLabel）
         self.map_label = MapLabel(self)
         self.map_label.setAlignment(Qt.AlignLeft | Qt.AlignTop)  # 左上对齐，避免偏移

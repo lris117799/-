@@ -13,12 +13,11 @@ import os
 import sys
 import tempfile
 
-from PySide6.QtCore import Qt, QThread, Signal
+from PySide6.QtCore import Qt, QThread, Signal, QPropertyAnimation, QEasingCurve
 from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
     QWidget, QProgressBar, QTextEdit, QFrame
 )
-from PySide6.QtGui import QPropertyAnimation, QEasingCurve
 
 
 class _DownloadWorker(QThread):
