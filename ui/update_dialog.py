@@ -7,11 +7,13 @@
 - 当前版本 → 最新版本
 - 更新日志（中央 QTextEdit，只读）
 - 底部两个按钮：更新 / 下次再说
-- 下载进度条（点击"更新"后显示）
+- 下载进度条 + 解压进度条（点击"更新"后显示）
 """
 import os
+import shutil
 import sys
 import tempfile
+import zipfile
 
 from PySide6.QtCore import Qt, QThread, Signal, QPropertyAnimation, QEasingCurve
 from PySide6.QtWidgets import (
@@ -45,6 +47,38 @@ class _DownloadWorker(QThread):
         self.progress.emit(downloaded, total)
 
 
+class _ExtractWorker(QThread):
+    """后台解压线程：程序内解压 zip，显示解压进度"""
+    progress = Signal(int, int)   # extracted_count, total_count
+    finished_signal = Signal(bool, str)  # success, msg_or_extract_dir
+
+    def __init__(self, zip_path: str, extract_dir: str):
+        super().__init__()
+        self._zip_path = zip_path
+        self._extract_dir = extract_dir
+
+    def run(self):
+        try:
+            # 清理目标目录
+            if os.path.exists(self._extract_dir):
+                shutil.rmtree(self._extract_dir, ignore_errors=True)
+            os.makedirs(self._extract_dir, exist_ok=True)
+
+            with zipfile.ZipFile(self._zip_path) as zf:
+                members = zf.infolist()
+                total = len(members)
+                for i, member in enumerate(members):
+                    try:
+                        zf.extract(member, self._extract_dir)
+                    except Exception:
+                        # 单个文件解压失败时跳过，避免整体失败
+                        pass
+                    self.progress.emit(i + 1, total)
+            self.finished_signal.emit(True, self._extract_dir)
+        except Exception as e:
+            self.finished_signal.emit(False, f"解压失败: {e}；如多次失败请加 QQ 群 1105048691 获取下载")
+
+
 class UpdateDialog(QDialog):
     """更新弹窗"""
 
@@ -56,7 +90,9 @@ class UpdateDialog(QDialog):
         super().__init__(parent)
         self._info = update_info
         self._download_worker = None
+        self._extract_worker = None
         self._downloaded_zip = ""
+        self._extract_dir = ""
 
         self.setWindowTitle("检测到更新")
         self.setModal(True)
@@ -304,11 +340,14 @@ class UpdateDialog(QDialog):
         self.status_label.setText("正在下载更新包，请稍候...")
         self.status_label.setStyleSheet("color: #94a3b8; font-size: 12px;")
 
-        # 准备临时下载路径
+        # 准备下载路径：放在程序所在目录（而不是 C 盘 tempdir），方便用户查找
         if not self._downloaded_zip:
-            self._downloaded_zip = os.path.join(
-                tempfile.gettempdir(), "klxy_update.zip"
-            )
+            try:
+                from core.update_manager import get_app_root_dir
+                app_root = get_app_root_dir()
+            except Exception:
+                app_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            self._downloaded_zip = os.path.join(app_root, "klxy_update.zip")
             # 删除旧文件
             try:
                 if os.path.exists(self._downloaded_zip):
@@ -342,24 +381,65 @@ class UpdateDialog(QDialog):
             self.status_label.setStyleSheet("color: #ef4444; font-size: 12px;")
             return
 
-        # 下载完成，应用更新
-        self.progress_bar.setFormat("正在应用更新...")
-        self.status_label.setText("更新包已下载，正在应用更新...")
+        # 下载完成，开始解压（程序内解压，显示进度条）
+        self.progress_bar.setValue(0)
+        self.progress_bar.setFormat("准备解压...")
+        self.status_label.setText("下载完成，正在解压更新包...")
         self.status_label.setStyleSheet("color: #10b981; font-size: 12px;")
 
+        # 准备解压目录（放在程序所在目录下，方便清理）
+        try:
+            from core.update_manager import get_app_root_dir
+            app_root = get_app_root_dir()
+        except Exception:
+            app_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self._extract_dir = os.path.join(app_root, "klxy_update_extract")
+
+        # 启动解压线程
+        self._extract_worker = _ExtractWorker(self._downloaded_zip, self._extract_dir)
+        self._extract_worker.progress.connect(self._on_extract_progress)
+        self._extract_worker.finished_signal.connect(self._on_extract_finished)
+        self._extract_worker.start()
+
+    def _on_extract_progress(self, extracted: int, total: int):
+        if total <= 0:
+            self.progress_bar.setFormat(f"已解压 {extracted} 个文件")
+            self.progress_bar.setValue(0)
+        else:
+            pct = int(extracted * 100 / total) if total else 0
+            self.progress_bar.setValue(pct)
+            self.progress_bar.setFormat(f"解压中 {pct}%  ({extracted} / {total})")
+
+    def _on_extract_finished(self, success: bool, msg: str):
+        if not success:
+            self.update_btn.setEnabled(True)
+            self.update_btn.setText("立即更新")
+            self.progress_bar.setFormat("解压失败")
+            self.status_label.setText(msg)
+            self.status_label.setStyleSheet("color: #ef4444; font-size: 12px;")
+            return
+
+        # 解压完成，启动更新脚本（bat 会等待程序退出后覆盖文件并重启）
+        self.progress_bar.setValue(100)
+        self.progress_bar.setFormat("正在应用更新...")
+        self.status_label.setText("解压完成，正在应用更新，程序即将退出...")
+        self.status_label.setStyleSheet("color: #10b981; font-size: 12px;")
+
+        extract_dir = msg  # 成功时 msg 是 extract_dir 路径
         try:
             from core.update_manager import apply_update
-            ok = apply_update(self._downloaded_zip, restart=True)
+            ok = apply_update(zip_path=self._downloaded_zip, extract_dir=extract_dir, restart=True)
         except Exception as e:
             ok = False
             msg = str(e)
 
         if ok:
             self.status_label.setText("更新已启动，程序即将退出...")
-            # 等待 1.2 秒后退出程序
+            # 等待 1.2 秒让用户看到提示，然后强制退出进程
+            # 用 os._exit(0) 而不是 QApplication.quit()，因为后者只退出 Qt 事件循环，
+            # 后台线程（如 GameCapture）不退出会导致进程不退出，bat 永远等不到程序退出
             from PySide6.QtCore import QTimer
-            from PySide6.QtWidgets import QApplication
-            QTimer.singleShot(1200, lambda: QApplication.quit())
+            QTimer.singleShot(1200, lambda: os._exit(0))
         else:
             self.update_btn.setEnabled(True)
             self.update_btn.setText("立即更新")

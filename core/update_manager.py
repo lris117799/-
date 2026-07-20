@@ -281,22 +281,24 @@ def _build_user_preserve_set(app_root: str) -> set:
     return preserve
 
 
-def apply_update(zip_path: str, restart: bool = True) -> bool:
-    """应用更新：解压 zip 覆盖到程序目录，保留用户文件，可选重启
+def apply_update(zip_path: str = "", extract_dir: str = "", restart: bool = True) -> bool:
+    """应用更新：从已解压目录或 zip 文件覆盖到程序目录，保留用户文件，可选重启
 
     流程：
     1. 创建一个临时批处理脚本 update.bat
     2. 脚本内容：
        - 等待当前 exe 退出
-       - 解压 zip 到临时目录
-       - 把临时目录的文件覆盖到程序目录（跳过用户保留文件）
+       - 如果传入 extract_dir，直接从该目录覆盖（程序内已解压完成）
+         否则在 bat 内解压 zip 到临时目录
+       - 把文件覆盖到程序目录（跳过用户保留文件）
        - 删除临时文件
        - 重启 klxy.exe
     3. 启动该批处理（独立进程）
-    4. 当前程序退出
+    4. 当前程序退出（由调用方负责，建议用 os._exit(0) 强制退出）
 
     Args:
-        zip_path: 已下载的更新 zip 文件路径
+        zip_path: 已下载的更新 zip 文件路径（仅当 extract_dir 为空时在 bat 内解压）
+        extract_dir: 程序内已解压的目录（优先使用，避免 bat 内解压无进度）
         restart: 是否在更新完成后重启程序
 
     Returns:
@@ -305,6 +307,12 @@ def apply_update(zip_path: str, restart: bool = True) -> bool:
     """
     app_root = get_app_root_dir()
     exe_name = "klxy.exe" if getattr(sys, 'frozen', False) else None
+
+    # 决定源目录模式
+    use_extract_dir = bool(extract_dir and os.path.isdir(extract_dir))
+    if not use_extract_dir and not zip_path:
+        print("[UpdateManager] apply_update 需要 extract_dir 或 zip_path")
+        return False
 
     # 构造保留文件集合（绝对路径，规范化）
     preserve_set = _build_user_preserve_set(app_root)
@@ -327,17 +335,42 @@ def apply_update(zip_path: str, restart: bool = True) -> bool:
     exe_path = sys.executable if getattr(sys, 'frozen', False) else ""
     exe_dir = app_root
 
-    # 引号包裹路径
-    qzip = f'"{zip_path}"'
-    qroot = f'"{exe_dir}"'
-    qpreserve = f'"{preserve_list_path}"'
-
     # 是否重启
     restart_cmd = ""
     if restart and exe_name:
         restart_cmd = f'start "" "{exe_path}"'
 
-    bat_content = f"""@echo off
+    if use_extract_dir:
+        # 新模式：程序内已解压完成，bat 只负责覆盖文件 + 重启
+        src_dir = extract_dir
+        bat_content = f"""@echo off
+chcp 65001 >nul
+setlocal enabledelayedexpansion
+
+echo [klxy 更新器] 正在等待程序退出...
+:wait_exit
+tasklist /FI "IMAGENAME eq {exe_name}" 2>nul | find /I "{exe_name}" >nul
+if not errorlevel 1 (
+    timeout /t 1 /nobreak >nul
+    goto wait_exit
+)
+
+echo [klxy 更新器] 正在应用更新...
+powershell -NoProfile -Command "$root='{exe_dir}'; $src='{src_dir}'; $preserve=Get-Content '{preserve_list_path}' -ErrorAction SilentlyContinue; $preserveSet=@{{}}; if ($preserve) {{ foreach ($p in $preserve) {{ $pp=$p.Trim(); if ($pp) {{ $preserveSet[$pp]=$true }} }} }}; Get-ChildItem -Path $src -Recurse -File | ForEach-Object {{ $rel=$_.FullName.Substring($src.Length+1); $dest=Join-Path $root $rel; $destNorm=([System.IO.Path]::GetFullPath($dest)).TrimEnd('\\'); if ($preserveSet.ContainsKey($destNorm)) {{ Write-Host ('SKIP: ' + $rel); return }}; $dir=Split-Path $dest -Parent; if (!(Test-Path $dir)) {{ New-Item -ItemType Directory -Path $dir -Force | Out-Null }}; Copy-Item -Path $_.FullName -Destination $dest -Force; Write-Host ('OK: ' + $rel) }}"
+
+echo [klxy 更新器] 清理临时文件...
+rmdir /S /Q "{src_dir}" 2>nul
+del "{preserve_list_path}" 2>nul
+{f'del "{zip_path}" 2>nul' if zip_path else ''}
+
+echo [klxy 更新器] 更新完成！
+{restart_cmd}
+exit
+"""
+    else:
+        # 旧模式：bat 内解压 zip（兼容路径，不推荐，无解压进度）
+        qzip = f'"{zip_path}"'
+        bat_content = f"""@echo off
 chcp 65001 >nul
 setlocal enabledelayedexpansion
 
