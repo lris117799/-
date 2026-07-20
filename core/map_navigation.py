@@ -53,9 +53,8 @@ def _log_map_debug(msg):
 def load_map_full_hq_pixmap():
     """加载 map_full_hq.png 的 QPixmap
 
-    优先使用嵌入到 exe 内部的数据（core._map_data），
-    其次从外部文件 image/map_full_hq.png 加载。
-    即使 _internal/image/map_full_hq.png 被删除，仍可正常显示。
+    优先从外部文件 image/map_full_hq.png 加载（用户更新图片立即生效），
+    外部文件不存在时回退到嵌入数据 core._map_data（用于打包后文件被删的兜底）。
 
     返回: QPixmap 对象（加载失败时为空 pixmap）
     """
@@ -63,7 +62,19 @@ def load_map_full_hq_pixmap():
 
     _log_map_debug("[Map] === 开始加载地图 ===")
 
-    # 1. 优先尝试嵌入数据
+    # 1. 优先使用外部文件（开发环境用户更新即生效）
+    map_path = _get_resource_path(os.path.join("image", "map_full_hq.png"))
+    _log_map_debug(f"[Map] 尝试外部文件: {map_path}, exists={os.path.exists(map_path)}")
+    if os.path.exists(map_path):
+        pix = QPixmap(map_path)
+        if not pix.isNull():
+            _log_map_debug(f"[Map] 外部文件加载成功: {pix.width()}x{pix.height()}")
+            return pix
+        _log_map_debug("[Map] 警告: 外部文件 QPixmap 加载失败（isNull）")
+    else:
+        _log_map_debug("[Map] 外部文件不存在，回退到嵌入数据")
+
+    # 2. 回退到嵌入数据
     try:
         _log_map_debug("[Map] 尝试导入 core._map_data ...")
         from core._map_data import get_map_bytes
@@ -73,7 +84,7 @@ def load_map_full_hq_pixmap():
         _log_map_debug(f"[Map] PNG 头: {data[:8]}")
         pix = QPixmap()
         if pix.loadFromData(data):
-            _log_map_debug(f"[Map] QPixmap 加载成功: {pix.width()}x{pix.height()}")
+            _log_map_debug(f"[Map] 嵌入数据 QPixmap 加载成功: {pix.width()}x{pix.height()}")
             return pix
         else:
             _log_map_debug("[Map] 警告: loadFromData 返回 False，数据可能损坏")
@@ -82,33 +93,27 @@ def load_map_full_hq_pixmap():
         import traceback
         _log_map_debug(traceback.format_exc())
 
-    # 2. 回退到外部文件
-    map_path = _get_resource_path(os.path.join("image", "map_full_hq.png"))
-    _log_map_debug(f"[Map] 回退到外部文件: {map_path}, exists={os.path.exists(map_path)}")
-    if os.path.exists(map_path):
-        return QPixmap(map_path)
-
-    _log_map_debug("[Map] 错误: 嵌入数据和外部文件均不可用")
+    _log_map_debug("[Map] 错误: 外部文件和嵌入数据均不可用")
     return QPixmap()
 
 
 def get_map_full_hq_bytes():
-    """返回 map_full_hq.png 的原始字节（优先嵌入数据，其次读文件）
+    """返回 map_full_hq.png 的原始字节（优先外部文件，其次嵌入数据）
 
     返回: bytes 或 None
     """
-    # 1. 优先嵌入数据
+    # 1. 优先外部文件
+    map_path = _get_resource_path(os.path.join("image", "map_full_hq.png"))
+    if os.path.exists(map_path):
+        with open(map_path, "rb") as f:
+            return f.read()
+
+    # 2. 回退到嵌入数据
     try:
         from core._map_data import get_map_bytes
         return get_map_bytes()
     except Exception:
         pass
-
-    # 2. 回退到外部文件
-    map_path = _get_resource_path(os.path.join("image", "map_full_hq.png"))
-    if os.path.exists(map_path):
-        with open(map_path, "rb") as f:
-            return f.read()
 
     return None
 

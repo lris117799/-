@@ -34,6 +34,30 @@ def get_resource_path(relative_path):
         return os.path.join(base_dir, relative_path)
 
 
+# 宝箱分类合并：将 A1/A2/A2-2 等版本的宝箱统一为单一分类
+_CHEST_ELEMENTS = ['幽系', '草系', '火系', '水系', '光系', '地系', '冰系', '电系',
+                   '毒系', '虫系', '武系', '翼系', '恶系', '机械系', '龙系', '萌系', '幻系']
+
+def _merge_chest_name(name):
+    """根据宝箱名称合并分类（按优先级匹配）"""
+    if '隐藏' in name:
+        return '隐藏宝箱'
+    if '华丽' in name:
+        return '华丽宝箱'
+    if '贵重' in name or '珍贵' in name:
+        return '贵重宝箱'
+    for elem in _CHEST_ELEMENTS:
+        if elem in name:
+            return f'{elem}宝箱'
+    if '高级' in name:
+        return '高级宝箱'
+    if '中级' in name:
+        return '中级宝箱'
+    if '初级' in name or '普通' in name:
+        return '普通宝箱'
+    return '其他宝箱'
+
+
 class MapLabel(QLabel):
     """支持绘制资源图标、指针和路线的地图标签"""
     def __init__(self, parent=None):
@@ -44,6 +68,10 @@ class MapLabel(QLabel):
         self.pointer_angle = 0.0  # 指针Qt旋转角度（度），0°=朝上
         self._target_angle = 0.0   # 目标角度（模型原始角度，未转换）
         self.map_scale = 1.0  # 地图缩放比例
+        # 缩放后的图标缓存：key=(cacheKey, size) → scaled_pixmap
+        # 避免每次 paintEvent 都对每个图标执行 scaled(SmoothTransformation)（CPU 密集）
+        self._scaled_icon_cache = {}
+        self._scaled_icon_cache_max = 200  # 缓存上限，防止内存膨胀
 
         # 指针图标（zz.png，支持旋转渲染）
         zz_path = get_resource_path(os.path.join("image", "zz.png"))
@@ -63,6 +91,26 @@ class MapLabel(QLabel):
         """设置资源数据"""
         self.resource_data = data
         self.update()
+
+    def _get_scaled_icon(self, icon, size):
+        """获取缩放后的图标（带缓存）
+
+        每次 paintEvent 都对每个图标执行 scaled(SmoothTransformation) 是 CPU 密集操作，
+        资源多时（拖拽/缩放频繁触发 update）会导致严重卡顿。
+        这里按 (pixmap.cacheKey(), size) 缓存缩放结果，同一图标同一尺寸只 scaled 一次。
+        """
+        if icon is None or icon.isNull():
+            return None
+        cache_key = (icon.cacheKey(), size)
+        cached = self._scaled_icon_cache.get(cache_key)
+        if cached is not None:
+            return cached
+        scaled = icon.scaled(size, size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        # 缓存清理：超过上限时清空重建（dict 按插入顺序，简单 LRU 近似）
+        if len(self._scaled_icon_cache) >= self._scaled_icon_cache_max:
+            self._scaled_icon_cache.clear()
+        self._scaled_icon_cache[cache_key] = scaled
+        return scaled
         
     def set_pointer_position(self, x, y, visible=True):
         """设置指针位置"""
@@ -129,17 +177,17 @@ class MapLabel(QLabel):
         painter.setRenderHint(QPainter.Antialiasing)
         painter.setRenderHint(QPainter.SmoothPixmapTransform)
         
-        # 绘制资源图标
+        # 绘制资源图标（使用缓存避免每次 scaled 导致卡顿）
         for item in self.resource_data:
             icon = item['icon']
             x = item['x']
             y = item['y']
             size = item['size']
-            
+
             if icon and not icon.isNull():
-                # 绘制图标
-                scaled_icon = icon.scaled(size, size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-                painter.drawPixmap(int(x - size/2), int(y - size/2), scaled_icon)
+                scaled_icon = self._get_scaled_icon(icon, size)
+                if scaled_icon is not None:
+                    painter.drawPixmap(int(x - size/2), int(y - size/2), scaled_icon)
         
         # 绘制路线（支持多段路线）
         if self.route_visible and len(self.route_points) >= 2:
@@ -291,7 +339,7 @@ class MapFloatingWindow(QWidget):
         self.window_scale = 1.0  # 默认1.0倍
         self.base_window_width = 400
         self.base_window_height = 300
-        self.base_map_width = 360
+        self.base_map_width = 368  # = base_window_width(400) - 左右边距(32)，仅用于参考
         self.base_map_height = 200
         
         # 上次有效位置（用于检测异常跳变）
@@ -370,6 +418,7 @@ class MapFloatingWindow(QWidget):
         self._lx_icon = QPixmap(os.path.join(sc_dir, 'lx.png')) if os.path.exists(os.path.join(sc_dir, 'lx.png')) else QPixmap()
         self._xz_icon = QPixmap(os.path.join(sc_dir, 'xz.png')) if os.path.exists(os.path.join(sc_dir, 'xz.png')) else QPixmap()
         self._yp_icon = QPixmap(os.path.join(sc_dir, 'yp.png')) if os.path.exists(os.path.join(sc_dir, 'yp.png')) else QPixmap()
+        self._zx_icon = QPixmap(os.path.join(sc_dir, 'zx.png')) if os.path.exists(os.path.join(sc_dir, 'zx.png')) else QPixmap()
         
         # 初始化UI
         self._init_ui()
@@ -551,7 +600,7 @@ class MapFloatingWindow(QWidget):
         # 缩小按钮（缩小窗口）
         self.shrink_btn = QPushButton()
         self.shrink_btn.setFixedSize(28, 28)
-        self.shrink_btn.setToolTip("缩小悬浮窗 (Ctrl+-)")
+        self.shrink_btn.setToolTip("缩小悬浮窗")
         self.shrink_btn.setStyleSheet("""
             QPushButton {
                 background-color: rgba(124, 58, 237, 0.15);
@@ -573,7 +622,7 @@ class MapFloatingWindow(QWidget):
         # 放大按钮（放大窗口）
         self.expand_btn = QPushButton()
         self.expand_btn.setFixedSize(28, 28)
-        self.expand_btn.setToolTip("放大悬浮窗 (Ctrl++)")
+        self.expand_btn.setToolTip("放大悬浮窗")
         self.expand_btn.setStyleSheet("""
             QPushButton {
                 background-color: rgba(124, 58, 237, 0.15);
@@ -618,9 +667,13 @@ class MapFloatingWindow(QWidget):
         
         main_layout.addLayout(top_bar)
         
-        # 地图容器（固定大小）
+        # 地图容器：宽度由 layout 自动拉伸填满（= 窗口宽度 - 左右边距 32），
+        # 高度固定。这样 map_container 宽度始终跟随窗口宽度，
+        # 彻底避免手动同步宽度导致的"右侧紫色背景变宽"bug。
         self.map_container = QWidget()
-        self.map_container.setFixedSize(360, 200)  # 固定地图显示区域大小
+        self.map_container.setFixedHeight(200)  # 只固定高度
+        self.map_container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.map_container.setMinimumWidth(1)  # 防止收缩为 0
         self.map_container.setStyleSheet("""
             QWidget {
                 background-color: transparent;
@@ -1347,10 +1400,30 @@ class MapFloatingWindow(QWidget):
         if hasattr(self, '_unregister_hotkeys'):
             self._unregister_hotkeys()
         super().closeEvent(event)
+
+    def resizeEvent(self, event):
+        """窗口大小变化时，重算地图偏移
+
+        map_container 宽度由 layout 自动拉伸填满，无需手动 setFixedSize。
+        高度由 _apply_window_scale 中的 setFixedHeight 控制。
+        event.size() 一定返回正确的新窗口尺寸。
+        """
+        super().resizeEvent(event)
+        if not hasattr(self, 'map_container'):
+            return
+        # 用 event.size() 获取实际窗口尺寸（避免读到旧值）
+        win_w = event.size().width()
+        new_map_width = max(1, win_w - 32)
+        new_map_height = max(1, int(self.base_map_height * self.window_scale))
+        # 重算地图偏移（map_container.width 由 layout 自动同步，这里只关心地图渲染）
+        self._recalculate_map_offset(new_map_width, new_map_height)
+        self.update()
+        self.map_container.update()
+        self.map_label.update()
     
     def _shrink_window(self):
-        """缩小悬浮窗"""
-        if self.window_scale > 0.5:  # 最小缩小到50%
+        """缩小悬浮窗（默认大小即最小，只有放大后才能缩小回默认）"""
+        if self.window_scale > 1.0:  # 默认1.0即最小，不能再缩小
             self.window_scale -= 0.25
             self._apply_window_scale()
     
@@ -1385,29 +1458,51 @@ class MapFloatingWindow(QWidget):
             self.raise_()
     
     def _apply_window_scale(self):
-        """应用窗口缩放"""
-        # 计算新的窗口和地图尺寸
+        """应用窗口缩放
+
+        核心策略：map_container 宽度由 layout 自动拉伸填满（= 窗口宽度 - 32），
+        无需手动同步宽度。只更新 map_container 的高度。
+        这样无论 Qt resize 是否异步、layout 是否同步更新 minimumSize，
+        map_container 宽度始终跟随窗口宽度，彻底解决"缩小时右侧紫色背景变宽"问题。
+        """
         new_width = int(self.base_window_width * self.window_scale)
         new_height = int(self.base_window_height * self.window_scale)
-        new_map_width = int(self.base_map_width * self.window_scale)
-        new_map_height = int(self.base_map_height * self.window_scale)
-        
-        # 应用窗口大小
+        new_map_height = max(1, int(self.base_map_height * self.window_scale))
+
+        # 1. 只更新 map_container 的高度（宽度由 layout 自动拉伸）
+        self.map_container.setFixedHeight(new_map_height)
+
+        # 2. resize 窗口（layout 会自动拉伸 map_container 宽度填满可用区域）
         self.resize(new_width, new_height)
-        
-        # 应用地图容器大小
-        self.map_container.setFixedSize(new_map_width, new_map_height)
-        
-        # 更新地图显示（重新计算偏移）
-        self._recalculate_map_offset()
-        
-    
-    def _recalculate_map_offset(self):
-        """重新计算地图偏移以保持中心位置（窗口缩放后调用）"""
+
+        # 3. 强制 layout 立即重算（让 map_container.width() 立即更新为新值）
+        if self.layout() is not None:
+            self.layout().invalidate()
+            self.layout().activate()
+
+        # 4. 重算地图偏移（用预期宽度 = new_width - 32，避免读旧值）
+        new_map_width = max(1, new_width - 32)
+        self._recalculate_map_offset(new_map_width, new_map_height)
+        self.update()
+        self.map_container.update()
+        self.map_label.update()
+
+
+    def _recalculate_map_offset(self, container_width=None, container_height=None):
+        """重新计算地图偏移以保持中心位置（窗口缩放后调用）
+
+        Args:
+            container_width: 可选，强制使用此宽度（避免 setFixedSize 后读到旧值）
+            container_height: 可选，强制使用此高度
+        """
         if hasattr(self, 'original_pixmap') and not self.original_pixmap.isNull():
-            # 获取容器尺寸
-            container_width = max(1, self.map_container.width())
-            container_height = max(1, self.map_container.height())
+            # 获取容器尺寸（优先使用传入值，避免 setFixedSize 后读旧值）
+            if container_width is None or container_height is None:
+                container_width = max(1, self.map_container.width())
+                container_height = max(1, self.map_container.height())
+            else:
+                container_width = max(1, container_width)
+                container_height = max(1, container_height)
 
             # 重新计算 fit_scale，确保地图铺满容器（无黑边）
             fit_scale = max(
@@ -1423,26 +1518,22 @@ class MapFloatingWindow(QWidget):
             # 居中显示（地图 >= 容器时 offset 为负数，地图中心对齐容器中心）
             self.map_offset_x = (container_width - scaled_width) // 2
             self.map_offset_y = (container_height - scaled_height) // 2
-            self._clamp_map_offset()
+            self._clamp_map_offset(container_width, container_height)
 
             # 注意：此处不再调用 setFixedSize 锁定 map_label 大小。
             # 否则后续 Ctrl+滚轮缩放地图时，setGeometry 受固定大小约束无法放大 map_label，
             # 会导致 map_label 不能覆盖整个容器，露出容器外的黑色背景（黑边越缩放越多）。
             # 大小由 update_map_display -> _update_map_render 中的 setGeometry 动态设置。
-            self.update_map_display()
+
+            # 直接调用 _update_map_render 重新设置 map_label 的 setGeometry
+            # 不能调用 update_map_display()（无参数会走 else 分支把 map_label 文字重置为"地图加载中..."）
+            self._cached_scaled_pixmap = None  # 强制重新缩放 pixmap
+            self._update_map_render()
     
     def keyPressEvent(self, event):
         """处理键盘事件"""
-        # Ctrl++ 放大窗口
-        if event.modifiers() == Qt.ControlModifier and event.key() == Qt.Key_Plus:
-            self._expand_window()
-            event.accept()
-        # Ctrl+- 缩小窗口
-        elif event.modifiers() == Qt.ControlModifier and event.key() == Qt.Key_Minus:
-            self._shrink_window()
-            event.accept()
         # Ctrl+0 重置窗口大小
-        elif event.modifiers() == Qt.ControlModifier and event.key() == Qt.Key_0:
+        if event.modifiers() == Qt.ControlModifier and event.key() == Qt.Key_0:
             self.window_scale = 1.0
             self._apply_window_scale()
             event.accept()
@@ -1498,11 +1589,7 @@ class MapFloatingWindow(QWidget):
                 action.setChecked(False)  # 默认不选中
                 action.triggered.connect(lambda checked, name=star_name: self._on_owl_star_toggled(name, checked))
                 self.owl_stars_checkboxes[star_name] = action
-        
-        # 加载宝箱数据并合并到owl_stars_data
-        if not self.chests_loaded:
-            self._load_chests_data_and_merge()
-        
+
         if map_pixmap is not None and not map_pixmap.isNull():
             # 优先使用已加载的 pixmap（来自嵌入数据）
             self.original_pixmap = map_pixmap
@@ -1530,7 +1617,7 @@ class MapFloatingWindow(QWidget):
             # 居中显示（地图大于容器时 offset 为负，地图中心对齐容器中心）
             self.map_offset_x = (container_width - scaled_width) // 2
             self.map_offset_y = (container_height - scaled_height) // 2
-            self._clamp_map_offset()
+            self._clamp_map_offset(container_width, container_height)
 
             self._update_map_render()
         else:
@@ -1656,39 +1743,36 @@ class MapFloatingWindow(QWidget):
         self.map_label.set_resource_data(draw_data)
     
     def _load_owl_stars_data(self):
-        """加载眠枭之星数据"""
+        """加载宝箱和眠枭之星数据（从 resource_configs.json 分离，宝箱分类已合并）"""
         try:
             base_dir = os.path.join(os.path.dirname(__file__), '..')
-            owl_stars_file = os.path.join(base_dir, 'owl_stars.json')
-            if os.path.exists(owl_stars_file):
-                with open(owl_stars_file, 'r', encoding='utf-8') as f:
-                    self.owl_stars_data = json.load(f)
+            collect_file = os.path.join(base_dir, 'image', 'map', 'resource_configs.json')
+            if os.path.exists(collect_file):
+                with open(collect_file, 'r', encoding='utf-8') as f:
+                    raw_list = json.load(f)
+                    tmp = {}
+                    for item in raw_list:
+                        layer = str(item.get('layer', ''))
+                        if layer != '10003':
+                            continue
+                        name = item.get('markTypeName', '')
+                        if not name:
+                            continue
+                        item_type = item.get('type', '')
+                        if item_type not in ('宝箱', '眠枭之星'):
+                            continue
+                        # 宝箱分类合并：A1/A2/A2-2 等版本统一为单一分类
+                        if item_type == '宝箱':
+                            name = _merge_chest_name(name)
+                        lat = -item.get('lat', 0)
+                        lng = item.get('lng', 0)
+                        if name not in tmp:
+                            tmp[name] = {'points': []}
+                        tmp[name]['points'].append({'lat': lat, 'lng': lng})
+                    self.owl_stars_data = tmp
         except Exception as e:
             pass  # 静默失败
-    
-    def _load_chests_data_and_merge(self):
-        """加载宝箱数据并合并到owl_stars_data"""
-        try:
-            base_dir = os.path.join(os.path.dirname(__file__), '..')
-            chests_file = os.path.join(base_dir, 'chests.json')
-            if os.path.exists(chests_file):
-                with open(chests_file, 'r', encoding='utf-8') as f:
-                    chests_data = json.load(f)
-                    # 将宝箱数据合并到owl_stars_data中
-                    self.owl_stars_data.update(chests_data)
-                    
-                    # 填充宝箱菜单（多选复选框）
-                    for chest_name in sorted(chests_data.keys()):
-                        action = self.owl_stars_menu.addAction(chest_name)
-                        action.setCheckable(True)
-                        action.setChecked(False)  # 默认不选中
-                        action.triggered.connect(lambda checked, name=chest_name: self._on_owl_star_toggled(name, checked))
-                        self.owl_stars_checkboxes[chest_name] = action
-                    
-                    self.chests_loaded = True
-        except Exception as e:
-            pass  # 静默失败
-    
+
     def _toggle_owl_stars_menu(self):
         """显示/隐藏眠枭之星选择菜单"""
         pos = self.owl_stars_btn.mapToGlobal(QPoint(0, self.owl_stars_btn.height()))
@@ -1765,8 +1849,10 @@ class MapFloatingWindow(QWidget):
                     continue
                 items = self.owl_stars_data[item_name].get('points', [])
 
-                if '金' in item_name:
+                if '金' in item_name or '黄' in item_name:
                     current_pixmap = self._jx_icon
+                elif '紫' in item_name:
+                    current_pixmap = self._zx_icon
                 elif '蓝' in item_name:
                     current_pixmap = self._lx_icon
                 elif '宝箱' in item_name:
@@ -1854,11 +1940,18 @@ class MapFloatingWindow(QWidget):
             self._cached_scale = self.map_scale
             self.map_label.setPixmap(self._cached_scaled_pixmap)
 
+        # 确保 map_label 至少和 map_container 一样大，避免 QPixmap.scaled 返回值
+        # 小于容器时露出 map_container 透明背景（透过显示窗口深紫色背景，看起来像紫色边距变宽）
+        container_w = max(1, self.map_container.width())
+        container_h = max(1, self.map_container.height())
+        label_w = max(self._cached_scaled_pixmap.width() + 1, container_w + 2)
+        label_h = max(self._cached_scaled_pixmap.height() + 1, container_h + 2)
+
         self.map_label.setGeometry(
             int(self.map_offset_x),
             int(self.map_offset_y),
-            self._cached_scaled_pixmap.width(),
-            self._cached_scaled_pixmap.height()
+            label_w,
+            label_h
         )
 
         self.map_label.set_map_scale(self.map_scale)
@@ -1977,16 +2070,27 @@ class MapFloatingWindow(QWidget):
         
         super().wheelEvent(event)
 
-    def _clamp_map_offset(self):
+    def _clamp_map_offset(self, cw=None, ch=None):
         """限制地图偏移：到地图边缘时直接拉不动（不露出地图外的黑色区域）
         核心策略：保证地图始终 >= 容器，offset 限制在 [container-scaled, 0]。
+
+        Args:
+            cw: 可选，强制使用此容器宽度（避免 setFixedSize 后读到旧值）
+            ch: 可选，强制使用此容器高度
         """
         if not hasattr(self, 'map_container') or not hasattr(self, 'map_label'):
             return
         if not hasattr(self, 'original_pixmap') or self.original_pixmap.isNull():
             return
-        cw = max(1, self.map_container.width())
-        ch = max(1, self.map_container.height())
+        # 优先使用传入值，避免 setFixedSize 后读到旧 width()/height()
+        if cw is None:
+            cw = max(1, self.map_container.width())
+        else:
+            cw = max(1, cw)
+        if ch is None:
+            ch = max(1, self.map_container.height())
+        else:
+            ch = max(1, ch)
         if cw <= 1 or ch <= 1:
             return
         scale = self.map_scale if self.map_scale > 0 else 1.0
