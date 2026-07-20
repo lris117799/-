@@ -816,7 +816,7 @@ class GameCapture:
     
     def detect_nightmare_template(self, image=None):
         """
-        检测nightmare_template图片，带6秒冷却(智能缓存最佳缩放比例+DPI感知)
+        检测nightmare_template图片，带5秒冷却(智能缓存最佳缩放比例+DPI感知)
         :return: (是否检测到, 当前计数)
         """
         import time

@@ -984,24 +984,17 @@ class MapLabel(QLabel):
             self.main_window._update_map_display()
 
     def _detect_clicked_resource(self, pos):
-        """检测点击位置是否在某个资源标记上"""
-        if not hasattr(self.main_window, 'collect_data') or not self.main_window.collect_data:
-            return None
-
+        """检测点击位置是否在某个资源标记上（包括资源一栏和其余一栏）"""
         click_x = pos.x()
         click_y = pos.y()
 
         detection_radius = max(12 * self.main_window.map_scale, 10)
 
+        # 优先检测"资源"一栏（材料）
         selected_resources = getattr(self.main_window, 'selected_resources', set())
-
-        if not selected_resources:
-            return None
-        else:
-            resources_to_check = list(selected_resources)
-
-        for resource_name in resources_to_check:
-            resource_info = self.main_window.collect_data.get(resource_name, {})
+        collect_data = getattr(self.main_window, 'collect_data', {})
+        for resource_name in selected_resources:
+            resource_info = collect_data.get(resource_name, {})
             points = resource_info.get('points', [])
 
             for point in points:
@@ -1016,6 +1009,26 @@ class MapLabel(QLabel):
 
                 if distance <= detection_radius:
                     return resource_name
+
+        # 再检测"其余"一栏（宝箱 + 眠枭之星）
+        selected_owl_stars = getattr(self.main_window, 'selected_owl_stars', set())
+        owl_stars_data = getattr(self.main_window, 'owl_stars_data', {})
+        for item_name in selected_owl_stars:
+            item_info = owl_stars_data.get(item_name, {})
+            points = item_info.get('points', [])
+
+            for point in points:
+                lat = point.get('lat', 0)
+                lng = point.get('lng', 0)
+
+                x, y = self.main_window._game_to_map_coords(lat, lng)
+                screen_x = self.main_window.map_offset_x + (x * self.main_window.map_scale)
+                screen_y = self.main_window.map_offset_y + (y * self.main_window.map_scale)
+
+                distance = ((click_x - screen_x) ** 2 + (click_y - screen_y) ** 2) ** 0.5
+
+                if distance <= detection_radius:
+                    return item_name
 
         return None
 
@@ -1257,11 +1270,13 @@ class MapLabel(QLabel):
         lx_icon_path = os.path.join(sc_dir, 'lx.png')
         xz_icon_path = os.path.join(sc_dir, 'xz.png')
         yp_icon_path = os.path.join(sc_dir, 'yp.png')
+        zx_icon_path = os.path.join(sc_dir, 'zx.png')
 
         jx_pixmap = QPixmap(jx_icon_path) if os.path.exists(jx_icon_path) else None
         lx_pixmap = QPixmap(lx_icon_path) if os.path.exists(lx_icon_path) else None
         xz_pixmap = QPixmap(xz_icon_path) if os.path.exists(xz_icon_path) else None
         yp_pixmap = QPixmap(yp_icon_path) if os.path.exists(yp_icon_path) else None
+        zx_pixmap = QPixmap(zx_icon_path) if os.path.exists(zx_icon_path) else None
 
         if pixmap_to_draw:
             # 地图绘制：到边缘拉不动，无黑边，不拉伸
@@ -1397,8 +1412,10 @@ class MapLabel(QLabel):
 
                 items = self.main_window.owl_stars_data[item_name].get('points', [])
 
-                if '金' in item_name:
+                if '金' in item_name or '黄' in item_name:
                     current_pixmap = jx_pixmap
+                elif '紫' in item_name:
+                    current_pixmap = zx_pixmap
                 elif '蓝' in item_name:
                     current_pixmap = lx_pixmap
                 elif '宝箱' in item_name:
@@ -3039,6 +3056,30 @@ def get_pokemon_types(name):
     """获取精灵的属性列表，返回如 ['火系', '萌系'] 的列表"""
     cache = _build_pokemon_type_cache()
     return cache.get(name, [])
+
+
+# 宝箱分类合并：将 A1/A2/A2-2 等版本的宝箱统一为单一分类
+_CHEST_ELEMENTS = ['幽系', '草系', '火系', '水系', '光系', '地系', '冰系', '电系',
+                   '毒系', '虫系', '武系', '翼系', '恶系', '机械系', '龙系', '萌系', '幻系']
+
+def _merge_chest_name(name):
+    """根据宝箱名称合并分类（按优先级匹配）"""
+    if '隐藏' in name:
+        return '隐藏宝箱'
+    if '华丽' in name:
+        return '华丽宝箱'
+    if '贵重' in name or '珍贵' in name:
+        return '贵重宝箱'
+    for elem in _CHEST_ELEMENTS:
+        if elem in name:
+            return f'{elem}宝箱'
+    if '高级' in name:
+        return '高级宝箱'
+    if '中级' in name:
+        return '中级宝箱'
+    if '初级' in name or '普通' in name:
+        return '普通宝箱'
+    return '其他宝箱'
 
 
 class MainWindow(QMainWindow):
@@ -8059,7 +8100,7 @@ class MainWindow(QMainWindow):
             try:
                 from core.update_manager import CURRENT_VERSION
             except Exception:
-                CURRENT_VERSION = "4.6.9"
+                CURRENT_VERSION = "4.6.10"
             self.latest_version_label.setText(f"✅ 已是最新版本 v{CURRENT_VERSION}")
             self.latest_version_label.setStyleSheet("color: #10b981; font-size: 13px;")
             return
@@ -8660,7 +8701,7 @@ class MainWindow(QMainWindow):
             "调温球", "变幻球", "暗星球", "网兜球",
             "绝缘球", "好战球", "美妙球", "捕光球",
             "国王球", "棱镜球", "织梦棱镜球",
-            "奇趣球", "狂欢棱镜球"
+            "奇趣球", "狂欢棱镜球", "童话球", "铅绘棱镜球"
         ]
         
         # 创建输入表格
@@ -10117,7 +10158,7 @@ class MainWindow(QMainWindow):
         """)
         bloodline_select_btn.clicked.connect(self.on_bloodline_select)
 
-        bloodline_info = QLabel("框选血脉识别区域，配合童话事件自动识别 奇异/污染/混乱/异色 血脉")
+        bloodline_info = QLabel("框选血脉识别区域，配合童话事件自动识别 奇异/污染/混乱/异色 血脉（为了流畅，最好只框选提示区域，而非整个屏幕）")
         bloodline_info.setStyleSheet("color: #71717a; font-size: 13px;")
         bloodline_info.setWordWrap(True)
 
@@ -10283,7 +10324,7 @@ class MainWindow(QMainWindow):
         try:
             from core.update_manager import CURRENT_VERSION
         except Exception:
-            CURRENT_VERSION = "4.6.9"
+            CURRENT_VERSION = "4.6.10"
 
         version_section = QWidget()
         version_section_layout = QVBoxLayout(version_section)
@@ -12762,8 +12803,12 @@ class MainWindow(QMainWindow):
         layout.addWidget(copyright_label)
         
         # 加载采集资源数据（使用 image/map/resource_configs.json）
+        # 新版 resource_configs.json 同时包含 材料 / 宝箱 / 眠枭之星 三类数据
+        # 材料 → collect_data（资源菜单）；宝箱+眠枭之星 → owl_stars_data（其余菜单）
         self.collect_data = {}
         self.selected_resources = set()  # 选中的资源集合
+        self.owl_stars_data = {}
+        self.selected_owl_stars = set()  # 选中的眠枭之星和宝箱集合
         collect_file = os.path.join(os.path.dirname(__file__), '..', 'image', 'map', 'resource_configs.json')
         if os.path.exists(collect_file):
             try:
@@ -12774,7 +12819,8 @@ class MainWindow(QMainWindow):
                     # 注意：新文件 lat 符号约定与旧文件相反（新 lat = -旧 lat），
                     # 旧坐标转换公式 y=(4096-lat) 是按旧约定设计的，
                     # 因此这里加载时取反 lat，使现有公式继续正确工作
-                    tmp = {}
+                    tmp_collect = {}   # 材料
+                    tmp_owl = {}      # 宝箱 + 眠枭之星
                     for item in raw_list:
                         layer = str(item.get('layer', ''))
                         if layer != '10003':
@@ -12784,14 +12830,20 @@ class MainWindow(QMainWindow):
                             continue
                         lat = -item.get('lat', 0)  # 取反，对齐旧坐标系（南为负）
                         lng = item.get('lng', 0)
-                        if name not in tmp:
-                            tmp[name] = {
+                        item_type = item.get('type', '')
+                        # 宝箱分类合并：A1/A2/A2-2 等版本统一为单一分类
+                        if item_type == '宝箱':
+                            name = _merge_chest_name(name)
+                        target = tmp_owl if item_type in ('宝箱', '眠枭之星') else tmp_collect
+                        if name not in target:
+                            target[name] = {
                                 'points': [],
                                 'markType': item.get('markType', 1),
                                 'icon': item.get('icon', ''),  # 图标文件名，如 "星霜花.png"
                             }
-                        tmp[name]['points'].append({'lat': lat, 'lng': lng})
-                    self.collect_data = tmp
+                        target[name]['points'].append({'lat': lat, 'lng': lng})
+                    self.collect_data = tmp_collect
+                    self.owl_stars_data = tmp_owl
 
                     # 预加载资源图标到缓存（从 image/sc/ 目录加载每个资源对应的图标）
                     # 图标缺失映射：资源名在 sc 目录中无对应图标时，回退到指定文件
@@ -12800,7 +12852,7 @@ class MainWindow(QMainWindow):
                     }
                     self._resource_icon_cache = {}
                     sc_dir = os.path.join(os.path.dirname(__file__), '..', 'image', 'sc')
-                    for rname, rinfo in tmp.items():
+                    for rname, rinfo in tmp_collect.items():
                         icon_file = rinfo.get('icon', '')
                         if not icon_file:
                             continue
@@ -12813,7 +12865,7 @@ class MainWindow(QMainWindow):
                             if not pix.isNull():
                                 self._resource_icon_cache[rname] = pix
 
-                    # 填充资源菜单（多选复选框）
+                    # 填充资源菜单（多选复选框）- 仅材料
                     self.resource_checkboxes = {}
                     for resource_name in sorted(self.collect_data.keys()):
                         action = self.resource_menu.addAction(resource_name)
@@ -12822,19 +12874,9 @@ class MainWindow(QMainWindow):
                         action.triggered.connect(lambda checked, name=resource_name: self._on_resource_toggled(name, checked))
                         self.resource_checkboxes[resource_name] = action
                         self.selected_resources.add(resource_name)
-            except Exception as e:
-                print(f"[资源加载错误] {e}")
-        
-        # 加载眠枭之星数据
-        self.owl_stars_data = {}
-        self.selected_owl_stars = set()  # 选中的眠枭之星和宝箱集合
-        owl_stars_file = os.path.join(os.path.dirname(__file__), '..', 'owl_stars.json')
-        if os.path.exists(owl_stars_file):
-            try:
-                with open(owl_stars_file, 'r', encoding='utf-8') as f:
-                    self.owl_stars_data = json.load(f)
-                    
-                    # 填充眠枭之星菜单（多选复选框）
+
+                    # 填充眠枭之星菜单（多选复选框）- 宝箱 + 眠枭之星
+                    self.owl_stars_checkboxes = {}
                     for star_name in sorted(self.owl_stars_data.keys()):
                         action = self.owl_stars_menu.addAction(star_name)
                         action.setCheckable(True)
@@ -12842,7 +12884,7 @@ class MainWindow(QMainWindow):
                         action.triggered.connect(lambda checked, name=star_name: self._on_owl_star_toggled(name, checked))
                         self.owl_stars_checkboxes[star_name] = action
             except Exception as e:
-                pass  # 静默失败
+                print(f"[资源加载错误] {e}")
 
         # 创建地图显示标签（使用自定义MapLabel）
         self.map_label = MapLabel(self)

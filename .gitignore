@@ -169,6 +169,9 @@ ui/untitled-1.py
 # ─── PresentMon 工具 ───
 tools/PresentMon/
 
+# ─── 工具脚本（生成不上传的数据，本身也不被主程序调用） ───
+tools/generate_embedded_map.py
+
 # ─── 未被引用的导航模块 ───
 navigation/
 
