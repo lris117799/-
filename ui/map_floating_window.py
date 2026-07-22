@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, 
+    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
     QProgressBar, QGraphicsDropShadowEffect, QScrollArea, QComboBox,
-    QFileDialog, QSizePolicy, QLineEdit
+    QFileDialog, QSizePolicy, QLineEdit, QInputDialog
 )
 from PySide6.QtCore import Qt, QPoint, QPointF, Signal, QTimer, QRectF
 from PySide6.QtGui import QPainter, QColor, QBrush, QPixmap, QPen, QWheelEvent, QImage
@@ -1434,28 +1434,42 @@ class MapFloatingWindow(QWidget):
             self._apply_window_scale()
     
     def _toggle_collapse(self):
-        """切换折叠/展开状态"""
+        """切换折叠/展开状态
+
+        关键：保持 window_scale 和当前宽度不变，只调整高度。
+        折叠高度 = 标题栏 + map_container 高度 + 边距
+        展开高度 = 折叠前记录的高度
+        """
         if self.collapse_btn.isChecked():
             # 折叠状态：隐藏内容区域，只显示地图
+            self._saved_expanded_height = self.height()
             self.content_container.hide()
             self.collapse_icon_label.setText("▲")
-            # 先清空布局约束，然后设置精确大小
             self.setMinimumSize(0, 0)
             self.setMaximumSize(16777215, 16777215)
-            # 设置只显示地图的窗口大小（标题栏约30px + 地图200px + 边距）
-            self.resize(400, 230)
-            # 强制刷新
+            # 保持宽度不变，高度 = 标题栏(30) + map_container 高度 + 边距
+            new_height = self.map_container.height() + 30 + 10
+            self.resize(self.width(), new_height)
             self.show()
             self.raise_()
         else:
-            # 展开状态：显示所有内容
+            # 展开状态：显示所有内容，恢复折叠前的高度
             self.content_container.show()
             self.collapse_icon_label.setText("▼")
-            # 设置展开后的窗口大小
-            self.resize(400, 530)
-            # 强制刷新
+            saved_h = getattr(self, '_saved_expanded_height',
+                              int(self.base_window_height * self.window_scale))
+            self.resize(self.width(), saved_h)
             self.show()
             self.raise_()
+        # 强制 layout 重算并刷新
+        if self.layout() is not None:
+            self.layout().invalidate()
+            self.layout().activate()
+        self._markers_needs_update = True
+        self._update_map_render()
+        self.update()
+        self.map_container.update()
+        self.map_label.update()
     
     def _apply_window_scale(self):
         """应用窗口缩放
@@ -1480,7 +1494,10 @@ class MapFloatingWindow(QWidget):
             self.layout().invalidate()
             self.layout().activate()
 
-        # 4. 重算地图偏移（用预期宽度 = new_width - 32，避免读旧值）
+        # 4. 标记需要更新资源标记（缩放悬浮窗后 map_scale/map_offset 都变了）
+        self._markers_needs_update = True
+
+        # 5. 重算地图偏移（内部会调用 _update_map_render，检查 _markers_needs_update）
         new_map_width = max(1, new_width - 32)
         self._recalculate_map_offset(new_map_width, new_map_height)
         self.update()
@@ -1708,7 +1725,8 @@ class MapFloatingWindow(QWidget):
                     relative_x = screen_x - label_pos.x()
                     relative_y = screen_y - label_pos.y()
                     draw_data.append({'icon': icon, 'x': relative_x, 'y': relative_y, 'size': icon_size})
-                    need_markers.append((int(screen_x - icon_size/2), int(screen_y - icon_size/2), icon_size, resource_name))
+                    # marker 坐标也转为相对 map_label（parent 是 map_label）
+                    need_markers.append((int(relative_x - icon_size/2), int(relative_y - icon_size/2), icon_size, resource_name))
 
         # 池化复用QLabel
         old_count = len(self.resource_markers)
@@ -1718,6 +1736,8 @@ class MapFloatingWindow(QWidget):
         for i in range(reuse):
             m = self.resource_markers[i]
             x, y, s, tip = need_markers[i]
+            if m.parent() is not self.map_label:
+                m.setParent(self.map_label)
             m.setGeometry(x, y, s, s)
             m.setToolTip(tip)
             m.show()
@@ -1725,7 +1745,7 @@ class MapFloatingWindow(QWidget):
         if new_count > old_count:
             for i in range(old_count, new_count):
                 x, y, s, tip = need_markers[i]
-                marker = QLabel(self.map_container)
+                marker = QLabel(self.map_label)  # parent 是 map_label
                 marker.setAttribute(Qt.WA_TransparentForMouseEvents, True)
                 marker.setFixedSize(s, s)
                 marker.setGeometry(x, y, s, s)
@@ -1836,13 +1856,19 @@ class MapFloatingWindow(QWidget):
         return x, y
     
     def _update_owl_star_markers(self):
-        """更新眠枭之星和宝箱标记显示 - 池化复用+图标缓存"""
+        """更新眠枭之星和宝箱标记显示 - 池化复用+图标缓存
+
+        关键：marker 的 parent 是 map_label（不是 map_container），这样 marker
+        会跟着 map_label 一起移动，拖拽/缩放时位置始终正确，和"资源"一栏的
+        paintEvent 绘制方式完全一致，无需 _shift_markers 手动移动。
+        """
         need_markers = []
 
         if self.owl_stars_data:
             base_icon_size = 16
             icon_size = self._compute_icon_size(base_icon_size)
             container_rect = self.map_container.rect()
+            label_pos = self.map_label.pos()
 
             for item_name in self.selected_owl_stars:
                 if item_name not in self.owl_stars_data:
@@ -1872,11 +1898,15 @@ class MapFloatingWindow(QWidget):
 
                     item_icon_size = self._compute_icon_size(24, 40) if '乐谱' in item_name else icon_size
 
+                    # culling：用 map_container 可见区域判断
                     if (screen_x < -item_icon_size or screen_x > container_rect.width() + item_icon_size or
                         screen_y < -item_icon_size or screen_y > container_rect.height() + item_icon_size):
                         continue
 
-                    need_markers.append((int(screen_x - item_icon_size/2), int(screen_y - item_icon_size/2),
+                    # 坐标转为相对 map_label（marker 的 parent 是 map_label）
+                    rel_x = int(screen_x - label_pos.x() - item_icon_size/2)
+                    rel_y = int(screen_y - label_pos.y() - item_icon_size/2)
+                    need_markers.append((rel_x, rel_y,
                                          item_icon_size, current_pixmap, item_name))
 
         old_count = len(self.owl_star_markers)
@@ -1888,6 +1918,8 @@ class MapFloatingWindow(QWidget):
             x, y, s, pix, tip = need_markers[i]
             scaled = pix.scaled(s, s, Qt.KeepAspectRatio, Qt.FastTransformation)
             m.setPixmap(scaled)
+            if m.parent() is not self.map_label:
+                m.setParent(self.map_label)
             m.setGeometry(x, y, s, s)
             m.setToolTip(tip)
             m.show()
@@ -1896,7 +1928,7 @@ class MapFloatingWindow(QWidget):
             for i in range(old_count, new_count):
                 x, y, s, pix, tip = need_markers[i]
                 scaled = pix.scaled(s, s, Qt.KeepAspectRatio, Qt.FastTransformation)
-                marker = QLabel(self.map_container)
+                marker = QLabel(self.map_label)  # parent 是 map_label
                 marker.setAttribute(Qt.WA_TransparentForMouseEvents, True)
                 marker.setPixmap(scaled)
                 marker.setGeometry(x, y, s, s)
@@ -1999,7 +2031,16 @@ class MapFloatingWindow(QWidget):
         """鼠标移动实现拖拽"""
         # 地图拖拽平移
         if self.is_dragging_map and self.drag_start_pos:
-            delta = event.pos() - self.drag_start_pos
+            current_pos = event.pos()
+            # 增量位移（上次位置到当前位置），用于移动标记
+            last_pos = getattr(self, '_last_map_drag_pos', None)
+            if last_pos is not None:
+                inc = current_pos - last_pos
+            else:
+                inc = QPoint(0, 0)
+            self._last_map_drag_pos = current_pos
+            # 总位移（从起点到当前位置），用于 map_offset
+            delta = current_pos - self.drag_start_pos
             self.map_offset_x = self.drag_start_offset_x + delta.x()
             self.map_offset_y = self.drag_start_offset_y + delta.y()
             self._clamp_map_offset()
@@ -2010,7 +2051,7 @@ class MapFloatingWindow(QWidget):
                 self._cached_scaled_pixmap.width(),
                 self._cached_scaled_pixmap.height()
             )
-            self._shift_markers(int(delta.x()), int(delta.y()))
+            # 标记现在都是 map_label 的子控件，跟着 map_label 一起移动，无需 _shift_markers
             self.map_label.update()
             event.accept()
             return
@@ -2022,9 +2063,15 @@ class MapFloatingWindow(QWidget):
     
     def mouseReleaseEvent(self, event):
         """鼠标释放"""
+        was_dragging_map = self.is_dragging_map
         self.is_dragging_map = False
         self.drag_start_pos = None
+        self._last_map_drag_pos = None
         self.drag_pos = None
+        if was_dragging_map:
+            # 拖拽结束后重新计算资源标记（显示新进入视野的资源）
+            self._update_resource_markers()
+            self._update_owl_star_markers()
         event.accept()
     
     def wheelEvent(self, event):
@@ -2392,21 +2439,35 @@ class MapFloatingWindow(QWidget):
                 sub_menu.setStyleSheet("""
                     QMenu {
                         background-color: rgba(30, 30, 38, 0.95);
-                        border: 1px solid rgba(239, 68, 68, 0.5);
+                        border: 1px solid rgba(124, 58, 237, 0.5);
                         border-radius: 4px;
                         padding: 4px;
                     }
                     QMenu::item {
                         padding: 6px 16px;
-                        color: #ef4444;
+                        color: #e4e4e7;
                         font-size: 11px;
                     }
                     QMenu::item:selected {
-                        background-color: rgba(239, 68, 68, 0.3);
+                        background-color: rgba(124, 58, 237, 0.3);
                     }
                 """)
-                delete_action = sub_menu.addAction("删除")
+                # 删除（红色文字表示危险操作）
+                delete_action = sub_menu.addAction("🗑  删除")
                 delete_action.triggered.connect(lambda checked, i=idx: self._delete_route(i))
+
+                # 修改子菜单（缩放 / 旋转 / 移动）
+                modify_sub_menu = QMenu()
+                modify_sub_menu.setStyleSheet(sub_menu.styleSheet())
+                scale_action = modify_sub_menu.addAction("缩放")
+                scale_action.triggered.connect(lambda checked, i=idx: self._modify_scale_route(i))
+                rotate_action = modify_sub_menu.addAction("旋转")
+                rotate_action.triggered.connect(lambda checked, i=idx: self._modify_rotate_route(i))
+                move_action = modify_sub_menu.addAction("移动")
+                move_action.triggered.connect(lambda checked, i=idx: self._modify_move_route(i))
+                modify_action = sub_menu.addAction("修改")
+                modify_action.setMenu(modify_sub_menu)
+
                 action.setMenu(sub_menu)
         
         pos = self.route_list_btn.mapToGlobal(QPoint(0, self.route_list_btn.height()))
@@ -2524,7 +2585,107 @@ class MapFloatingWindow(QWidget):
             self._current_route_name = "未命名路线"
             if hasattr(self, 'route_name_label'):
                 self.route_name_label.setText("未命名路线")
-    
+
+    # ============ 路线整体变换功能（缩放/旋转/移动） ============
+
+    def _get_route_center(self, segments):
+        """计算路线几何中心（所有点的平均值）"""
+        pts = [(p[0], p[1]) for seg in segments for p in seg]
+        if not pts:
+            return (0.0, 0.0)
+        cx = sum(x for x, _ in pts) / len(pts)
+        cy = sum(y for _, y in pts) / len(pts)
+        return (cx, cy)
+
+    def _apply_route_segments(self, route_index, new_segments):
+        """写回变换后的 segments，并同步当前显示（若正在显示这条路线）"""
+        if route_index < 0 or route_index >= len(self.saved_routes):
+            return
+        self.saved_routes[route_index]["segments"] = new_segments
+        # 如果当前显示的就是这条路线，同步更新显示
+        if self._current_route_name == self.saved_routes[route_index]["name"]:
+            self.route_segments = [seg.copy() for seg in new_segments]
+            self._update_route_display()
+
+    def _modify_scale_route(self, route_index):
+        """缩放整条路线（以路线中心为基准）"""
+        if route_index < 0 or route_index >= len(self.saved_routes):
+            return
+        route = self.saved_routes[route_index]
+        segments = route.get("segments", [])
+        if not any(segments):
+            return
+        factor, ok = QInputDialog.getDouble(
+            self, "缩放路线", "缩放比例（0.1 ~ 10）：",
+            value=1.0, minValue=0.1, maxValue=10.0, decimals=2,
+        )
+        if not ok or abs(factor - 1.0) < 1e-6:
+            return
+        cx, cy = self._get_route_center(segments)
+        new_segments = [
+            [((cx + (p[0] - cx) * factor), (cy + (p[1] - cy) * factor), p[2]) for p in seg]
+            for seg in segments
+        ]
+        self._apply_route_segments(route_index, new_segments)
+
+    def _modify_rotate_route(self, route_index):
+        """旋转整条路线（以路线中心为基准，逆时针为正）"""
+        if route_index < 0 or route_index >= len(self.saved_routes):
+            return
+        route = self.saved_routes[route_index]
+        segments = route.get("segments", [])
+        if not any(segments):
+            return
+        angle, ok = QInputDialog.getDouble(
+            self, "旋转路线", "旋转角度（-360 ~ 360，逆时针为正）：",
+            value=0.0, minValue=-360.0, maxValue=360.0, decimals=1,
+        )
+        if not ok or abs(angle) < 1e-6:
+            return
+        cx, cy = self._get_route_center(segments)
+        rad = math.radians(angle)
+        cos_a = math.cos(rad)
+        sin_a = math.sin(rad)
+        new_segments = []
+        for seg in segments:
+            new_seg = []
+            for (x, y, cp) in seg:
+                dx = x - cx
+                dy = y - cy
+                new_x = cx + dx * cos_a - dy * sin_a
+                new_y = cy + dx * sin_a + dy * cos_a
+                new_seg.append((new_x, new_y, cp))
+            new_segments.append(new_seg)
+        self._apply_route_segments(route_index, new_segments)
+
+    def _modify_move_route(self, route_index):
+        """平移整条路线（世界坐标系下的位移量）"""
+        if route_index < 0 or route_index >= len(self.saved_routes):
+            return
+        route = self.saved_routes[route_index]
+        segments = route.get("segments", [])
+        if not any(segments):
+            return
+        dx, ok = QInputDialog.getDouble(
+            self, "移动路线", "水平位移 dx（地图世界坐标）：",
+            value=0.0, minValue=-8192.0, maxValue=8192.0, decimals=1,
+        )
+        if not ok:
+            return
+        dy, ok = QInputDialog.getDouble(
+            self, "移动路线", "垂直位移 dy（地图世界坐标）：",
+            value=0.0, minValue=-8192.0, maxValue=8192.0, decimals=1,
+        )
+        if not ok:
+            return
+        if abs(dx) < 1e-6 and abs(dy) < 1e-6:
+            return
+        new_segments = [
+            [((p[0] + dx), (p[1] + dy), p[2]) for p in seg]
+            for seg in segments
+        ]
+        self._apply_route_segments(route_index, new_segments)
+
     def _get_color_display_name(self, color_name):
         """获取颜色显示名称"""
         color_map = {
@@ -2734,6 +2895,7 @@ class MapFloatingWindow(QWidget):
                 # 在地图上进行拖拽平移
                 self.is_dragging_map = True
                 self.drag_start_pos = event.pos()
+                self._last_map_drag_pos = event.pos()  # 记录上次位置，用于计算增量
                 self.drag_start_offset_x = self.map_offset_x
                 self.drag_start_offset_y = self.map_offset_y
                 event.accept()
