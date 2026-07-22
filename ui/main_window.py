@@ -10637,7 +10637,7 @@ class MainWindow(QMainWindow):
         try:
             from core.update_manager import CURRENT_VERSION
         except Exception:
-            CURRENT_VERSION = "4.6.11"
+            CURRENT_VERSION = "4.6.12"
 
         version_section = QWidget()
         version_section_layout = QVBoxLayout(version_section)

@@ -428,10 +428,10 @@ class UpdateDialog(QDialog):
         extract_dir = msg  # 成功时 msg 是 extract_dir 路径
         try:
             from core.update_manager import apply_update
-            ok = apply_update(zip_path=self._downloaded_zip, extract_dir=extract_dir, restart=True)
+            ok, err_msg = apply_update(zip_path=self._downloaded_zip, extract_dir=extract_dir, restart=True)
         except Exception as e:
             ok = False
-            msg = str(e)
+            err_msg = str(e)
 
         if ok:
             self.status_label.setText("更新已启动，程序即将退出...")
@@ -444,7 +444,7 @@ class UpdateDialog(QDialog):
             self.update_btn.setEnabled(True)
             self.update_btn.setText("立即更新")
             self.progress_bar.setFormat("应用更新失败")
-            self.status_label.setText(f"应用更新失败：{msg}；如多次失败请加 QQ 群 1105048691 获取下载")
+            self.status_label.setText(f"应用更新失败：{err_msg}；如多次失败请加 QQ 群 1105048691 获取下载")
             self.status_label.setStyleSheet("color: #ef4444; font-size: 12px;")
 
     # ────────── 窗口拖动 ──────────
