@@ -4,11 +4,12 @@ from PySide6.QtWidgets import (
     QProgressBar, QFrame, QScrollArea, QLineEdit, QDialog, QFormLayout,
     QDialogButtonBox, QMessageBox, QInputDialog, QMenu, QGraphicsDropShadowEffect, QComboBox, QGroupBox, QCheckBox, QSpinBox, QDoubleSpinBox, QGraphicsView, QSizePolicy, QSlider, QSystemTrayIcon
 )
-from PySide6.QtCore import Qt, Signal, QPoint, QSize, QRect, QTimer, QEvent, QPropertyAnimation, QEasingCurve, QParallelAnimationGroup, Property
+from PySide6.QtCore import Qt, Signal, QPoint, QSize, QRect, QTimer, QEvent, QPropertyAnimation, QEasingCurve, QParallelAnimationGroup, Property, QObject
 from PySide6.QtGui import QFont, QIcon, QPainter, QColor, QLinearGradient, QPen, QBrush, QPainterPath, QPolygon, QPixmap, QFontMetrics, QImage
 import os
 import sys
 import time
+import math
 import cv2
 
 # ── OpenCV Unicode 路径支持 ──
@@ -312,6 +313,9 @@ class MapLabel(QLabel):
     def mousePressEvent(self, event):
         from PySide6.QtCore import QPointF
         import time
+        # 路线自由变换模式：优先处理
+        if getattr(self.main_window, 'route_transform_active', False):
+            return self._handle_route_transform_press(event)
         route_edit_mode = getattr(self.main_window, 'route_edit_mode', False)
 
         if event.button() == Qt.LeftButton:
@@ -1049,6 +1053,10 @@ class MapLabel(QLabel):
         import time
         current_time = time.time()
 
+        # 路线自由变换模式：拖拽中则优先处理
+        if getattr(self.main_window, 'route_transform_active', False) and self.main_window.route_transform_action is not None:
+            return self._handle_route_transform_move(event)
+
         # 路线绘制模式：更新预览线和吸附
         route_edit_mode = getattr(self.main_window, 'route_edit_mode', False)
         if route_edit_mode and self.route_preview_point is not None:
@@ -1195,6 +1203,15 @@ class MapLabel(QLabel):
         event.accept()
 
     def mouseReleaseEvent(self, event):
+        # 路线自由变换模式：释放结束本次拖拽
+        if getattr(self.main_window, 'route_transform_active', False) and self.main_window.route_transform_action is not None:
+            self.main_window.route_transform_action = None
+            self.main_window.route_transform_press_pos = None
+            self.main_window.route_transform_start_segments = None
+            self.setCursor(Qt.ArrowCursor)
+            self.update()
+            event.accept()
+            return
         if event.button() == Qt.LeftButton:
             if self.is_selecting:
                 self.is_resizing_circle = False
@@ -1233,6 +1250,250 @@ class MapLabel(QLabel):
             event.accept()
         else:
             super().mouseReleaseEvent(event)
+
+    def _handle_route_transform_press(self, event):
+        """自由变换模式：鼠标按下"""
+        if event.button() != Qt.LeftButton:
+            event.accept()
+            return
+        pos = event.pos()
+        mw = self.main_window
+        bbox = mw.route_transform_bbox
+        if not bbox:
+            event.accept()
+            return
+        min_x, min_y, max_x, max_y = bbox
+        scale = mw.map_scale
+        ox = mw.map_offset_x
+        oy = mw.map_offset_y
+        sx1 = ox + min_x * scale
+        sy1 = oy + min_y * scale
+        sx2 = ox + max_x * scale
+        sy2 = oy + max_y * scale
+        handle_size = 10
+        hit_tol = 8  # 手柄命中容差
+        mid_x = (sx1 + sx2) / 2
+        mid_y = (sy1 + sy2) / 2
+
+        # 1. 检测是否点击 4 角手柄 → 等比例缩放
+        corners = [(sx1, sy1), (sx2, sy1), (sx2, sy2), (sx1, sy2)]
+        for cx, cy in corners:
+            if abs(pos.x() - cx) <= handle_size/2 + hit_tol and abs(pos.y() - cy) <= handle_size/2 + hit_tol:
+                mw.route_transform_action = 'scale'
+                mw.route_transform_press_pos = pos
+                mw.route_transform_start_segments = [seg.copy() for seg in mw.route_segments]
+                # 记录锚点 = 对角点（地图世界坐标）
+                anchor_screen_x = sx1 + sx2 - cx
+                anchor_screen_y = sy1 + sy2 - cy
+                mw._route_transform_anchor = (
+                    (anchor_screen_x - ox) / scale,
+                    (anchor_screen_y - oy) / scale
+                )
+                self.setCursor(Qt.SizeFDiagCursor)
+                event.accept()
+                return
+
+        # 2. 检测是否点击上下边中点手柄 → 垂直缩放（scale_y）
+        for cx, cy in [(mid_x, sy1), (mid_x, sy2)]:
+            if abs(pos.x() - cx) <= handle_size/2 + hit_tol and abs(pos.y() - cy) <= handle_size/2 + hit_tol:
+                mw.route_transform_action = 'scale_y'
+                mw.route_transform_press_pos = pos
+                mw.route_transform_start_segments = [seg.copy() for seg in mw.route_segments]
+                # 锚点 = 对边中点（地图世界坐标）
+                anchor_screen_y = sy1 + sy2 - cy
+                mw._route_transform_anchor = (
+                    (cx - ox) / scale,
+                    (anchor_screen_y - oy) / scale
+                )
+                self.setCursor(Qt.SizeVerCursor)
+                event.accept()
+                return
+
+        # 3. 检测是否点击左右边中点手柄 → 水平缩放（scale_x）
+        for cx, cy in [(sx1, mid_y), (sx2, mid_y)]:
+            if abs(pos.x() - cx) <= handle_size/2 + hit_tol and abs(pos.y() - cy) <= handle_size/2 + hit_tol:
+                mw.route_transform_action = 'scale_x'
+                mw.route_transform_press_pos = pos
+                mw.route_transform_start_segments = [seg.copy() for seg in mw.route_segments]
+                # 锚点 = 对边中点（地图世界坐标）
+                anchor_screen_x = sx1 + sx2 - cx
+                mw._route_transform_anchor = (
+                    (anchor_screen_x - ox) / scale,
+                    (cy - oy) / scale
+                )
+                self.setCursor(Qt.SizeHorCursor)
+                event.accept()
+                return
+
+        # 2. 检测是否点击框内 → 移动
+        if sx1 - hit_tol <= pos.x() <= sx2 + hit_tol and sy1 - hit_tol <= pos.y() <= sy2 + hit_tol:
+            mw.route_transform_action = 'move'
+            mw.route_transform_press_pos = pos
+            mw.route_transform_start_segments = [seg.copy() for seg in mw.route_segments]
+            self.setCursor(Qt.SizeAllCursor)
+            event.accept()
+            return
+
+        # 3. 检测是否点击框外边缘（用于旋转）→ 鼠标在框外但距离框边不超过 30 像素
+        margin = 30
+        near_box = (
+            sx1 - margin <= pos.x() <= sx2 + margin and
+            sy1 - margin <= pos.y() <= sy2 + margin and
+            not (sx1 <= pos.x() <= sx2 and sy1 <= pos.y() <= sy2)
+        )
+        if near_box:
+            mw.route_transform_action = 'rotate'
+            mw.route_transform_press_pos = pos
+            mw.route_transform_start_segments = [seg.copy() for seg in mw.route_segments]
+            # 计算初始角度（鼠标相对中心的角度）
+            center_screen_x = (sx1 + sx2) / 2
+            center_screen_y = (sy1 + sy2) / 2
+            mw._route_transform_initial_angle = math.degrees(math.atan2(
+                pos.y() - center_screen_y,
+                pos.x() - center_screen_x
+            ))
+            self.setCursor(Qt.CrossCursor)
+            event.accept()
+            return
+
+        # 4. 点击其他位置：不做处理（保持变换模式）
+        event.accept()
+
+    def _handle_route_transform_move(self, event):
+        """自由变换模式：鼠标移动"""
+        pos = event.pos()
+        mw = self.main_window
+        if mw.route_transform_action is None or mw.route_transform_press_pos is None:
+            return
+        if mw.route_transform_start_segments is None:
+            return
+
+        start_pos = mw.route_transform_press_pos
+        start_segs = mw.route_transform_start_segments
+        scale = mw.map_scale
+
+        if mw.route_transform_action == 'move':
+            # 平移：dx/dy 转换到地图世界坐标
+            dx = (pos.x() - start_pos.x()) / scale
+            dy = (pos.y() - start_pos.y()) / scale
+            new_segs = [
+                [((p[0] + dx), (p[1] + dy), p[2]) for p in seg]
+                for seg in start_segs
+            ]
+            mw.route_segments = new_segs
+            mw._update_route_transform_bbox()
+            mw._update_map_display()
+
+        elif mw.route_transform_action == 'scale':
+            # 等比例缩放：以对角点为锚点
+            anchor_x, anchor_y = getattr(mw, '_route_transform_anchor', (0, 0))
+            ox = mw.map_offset_x
+            oy = mw.map_offset_y
+            anchor_screen_x = ox + anchor_x * scale
+            anchor_screen_y = oy + anchor_y * scale
+            start_dist = ((start_pos.x() - anchor_screen_x)**2 + (start_pos.y() - anchor_screen_y)**2) ** 0.5
+            curr_dist = ((pos.x() - anchor_screen_x)**2 + (pos.y() - anchor_screen_y)**2) ** 0.5
+            if start_dist > 5:
+                factor = curr_dist / start_dist
+                factor = max(0.05, min(factor, 20.0))  # 限制范围
+            else:
+                factor = 1.0
+            new_segs = [
+                [((anchor_x + (p[0] - anchor_x) * factor), (anchor_y + (p[1] - anchor_y) * factor), p[2]) for p in seg]
+                for seg in start_segs
+            ]
+            mw.route_segments = new_segs
+            mw._update_route_transform_bbox()
+            mw._update_map_display()
+
+        elif mw.route_transform_action == 'scale_x':
+            # 水平缩放：以对边中点为锚点，只缩放 x
+            anchor_x, anchor_y = getattr(mw, '_route_transform_anchor', (0, 0))
+            ox = mw.map_offset_x
+            anchor_screen_x = ox + anchor_x * scale
+            start_dx = start_pos.x() - anchor_screen_x
+            curr_dx = pos.x() - anchor_screen_x
+            if abs(start_dx) > 5:
+                factor = curr_dx / start_dx
+                factor = max(0.05, min(factor, 20.0))
+            else:
+                factor = 1.0
+            new_segs = [
+                [((anchor_x + (p[0] - anchor_x) * factor), p[1], p[2]) for p in seg]
+                for seg in start_segs
+            ]
+            mw.route_segments = new_segs
+            mw._update_route_transform_bbox()
+            mw._update_map_display()
+
+        elif mw.route_transform_action == 'scale_y':
+            # 垂直缩放：以对边中点为锚点，只缩放 y
+            anchor_x, anchor_y = getattr(mw, '_route_transform_anchor', (0, 0))
+            oy = mw.map_offset_y
+            anchor_screen_y = oy + anchor_y * scale
+            start_dy = start_pos.y() - anchor_screen_y
+            curr_dy = pos.y() - anchor_screen_y
+            if abs(start_dy) > 5:
+                factor = curr_dy / start_dy
+                factor = max(0.05, min(factor, 20.0))
+            else:
+                factor = 1.0
+            new_segs = [
+                [(p[0], (anchor_y + (p[1] - anchor_y) * factor), p[2]) for p in seg]
+                for seg in start_segs
+            ]
+            mw.route_segments = new_segs
+            mw._update_route_transform_bbox()
+            mw._update_map_display()
+
+        elif mw.route_transform_action == 'rotate':
+            # 旋转：以包围盒中心为锚点
+            all_pts = [(p[0], p[1]) for seg in start_segs for p in seg]
+            if not all_pts:
+                return
+            cx = sum(p[0] for p in all_pts) / len(all_pts)
+            cy = sum(p[1] for p in all_pts) / len(all_pts)
+            # 屏幕坐标的中心
+            ox = mw.map_offset_x
+            oy = mw.map_offset_y
+            center_screen_x = ox + cx * scale
+            center_screen_y = oy + cy * scale
+            curr_angle = math.degrees(math.atan2(
+                pos.y() - center_screen_y,
+                pos.x() - center_screen_x
+            ))
+            delta_angle = curr_angle - mw._route_transform_initial_angle
+            rad = math.radians(delta_angle)
+            cos_a = math.cos(rad)
+            sin_a = math.sin(rad)
+            new_segs = []
+            for seg in start_segs:
+                new_seg = []
+                for (x, y, cp) in seg:
+                    dx = x - cx
+                    dy = y - cy
+                    new_x = cx + dx * cos_a - dy * sin_a
+                    new_y = cy + dx * sin_a + dy * cos_a
+                    new_seg.append((new_x, new_y, cp))
+                new_segs.append(new_seg)
+            mw.route_segments = new_segs
+            mw._update_route_transform_bbox()
+            mw._update_map_display()
+
+        event.accept()
+
+    def keyPressEvent(self, event):
+        """处理 Enter/ESC 退出变换模式"""
+        if getattr(self.main_window, 'route_transform_active', False):
+            if event.key() == Qt.Key_Return or event.key() == Qt.Key_Enter:
+                self.main_window._exit_route_transform_mode(apply_changes=True)
+                event.accept()
+                return
+            elif event.key() == Qt.Key_Escape:
+                self.main_window._exit_route_transform_mode(apply_changes=False)
+                event.accept()
+                return
+        super().keyPressEvent(event)
 
     def wheelEvent(self, event):
         main_window = self.window()
@@ -1599,6 +1860,44 @@ class MapLabel(QLabel):
                 painter.setBrush(QBrush(preview_color))
                 painter.drawEllipse(int(end_x - end_radius), int(end_y - end_radius),
                                   int(end_radius * 2), int(end_radius * 2))
+
+        # 绘制路线变换框
+        if getattr(self.main_window, 'route_transform_active', False):
+            bbox = self.main_window.route_transform_bbox
+            if bbox:
+                min_x, min_y, max_x, max_y = bbox
+                t_scale = self.main_window.map_scale
+                ox = self.main_window.map_offset_x
+                oy = self.main_window.map_offset_y
+                sx1 = ox + min_x * t_scale
+                sy1 = oy + min_y * t_scale
+                sx2 = ox + max_x * t_scale
+                sy2 = oy + max_y * t_scale
+                # 虚线框
+                pen = QPen(QColor(124, 58, 237, 220), 2, Qt.DashLine)
+                painter.setPen(pen)
+                painter.setBrush(Qt.NoBrush)
+                painter.drawRect(QRectF(sx1, sy1, sx2 - sx1, sy2 - sy1))
+                # 8 个手柄（4 角 + 4 边中点，白色边框，紫色填充）
+                handle_size = 10
+                mid_x = (sx1 + sx2) / 2
+                mid_y = (sy1 + sy2) / 2
+                painter.setBrush(QBrush(QColor(124, 58, 237, 230)))
+                painter.setPen(QPen(QColor(255, 255, 255), 2))
+                handles = [
+                    (sx1, sy1), (sx2, sy1), (sx2, sy2), (sx1, sy2),  # 4 角
+                    (mid_x, sy1), (mid_x, sy2),  # 上中、下中
+                    (sx1, mid_y), (sx2, mid_y),  # 左中、右中
+                ]
+                for cxh, cyh in handles:
+                    painter.drawRect(QRectF(cxh - handle_size/2, cyh - handle_size/2, handle_size, handle_size))
+                # 提示文字
+                painter.setPen(QPen(QColor(255, 255, 255, 220)))
+                t_font = painter.font()
+                t_font.setPointSize(9)
+                painter.setFont(t_font)
+                painter.drawText(QRectF(sx1, sy2 + 6, sx2 - sx1, 20), Qt.AlignCenter,
+                                 "Enter 确认 / ESC 取消")
 
         painter.end()
 
@@ -3176,6 +3475,15 @@ class MainWindow(QMainWindow):
         self.route_color = QColor(34, 197, 94, 255)  # 路线颜色
         self.saved_routes = []  # 保存的路线列表: [{"name": str, "segments": list, "color": str}, ...]
         self._current_route_name = "未命名路线"  # 当前路线名称
+        # 路线自由变换模式
+        self.route_transform_active = False
+        self.route_transform_route_index = -1
+        self.route_transform_original = None  # 变换前原始 segments（ESC 恢复用）
+        self.route_transform_action = None  # 'move' / 'scale' / 'rotate' / None
+        self.route_transform_press_pos = None  # 鼠标按下位置（屏幕坐标）
+        self.route_transform_start_segments = None  # 本次变换开始时的 segments
+        self.route_transform_bbox = None  # 包围盒 (min_x, min_y, max_x, max_y) 地图世界坐标
+        self.route_transform_panel = None  # 右侧参数面板 QFrame
         self.map_view = self._create_map_view()  # 地图
         self.shiny_records_view = self._create_shiny_records_view()  # 出闪记录
         self.home_view = HomeView()  # 家园系统
@@ -3588,14 +3896,19 @@ class MainWindow(QMainWindow):
             active_counter = self.manager.get_active()
             if not active_counter:
                 return
-            
+
             # 调整计数
             old_count = active_counter.nightmare_count
             active_counter.nightmare_count = max(0, old_count + delta)
-            
+
+            # 同步更新 game_capture 的 nightmare_detected_count
+            # 防止下次自动检测时用旧值+1覆盖用户手动调整的值
+            if hasattr(self, 'game_capture') and self.game_capture:
+                self.game_capture.set_nightmare_count(active_counter.nightmare_count)
+
             # 保存并更新
             self.manager.save_counters()
-            
+
             # 同步更新悬浮窗
             if hasattr(self, 'floating_window') and self.floating_window.isVisible():
                 icon_id = active_counter.icon_id if hasattr(active_counter, 'icon_id') else 0
@@ -3612,7 +3925,7 @@ class MainWindow(QMainWindow):
                     active_counter.nightmare_count,
                     icon_id
                 )
-            
+
             logger.log(f"🔧 手动调整童话事件提示: {old_count} -> {active_counter.nightmare_count} ({'+' if delta > 0 else ''}{delta})")
         except Exception as e:
             print(f"❌ 处理悬浮窗计数调整错误: {e}")
@@ -8100,7 +8413,7 @@ class MainWindow(QMainWindow):
             try:
                 from core.update_manager import CURRENT_VERSION
             except Exception:
-                CURRENT_VERSION = "4.6.10"
+                CURRENT_VERSION = "4.6.11"
             self.latest_version_label.setText(f"✅ 已是最新版本 v{CURRENT_VERSION}")
             self.latest_version_label.setStyleSheet("color: #10b981; font-size: 13px;")
             return
@@ -10324,7 +10637,7 @@ class MainWindow(QMainWindow):
         try:
             from core.update_manager import CURRENT_VERSION
         except Exception:
-            CURRENT_VERSION = "4.6.10"
+            CURRENT_VERSION = "4.6.11"
 
         version_section = QWidget()
         version_section_layout = QVBoxLayout(version_section)
@@ -13855,26 +14168,36 @@ class MainWindow(QMainWindow):
                 action.setData(idx)
                 action.triggered.connect(lambda checked, i=idx: self._switch_to_route(i))
                 
-                # 添加删除子菜单
+                # 添加操作子菜单（删除 / 修改）
                 sub_menu = QMenu()
                 sub_menu.setStyleSheet("""
                     QMenu {
                         background-color: rgba(30, 30, 38, 0.95);
-                        border: 1px solid rgba(239, 68, 68, 0.5);
+                        border: 1px solid rgba(124, 58, 237, 0.5);
                         border-radius: 4px;
                         padding: 4px;
                     }
                     QMenu::item {
                         padding: 6px 16px;
-                        color: #ef4444;
+                        color: #e4e4e7;
                         font-size: 11px;
                     }
                     QMenu::item:selected {
-                        background-color: rgba(239, 68, 68, 0.3);
+                        background-color: rgba(124, 58, 237, 0.3);
                     }
                 """)
-                delete_action = sub_menu.addAction("删除")
+                # 删除
+                delete_action = sub_menu.addAction("🗑  删除")
                 delete_action.triggered.connect(lambda checked, i=idx: self._delete_route(i))
+
+                # 修改子菜单（自由变换）
+                modify_sub_menu = QMenu()
+                modify_sub_menu.setStyleSheet(sub_menu.styleSheet())
+                free_transform_action = modify_sub_menu.addAction("自由变换")
+                free_transform_action.triggered.connect(lambda checked, i=idx: self._enter_route_transform_mode(i))
+                modify_action = sub_menu.addAction("修改")
+                modify_action.setMenu(modify_sub_menu)
+
                 action.setMenu(sub_menu)
         
         pos = self.route_list_btn.mapToGlobal(QPoint(0, self.route_list_btn.height()))
@@ -13997,7 +14320,242 @@ class MainWindow(QMainWindow):
             self._current_route_name = "未命名路线"
             if hasattr(self, 'route_name_label'):
                 self.route_name_label.setText("未命名路线")
-    
+
+    # ============ 路线自由变换模式（PS 风格变换框） ============
+
+    def _enter_route_transform_mode(self, route_index):
+        """进入路线自由变换模式"""
+        if route_index < 0 or route_index >= len(self.saved_routes):
+            return
+        # 切换到目标路线
+        self._switch_to_route(route_index)
+        self.route_transform_route_index = route_index
+        # 保存原始 segments（ESC 恢复用）
+        self.route_transform_original = [seg.copy() for seg in self.saved_routes[route_index].get("segments", [])]
+        self.route_transform_active = True
+        self.route_transform_action = None
+        self.route_transform_press_pos = None
+        self.route_transform_start_segments = None
+        self._update_route_transform_bbox()
+        self._show_route_transform_panel()
+        if hasattr(self, 'map_label'):
+            self.map_label.setFocus()
+            self.map_label.update()
+
+    def _exit_route_transform_mode(self, apply_changes=True):
+        """退出路线自由变换模式"""
+        route_index = self.route_transform_route_index
+        if not apply_changes:
+            # ESC：恢复原始数据
+            if 0 <= route_index < len(self.saved_routes) and self.route_transform_original is not None:
+                self.saved_routes[route_index]["segments"] = [seg.copy() for seg in self.route_transform_original]
+                self.route_segments = [seg.copy() for seg in self.route_transform_original]
+                self._update_map_display()
+        else:
+            # Enter：写回变换后的数据并同步到悬浮窗
+            if 0 <= route_index < len(self.saved_routes):
+                self.saved_routes[route_index]["segments"] = [seg.copy() for seg in self.route_segments]
+            if hasattr(self, '_sync_routes_to_floating_window'):
+                self._sync_routes_to_floating_window()
+        # 重置状态
+        self.route_transform_active = False
+        self.route_transform_route_index = -1
+        self.route_transform_original = None
+        self.route_transform_action = None
+        self.route_transform_press_pos = None
+        self.route_transform_start_segments = None
+        self.route_transform_bbox = None
+        self._route_transform_anchor = None
+        self._route_transform_initial_angle = None
+        self._hide_route_transform_panel()
+        if hasattr(self, 'map_label'):
+            self.map_label.update()
+
+    def _update_route_transform_bbox(self):
+        """计算当前 route_segments 的包围盒（地图世界坐标）"""
+        all_pts = [(p[0], p[1]) for seg in self.route_segments for p in seg]
+        if not all_pts:
+            self.route_transform_bbox = None
+            return
+        xs = [p[0] for p in all_pts]
+        ys = [p[1] for p in all_pts]
+        self.route_transform_bbox = (min(xs), min(ys), max(xs), max(ys))
+
+    def _apply_transform_param(self, kind, value):
+        """参数面板应用变换（在当前 route_segments 基础上累积）"""
+        if not self.route_transform_active or not self.route_segments:
+            return
+        bbox = self.route_transform_bbox
+        if not bbox:
+            return
+        min_x, min_y, max_x, max_y = bbox
+        cx = (min_x + max_x) / 2
+        cy = (min_y + max_y) / 2
+        if kind == 'scale':
+            factor = float(value)
+            if abs(factor) < 1e-6:
+                return
+            new_segs = [
+                [((cx + (p[0] - cx) * factor), (cy + (p[1] - cy) * factor), p[2]) for p in seg]
+                for seg in self.route_segments
+            ]
+        elif kind == 'rotate':
+            angle = float(value)
+            rad = math.radians(angle)
+            cos_a = math.cos(rad)
+            sin_a = math.sin(rad)
+            new_segs = []
+            for seg in self.route_segments:
+                new_seg = []
+                for (x, y, cp) in seg:
+                    dx = x - cx
+                    dy = y - cy
+                    new_x = cx + dx * cos_a - dy * sin_a
+                    new_y = cy + dx * sin_a + dy * cos_a
+                    new_seg.append((new_x, new_y, cp))
+                new_segs.append(new_seg)
+        elif kind == 'move':
+            dx, dy = float(value[0]), float(value[1])
+            new_segs = [
+                [((p[0] + dx), (p[1] + dy), p[2]) for p in seg]
+                for seg in self.route_segments
+            ]
+        else:
+            return
+        self.route_segments = new_segs
+        self._update_route_transform_bbox()
+        self._update_map_display()
+
+    def _show_route_transform_panel(self):
+        """显示路线变换参数浮动面板"""
+        self._hide_route_transform_panel()
+        panel = QFrame(self.map_scroll.viewport())
+        panel.setObjectName("routeTransformPanel")
+        panel.setStyleSheet("""
+            QFrame {
+                background-color: rgba(30, 30, 38, 0.95);
+                border: 1px solid rgba(124, 58, 237, 0.6);
+                border-radius: 8px;
+            }
+            QLabel { color: #e4e4e7; font-size: 11px; }
+            QPushButton {
+                background-color: rgba(124, 58, 237, 0.4);
+                color: white;
+                border: 1px solid rgba(124, 58, 237, 0.8);
+                border-radius: 4px;
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+            QPushButton:hover { background-color: rgba(124, 58, 237, 0.7); }
+            QLineEdit, QDoubleSpinBox {
+                background-color: rgba(20, 20, 28, 0.9);
+                color: #e4e4e7;
+                border: 1px solid rgba(124, 58, 237, 0.4);
+                border-radius: 3px;
+                padding: 2px 4px;
+                font-size: 11px;
+            }
+        """)
+        layout = QVBoxLayout(panel)
+        layout.setContentsMargins(8, 8, 8, 8)
+        layout.setSpacing(4)
+
+        title = QLabel("变换参数")
+        title.setStyleSheet("color: #c4b5fd; font-size: 12px; font-weight: bold;")
+        layout.addWidget(title)
+
+        # 缩放
+        scale_row = QHBoxLayout()
+        scale_row.addWidget(QLabel("缩放比例:"))
+        scale_input = QDoubleSpinBox()
+        scale_input.setRange(0.05, 20.0)
+        scale_input.setValue(1.0)
+        scale_input.setDecimals(2)
+        scale_input.setSingleStep(0.1)
+        scale_row.addWidget(scale_input)
+        scale_btn = QPushButton("应用")
+        scale_btn.clicked.connect(lambda checked, w=scale_input: self._apply_transform_param('scale', w.value()))
+        scale_row.addWidget(scale_btn)
+        layout.addLayout(scale_row)
+
+        # 旋转
+        rotate_row = QHBoxLayout()
+        rotate_row.addWidget(QLabel("旋转角度:"))
+        rotate_input = QDoubleSpinBox()
+        rotate_input.setRange(-360.0, 360.0)
+        rotate_input.setValue(0.0)
+        rotate_input.setDecimals(1)
+        rotate_input.setSingleStep(15.0)
+        rotate_row.addWidget(rotate_input)
+        rotate_btn = QPushButton("应用")
+        rotate_btn.clicked.connect(lambda checked, w=rotate_input: self._apply_transform_param('rotate', w.value()))
+        rotate_row.addWidget(rotate_btn)
+        layout.addLayout(rotate_row)
+
+        # 移动
+        move_row = QHBoxLayout()
+        move_row.addWidget(QLabel("dx:"))
+        dx_input = QDoubleSpinBox()
+        dx_input.setRange(-8192.0, 8192.0)
+        dx_input.setValue(0.0)
+        dx_input.setDecimals(1)
+        move_row.addWidget(dx_input)
+        move_row.addWidget(QLabel("dy:"))
+        dy_input = QDoubleSpinBox()
+        dy_input.setRange(-8192.0, 8192.0)
+        dy_input.setValue(0.0)
+        dy_input.setDecimals(1)
+        move_row.addWidget(dy_input)
+        move_btn = QPushButton("应用")
+        move_btn.clicked.connect(lambda checked, w1=dx_input, w2=dy_input: self._apply_transform_param('move', (w1.value(), w2.value())))
+        move_row.addWidget(move_btn)
+        layout.addLayout(move_row)
+
+        # 确认/取消
+        btn_row = QHBoxLayout()
+        ok_btn = QPushButton("确认 (Enter)")
+        ok_btn.clicked.connect(lambda: self._exit_route_transform_mode(apply_changes=True))
+        btn_row.addWidget(ok_btn)
+        cancel_btn = QPushButton("取消 (ESC)")
+        cancel_btn.clicked.connect(lambda: self._exit_route_transform_mode(apply_changes=False))
+        btn_row.addWidget(cancel_btn)
+        layout.addLayout(btn_row)
+
+        panel.adjustSize()
+        panel_w = max(panel.sizeHint().width(), 250)
+        panel_h = max(panel.sizeHint().height(), 180)
+        try:
+            vp_w = self.map_scroll.viewport().width()
+        except Exception:
+            vp_w = 800
+        panel.setGeometry(max(0, vp_w - panel_w - 10), 10, panel_w, panel_h)
+        # 给面板及所有子控件安装事件过滤器，让 Enter/ESC 能被 MainWindow 捕获
+        panel.installEventFilter(self)
+        for child in panel.findChildren(QObject):
+            child.installEventFilter(self)
+        panel.show()
+        panel.raise_()
+        self.route_transform_panel = panel
+
+    def eventFilter(self, obj, event):
+        """事件过滤器：在变换模式下捕获 Enter/ESC 键"""
+        if self.route_transform_active and event.type() == QEvent.KeyPress:
+            key = event.key()
+            if key == Qt.Key_Return or key == Qt.Key_Enter:
+                self._exit_route_transform_mode(apply_changes=True)
+                return True
+            elif key == Qt.Key_Escape:
+                self._exit_route_transform_mode(apply_changes=False)
+                return True
+        return super().eventFilter(obj, event)
+
+    def _hide_route_transform_panel(self):
+        """隐藏并销毁路线变换参数面板"""
+        if self.route_transform_panel is not None:
+            self.route_transform_panel.setParent(None)
+            self.route_transform_panel.deleteLater()
+            self.route_transform_panel = None
+
     def _get_color_display_name(self, color_name):
         """获取颜色显示名称"""
         color_map = {

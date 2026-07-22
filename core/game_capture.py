@@ -53,7 +53,7 @@ class GameCapture:
         # 童话事件检测状态
         self.nightmare_detected_count = 0
         self.last_nightmare_time = 0
-        self.nightmare_cooldown = 6  # 6秒冷却
+        self.nightmare_cooldown = 5  # 5秒冷却
 
         # 窗口捕获缓存（避免每次重复 GDI 调用）
         self._capture_cache = {'valid': False}

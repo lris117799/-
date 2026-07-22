@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QGridLayout,
     QLabel, QLineEdit, QScrollArea, QFrame, QComboBox, QPushButton
 )
-from PySide6.QtCore import Qt, QRectF
+from PySide6.QtCore import Qt, QRectF, QTimer
 from PySide6.QtGui import QPixmap, QFont, QPainter, QPainterPath, QPen, QColor, QBrush
 import json
 import os
@@ -340,7 +340,57 @@ class RoundedFrame(QFrame):
 
 class PokemonCard(QFrame):
     """精灵卡片 - Material Design风格"""
-    
+
+    # ── 类级共享缓存：所有卡片实例共用，避免每张卡片都重新读磁盘 ──
+    _shared_icons = None        # 共享小图标 (xg.png / jb.png / sl.png 缩放后)
+    _pokemon_pixmaps = {}       # 精灵图按 pid 缓存 {pid: QPixmap}
+
+    @classmethod
+    def _load_shared_icons(cls):
+        """首次访问时加载共享图标（线程安全由 GDB 保证，UI 单线程足够）"""
+        if cls._shared_icons is not None:
+            return cls._shared_icons
+        xg_path = r"d:\game\lkwg\image\sc\sc\xg.png"
+        jb_path = r"d:\game\lkwg\image\sc\sc\jb.png"
+        sl_path = r"d:\game\lkwg\image\sc\sc\sl.png"
+
+        xg_pm = QPixmap(xg_path).scaled(14, 14, Qt.KeepAspectRatio, Qt.SmoothTransformation) if os.path.exists(xg_path) else None
+        if xg_pm is not None and xg_pm.isNull():
+            xg_pm = None
+        jb_pm = QPixmap(jb_path).scaled(14, 14, Qt.KeepAspectRatio, Qt.SmoothTransformation) if os.path.exists(jb_path) else None
+        if jb_pm is not None and jb_pm.isNull():
+            jb_pm = None
+        # sl.png 在卡片中用到两种尺寸：28x28(右上角) 和 22x22(信息行)，都缓存
+        sl_28 = None
+        sl_22 = None
+        if os.path.exists(sl_path):
+            sl_orig = QPixmap(sl_path)
+            if not sl_orig.isNull():
+                sl_28 = sl_orig.scaled(28, 28, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+                sl_22 = sl_orig.scaled(22, 22, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+
+        cls._shared_icons = {
+            'xg': xg_pm,
+            'jb': jb_pm,
+            'sl_28': sl_28,
+            'sl_22': sl_22,
+        }
+        return cls._shared_icons
+
+    @classmethod
+    def _get_pokemon_pixmap(cls, pid):
+        """按 pid 取精灵图（缓存命中直接返回，未命中才读磁盘）"""
+        if pid in cls._pokemon_pixmaps:
+            return cls._pokemon_pixmaps[pid]
+        image_path = os.path.join(os.path.dirname(__file__), "..", "image", "tj", "images", f"{pid:03d}.png")
+        pm = None
+        if os.path.exists(image_path):
+            raw = QPixmap(image_path)
+            if not raw.isNull():
+                pm = raw.scaled(110, 110, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        cls._pokemon_pixmaps[pid] = pm  # 即使为 None 也缓存，避免反复探测
+        return pm
+
     def __init__(self, pokemon, show_extra=False, parent=None):
         super().__init__(parent)
         self.pokemon = pokemon
@@ -367,7 +417,10 @@ class PokemonCard(QFrame):
         
     def setup_ui(self):
         is_leader = self.pokemon.get('is_leader_form', False)
-        
+
+        # 预加载共享图标缓存（首次调用才真正读磁盘，后续直接返回缓存）
+        shared_icons = self._load_shared_icons()
+
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
@@ -411,22 +464,18 @@ class PokemonCard(QFrame):
         image_label.setAlignment(Qt.AlignCenter)
         
         image_path = os.path.join(os.path.dirname(__file__), "..", "image", "tj", "images", f"{pid:03d}.png")
-        if os.path.exists(image_path):
-            pixmap = QPixmap(image_path)
-            if not pixmap.isNull():
-                scaled = pixmap.scaled(110, 110, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-                image_label.setPixmap(scaled)
-        
+        # 使用类级缓存：命中则直接复用，未命中才读磁盘
+        cached_pm = self._get_pokemon_pixmap(pid)
+        if cached_pm is not None:
+            image_label.setPixmap(cached_pm)
+
         image_layout.addWidget(image_label)
-        
+
         # 首领化标签 sl.png 素材（在图片右上方）
         if is_leader:
-            sl_path = r"d:\game\lkwg\image\sc\sc\sl.png"
             sl_label = QLabel()
-            if os.path.exists(sl_path):
-                sl_pixmap = QPixmap(sl_path)
-                if not sl_pixmap.isNull():
-                    sl_label.setPixmap(sl_pixmap.scaled(28, 28, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+            if shared_icons['sl_28'] is not None:
+                sl_label.setPixmap(shared_icons['sl_28'])
             sl_label.setStyleSheet("""
                 QLabel {
                     background-color: rgba(251, 191, 36, 0.2);
@@ -513,12 +562,10 @@ class PokemonCard(QFrame):
         
         # 首领标签（使用 sl.png 素材）
         if is_leader:
-            sl_path = r"d:\game\lkwg\image\sc\sc\sl.png"
-            if os.path.exists(sl_path):
+            sl_22 = shared_icons['sl_22']
+            if sl_22 is not None:
                 sl_label = QLabel()
-                sl_pixmap = QPixmap(sl_path)
-                if not sl_pixmap.isNull():
-                    sl_label.setPixmap(sl_pixmap.scaled(22, 22, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+                sl_label.setPixmap(sl_22)
                 sl_label.setAlignment(Qt.AlignCenter)
                 header_layout.addWidget(sl_label)
             else:
@@ -534,19 +581,17 @@ class PokemonCard(QFrame):
                 """)
                 leader_tag.setAlignment(Qt.AlignCenter)
                 header_layout.addWidget(leader_tag)
-        
+
         header_layout.addStretch()
         info_layout.addLayout(header_layout)
-        
+
         # 属性标签 + 额外信息（星光值/洛克贝）混合行
         attr = self.pokemon.get('attribute', '')
         extra_shown = False
-        
-        # 预加载素材图标
-        xg_path = r"d:\game\lkwg\image\sc\sc\xg.png"
-        jb_path = r"d:\game\lkwg\image\sc\sc\jb.png"
-        xg_pm = QPixmap(xg_path).scaled(14, 14, Qt.KeepAspectRatio, Qt.SmoothTransformation) if os.path.exists(xg_path) else None
-        jb_pm = QPixmap(jb_path).scaled(14, 14, Qt.KeepAspectRatio, Qt.SmoothTransformation) if os.path.exists(jb_path) else None
+
+        # 使用共享图标缓存（xg.png / jb.png 全局只加载一次）
+        xg_pm = shared_icons['xg']
+        jb_pm = shared_icons['jb']
         
         if attr or self.show_extra:
             attr_row = QHBoxLayout()
@@ -1776,6 +1821,11 @@ class PokedexWidget(QWidget):
         self.show_extra_info = False     # 是否显示星光值/洛克贝
         self.sort_ascending = True       # 升序/降序
         self.current_view = 'list'
+        # 搜索防抖定时器：用户连续输入时只在停顿 250ms 后才真正过滤
+        self._search_debounce_timer = QTimer(self)
+        self._search_debounce_timer.setSingleShot(True)
+        self._search_debounce_timer.setInterval(250)
+        self._search_debounce_timer.timeout.connect(self.apply_filters)
         self.init_ui()
         self.load_data()
     
@@ -2249,7 +2299,8 @@ class PokedexWidget(QWidget):
             self.stats_label.setText(f"加载失败: {str(e)}")
             
     def on_search_changed(self, text):
-        self.apply_filters()
+        # 防抖：连续输入时只触发一次过滤，避免每个字符都重建卡片
+        self._search_debounce_timer.start()
         
     def on_filter_changed(self, text):
         self.apply_filters()
@@ -2403,8 +2454,9 @@ class PokedexWidget(QWidget):
         egg_group_filter = self.egg_group_combo.currentText()
         sort_text = self.sort_combo.currentText()
         
-        # 筛选前记录旧ID集合，判断是否纯排序变化
-        old_ids = {p.get('id') for p in self.filtered_data} if self.filtered_data else None
+        # 筛选前记录旧对象身份集合，判断是否纯排序变化
+        # 用 id() 而非 p.get('id')，避免不同精灵共用同一 id 时误判为"未变化"
+        old_keys = {id(p) for p in self.filtered_data} if self.filtered_data else None
         
         # 排序键映射
         # "编号"默认保持原始顺序（不排序），避免首领精灵被排到最后
@@ -2455,9 +2507,9 @@ class PokedexWidget(QWidget):
         # 排序
         filtered.sort(key=sort_fn, reverse=not self.sort_ascending)
         
-        # 判断是否纯排序变化（集合相同说明内容没变）
-        new_ids = {p.get('id') for p in filtered}
-        if old_ids is not None and old_ids == new_ids:
+        # 判断是否纯排序变化（对象身份集合相同说明内容没变）
+        new_keys = {id(p) for p in filtered}
+        if old_keys is not None and old_keys == new_keys:
             pass  # 纯排序变化，保留现有缓存
         else:
             # 筛选条件变了，清缓存
@@ -2476,21 +2528,22 @@ class PokedexWidget(QWidget):
         # ── 尝试复用缓存的卡片（纯排序变化不重建） ──
         pool = getattr(self, '_card_pool', [])
         if pool:
-            pool_ids = [p.get('id') for p, _ in pool]
-            filtered_ids = [p.get('id') for p in self.filtered_data]
-            
-            if len(pool_ids) == len(filtered_ids) and set(pool_ids) == set(filtered_ids):
+            # 用对象身份(id())做 key，避免不同精灵共用同一 id 时字典塌成一条
+            pool_keys = [id(p) for p, _ in pool]
+            filtered_keys = [id(p) for p in self.filtered_data]
+
+            if len(pool_keys) == len(filtered_keys) and set(pool_keys) == set(filtered_keys):
                 # 纯排序/同批数据 - 只需重新排列
-                id_to_card = {p.get('id'): card for p, card in pool}
-                
+                id_to_card = {id(p): card for p, card in pool}
+
                 while self.grid_layout.count():
                     item = self.grid_layout.takeAt(0)
                     if item.widget():
                         item.widget().setParent(None)
-                
+
                 for idx, pokemon in enumerate(self.filtered_data):
                     row, col = divmod(idx, columns)
-                    self.grid_layout.addWidget(id_to_card[pokemon.get('id')], row, col)
+                    self.grid_layout.addWidget(id_to_card[id(pokemon)], row, col)
                 
                 self.grid_layout.setRowStretch(self.grid_layout.rowCount(), 1)
                 return
