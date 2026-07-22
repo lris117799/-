@@ -25,7 +25,7 @@ from typing import Callable, Optional
 # ──────────────────────────────────────────────────────────────
 # 基础配置
 # ──────────────────────────────────────────────────────────────
-CURRENT_VERSION = "4.6.11"  # 当前程序版本号
+CURRENT_VERSION = "4.6.12"  # 当前程序版本号
 GITHUB_OWNER = "lris117799"
 GITHUB_REPO = "-"  # 仓库名称为 "-"
 
@@ -281,7 +281,7 @@ def _build_user_preserve_set(app_root: str) -> set:
     return preserve
 
 
-def apply_update(zip_path: str = "", extract_dir: str = "", restart: bool = True) -> bool:
+def apply_update(zip_path: str = "", extract_dir: str = "", restart: bool = True):
     """应用更新：从已解压目录或 zip 文件覆盖到程序目录，保留用户文件，可选重启
 
     流程：
@@ -302,8 +302,8 @@ def apply_update(zip_path: str = "", extract_dir: str = "", restart: bool = True
         restart: 是否在更新完成后重启程序
 
     Returns:
-        True 表示更新流程已成功启动（不保证已完成）
-        False 表示启动失败
+        (True, "") 表示更新流程已成功启动
+        (False, "错误信息") 表示启动失败
     """
     app_root = get_app_root_dir()
     exe_name = "klxy.exe" if getattr(sys, 'frozen', False) else None
@@ -311,8 +311,15 @@ def apply_update(zip_path: str = "", extract_dir: str = "", restart: bool = True
     # 决定源目录模式
     use_extract_dir = bool(extract_dir and os.path.isdir(extract_dir))
     if not use_extract_dir and not zip_path:
-        print("[UpdateManager] apply_update 需要 extract_dir 或 zip_path")
-        return False
+        return (False, "apply_update 需要 extract_dir 或 zip_path")
+
+    # 检测 zip 包内是否有单一顶层目录（如 klxy/），如果有则进入该目录
+    if use_extract_dir:
+        entries = os.listdir(extract_dir)
+        if len(entries) == 1:
+            only_entry = os.path.join(extract_dir, entries[0])
+            if os.path.isdir(only_entry):
+                extract_dir = only_entry
 
     # 构造保留文件集合（绝对路径，规范化）
     preserve_set = _build_user_preserve_set(app_root)
@@ -325,8 +332,7 @@ def apply_update(zip_path: str = "", extract_dir: str = "", restart: bool = True
             for p in sorted(preserve_set):
                 f.write(p + "\n")
     except Exception as e:
-        print(f"[UpdateManager] 写入保留文件列表失败: {e}")
-        return False
+        return (False, f"写入保留文件列表失败: {e}")
 
     # 构造批处理脚本
     bat_path = os.path.join(tempfile.gettempdir(), "klxy_updater.bat")
@@ -411,18 +417,18 @@ exit
         with open(bat_path, "w", encoding="utf-8") as f:
             f.write(bat_content)
     except Exception as e:
-        print(f"[UpdateManager] 写入批处理脚本失败: {e}")
-        return False
+        return (False, f"写入批处理脚本失败: {e}")
 
     # 启动批处理（独立进程）
+    # 注意：CREATE_NEW_CONSOLE 和 DETACHED_PROCESS 不能同时使用（Windows API 限制），
+    # 否则 CreateProcess 会失败导致 Popen 抛异常。只用 DETACHED_PROCESS 即可。
     try:
         subprocess.Popen(
             ["cmd", "/c", "start", "/min", bat_path],
-            creationflags=subprocess.CREATE_NEW_CONSOLE | subprocess.DETACHED_PROCESS,
+            creationflags=subprocess.DETACHED_PROCESS,
             close_fds=True,
         )
     except Exception as e:
-        print(f"[UpdateManager] 启动更新脚本失败: {e}")
-        return False
+        return (False, f"启动更新脚本失败: {e}")
 
-    return True
+    return (True, "")

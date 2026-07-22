@@ -414,7 +414,7 @@ class SettingsDialog(QDialog):
         try:
             from core.update_manager import CURRENT_VERSION
         except Exception:
-            CURRENT_VERSION = "4.6.11"
+            CURRENT_VERSION = "4.6.12"
         version_label = QLabel(f"当前版本：v{CURRENT_VERSION}")
         version_label.setStyleSheet("color: #94a3b8; font-size: 12px;")
         vb_layout.addWidget(version_label)
@@ -704,7 +704,7 @@ class SettingsDialog(QDialog):
             try:
                 from core.update_manager import CURRENT_VERSION
             except Exception:
-                CURRENT_VERSION = "4.6.11"
+                CURRENT_VERSION = "4.6.12"
             self.latest_version_label.setText(f"已是最新版本 v{CURRENT_VERSION}")
             self.latest_version_label.setStyleSheet("color: #10b981; font-size: 12px;")
             return
