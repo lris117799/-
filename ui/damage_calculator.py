@@ -1,16 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-伤害计算器 - 童话风羊皮纸主题（左右分栏）
-
-计算原理依据 https://rocopvp.tzrain.wiki/battle-use-guide：
-    基础威力区 → 技能威力区(有效威力) → 显示威力区 → 预计伤害区
-    有效威力 = (基础威力 + 技能威力加成) × (1 + 本次技能威力%)
-    显示威力 = round(有效威力 × 本系 × 克制 × 攻防等级 × 其他威力乘区)
-    等级系数 = (等级 × 45 / 100 + 10) / 41
-    预计伤害 = floor(round(攻击 × 显示威力 × 等级系数) ÷ 防御) × 最终乘区
-    攻防等级 = (1 + 攻击提升 + 防御下降) ÷ (1 + 攻击下降 + 防御提升)
-"""
 
 import warnings
 warnings.filterwarnings("ignore", message="iCCP: known incorrect sRGB profile")
@@ -19,6 +8,11 @@ import json
 import os
 import re
 import math
+import sys
+
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
 
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QGridLayout,
@@ -29,23 +23,13 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, Signal, QSize, QTimer
 from PySide6.QtGui import QPixmap
 
-# 复用图鉴页面的羊皮纸主题基础设施
-try:
-    from ui.pokedex_view import (
-        PALETTE, ParchmentWidget, RoundedFrame,
-        _load_icon, _get_attr_icon, _skill_icon, _skill_type_icon,
-        _make_attr_pill, _make_skill_type_badge,
-        _type_bg, SCROLL_BAR_STYLE, _get_dpr, _scale_hdpi,
-        _SKILL_TYPE_COLORS,
-    )
-except Exception:  # 兜底：相对导入
-    from .pokedex_view import (
-        PALETTE, ParchmentWidget, RoundedFrame,
-        _load_icon, _get_attr_icon, _skill_icon, _skill_type_icon,
-        _make_attr_pill, _make_skill_type_badge,
-        _type_bg, SCROLL_BAR_STYLE, _get_dpr, _scale_hdpi,
-        _SKILL_TYPE_COLORS,
-    )
+from ui.pokedex_view import (
+    PALETTE, ParchmentWidget, RoundedFrame,
+    _load_icon, _get_attr_icon, _skill_icon, _skill_type_icon,
+    _make_attr_pill, _make_skill_type_badge,
+    _type_bg, SCROLL_BAR_STYLE, _get_dpr, _scale_hdpi,
+    _SKILL_TYPE_COLORS,
+)
 
 _SC_SC_DIR = os.path.join(os.path.dirname(__file__), "..", "image", "sc", "sc")
 _SC_DIR = os.path.join(os.path.dirname(__file__), "..", "image", "sc")
@@ -55,7 +39,6 @@ _POKEMON_DATA_FILE = os.path.join(_DATA_DIR, "pokemon_data.json")
 _STAR_GRAY = os.path.join(_SC_DIR, "xx.png")
 _STAR_GOLD = os.path.join(_SC_DIR, "hx.png")
 
-# ── 童话风样式片段 ──
 def _input_style():
     return f"""
         QSpinBox, QComboBox, QLineEdit {{
@@ -199,9 +182,6 @@ def _check_style():
     """
 
 
-# ────────────────────────────────────────────────────────────────
-# 全技能池（懒加载，按技能名去重）
-# ────────────────────────────────────────────────────────────────
 _SKILL_POOL_CACHE = None
 
 def build_skill_pool():
@@ -226,14 +206,10 @@ def build_skill_pool():
                     if not name or name in pool:
                         continue
                     pool[name] = dict(sk)
-    # 按名称排序
     _SKILL_POOL_CACHE = dict(sorted(pool.items()))
     return _SKILL_POOL_CACHE
 
 
-# ────────────────────────────────────────────────────────────────
-# 精灵搜索框（羊皮纸风）
-# ────────────────────────────────────────────────────────────────
 class SpriteSearchBox(QWidget):
     sprite_selected = Signal(object)  # 选中精灵后发出
 
@@ -328,9 +304,6 @@ class SpriteSearchBox(QWidget):
         self.list_widget.setVisible(False)
 
 
-# ────────────────────────────────────────────────────────────────
-# 技能选择弹窗（可学技能 + 全部技能池）
-# ────────────────────────────────────────────────────────────────
 class SkillSelectionDialog(QDialog):
     """选择技能弹窗 - 羊皮纸主题"""
 
@@ -357,12 +330,10 @@ class SkillSelectionDialog(QDialog):
         outer.setContentsMargins(16, 16, 16, 16)
         outer.setSpacing(10)
 
-        # 标题
         title = QLabel("✦ 选择技能")
         title.setStyleSheet(_label_style(PALETTE['gold_deep'], 18, True))
         outer.addWidget(title)
 
-        # 搜索 + 过滤
         filter_row = QHBoxLayout()
         filter_row.setSpacing(8)
         self.search_input = QLineEdit()
@@ -383,7 +354,6 @@ class SkillSelectionDialog(QDialog):
         filter_row.addWidget(self.filter_combo, 0)
         outer.addLayout(filter_row)
 
-        # 列表区
         self.list_widget = QListWidget()
         self.list_widget.setStyleSheet(f"""
             QListWidget {{
@@ -403,7 +373,6 @@ class SkillSelectionDialog(QDialog):
         self.list_widget.itemClicked.connect(self._on_item_clicked)
         outer.addWidget(self.list_widget, 1)
 
-        # 关闭按钮
         close_btn = QPushButton("关 闭")
         close_btn.setFixedHeight(34)
         close_btn.setCursor(Qt.PointingHandCursor)
@@ -450,7 +419,6 @@ class SkillSelectionDialog(QDialog):
         lay.setContentsMargins(8, 6, 10, 6)
         lay.setSpacing(8)
 
-        # 技能图标
         name = sk.get('name', '')
         pm = _skill_icon(name, size=44)
         icon_lbl = QLabel()
@@ -461,7 +429,6 @@ class SkillSelectionDialog(QDialog):
             icon_lbl.setPixmap(pm)
         lay.addWidget(icon_lbl)
 
-        # 中间：名称 + 元信息
         mid = QVBoxLayout()
         mid.setSpacing(2)
         mid.setContentsMargins(0, 0, 0, 0)
@@ -500,9 +467,6 @@ class SkillSelectionDialog(QDialog):
         self.accept()
 
 
-# ────────────────────────────────────────────────────────────────
-# 技能栏位（图标 + 详细信息 + 伤害 + 选中态）
-# ────────────────────────────────────────────────────────────────
 class SkillSlotWidget(QFrame):
     """单个技能栏位，可点击选中。"""
     clicked = Signal(int)  # 发出栏位索引
@@ -523,14 +487,12 @@ class SkillSlotWidget(QFrame):
         lay.setContentsMargins(8, 6, 10, 6)
         lay.setSpacing(8)
 
-        # 技能图标
         self.icon_lbl = QLabel()
         self.icon_lbl.setFixedSize(48, 48)
         self.icon_lbl.setAlignment(Qt.AlignCenter)
         self.icon_lbl.setStyleSheet("background: transparent; border: none;")
         lay.addWidget(self.icon_lbl)
 
-        # 中间信息列
         mid = QVBoxLayout()
         mid.setSpacing(2)
         mid.setContentsMargins(0, 0, 0, 0)
@@ -539,7 +501,6 @@ class SkillSlotWidget(QFrame):
         self.name_lbl.setStyleSheet(_label_style(PALETTE['text_mute'], 13, True))
         mid.addWidget(self.name_lbl)
 
-        # 元信息行（属性/类型/威力/能耗）
         self.meta_row = QHBoxLayout()
         self.meta_row.setSpacing(5)
         self.meta_row.setContentsMargins(0, 0, 0, 0)
@@ -548,7 +509,6 @@ class SkillSlotWidget(QFrame):
         self._meta_widget.setLayout(self.meta_row)
         mid.addWidget(self._meta_widget)
 
-        # 描述行
         self.desc_lbl = QLabel("")
         self.desc_lbl.setStyleSheet(_label_style(PALETTE['text_sub'], 10))
         self.desc_lbl.setWordWrap(False)
@@ -556,7 +516,6 @@ class SkillSlotWidget(QFrame):
 
         lay.addLayout(mid, 1)
 
-        # 右侧：显示威力 + 伤害
         right = QVBoxLayout()
         right.setSpacing(0)
         right.setContentsMargins(0, 0, 0, 0)
@@ -678,13 +637,9 @@ class SkillSlotWidget(QFrame):
             self.clicked.emit(self.index)
 
 
-# ────────────────────────────────────────────────────────────────
-# 伤害计算器主界面
-# ────────────────────────────────────────────────────────────────
 class DamageCalculatorWidget(ParchmentWidget):
     """伤害计算器主界面 - 羊皮纸主题"""
 
-    # 个体值范围（按星级）
     IV_RANGES = [
         (7, 10), (14, 20), (21, 30), (28, 40), (35, 50), (42, 60)
     ]
@@ -699,7 +654,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         self._build_skill_pool_for_pokemon = {}  # sprite name -> learnable list
         self.setup_ui()
 
-    # ── 数据加载 ──
     def _load_natures(self):
         natures = {}
         nature_file = os.path.join(os.path.dirname(__file__), '..', "性格.txt")
@@ -775,13 +729,11 @@ class DamageCalculatorWidget(ParchmentWidget):
             pass
         return effectiveness
 
-    # ── UI 构建 ──
     def setup_ui(self):
         root = QVBoxLayout(self)
         root.setContentsMargins(0, 0, 0, 0)
         root.setSpacing(0)
 
-        # 顶部标题条
         header = QLabel("✦  伤害计算器")
         header.setAlignment(Qt.AlignCenter)
         header.setFixedHeight(40)
@@ -831,7 +783,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         lay.setContentsMargins(14, 14, 14, 14)
         lay.setSpacing(8)
 
-        # 标题
         t_lbl = QLabel(title)
         t_lbl.setAlignment(Qt.AlignCenter)
         t_lbl.setStyleSheet(f"""
@@ -848,14 +799,12 @@ class DamageCalculatorWidget(ParchmentWidget):
         """)
         lay.addWidget(t_lbl)
 
-        # 精灵选择
         lay.addWidget(self._section_label("精灵"))
         search_box = SpriteSearchBox()
         search_box.sprite_selected.connect(lambda sp, s=side: self.on_sprite_selected(sp, s))
         setattr(self, f"{side}_search_box", search_box)
         lay.addWidget(search_box)
 
-        # 属性显示
         lay.addWidget(self._section_label("属性"))
         attr_row = QHBoxLayout()
         attr_row.setSpacing(6)
@@ -867,7 +816,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         setattr(self, f"{side}_attr2", attr2)
         lay.addLayout(attr_row)
 
-        # 等级
         lay.addWidget(self._section_label("等级"))
         level_row = QHBoxLayout()
         level_row.setSpacing(8)
@@ -888,7 +836,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         setattr(self, f"{side}_level_value_label", level_label)
         lay.addLayout(level_row)
 
-        # 当前属性
         stats_group = QGroupBox("当前属性")
         stats_group.setStyleSheet(_group_style())
         sg = QGridLayout(stats_group)
@@ -903,7 +850,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         setattr(self, f"{side}_computed_stats", {})
         lay.addWidget(stats_group)
 
-        # 星级
         lay.addWidget(self._section_label("星级评定"))
         star_row = QHBoxLayout()
         star_row.setSpacing(6)
@@ -926,20 +872,17 @@ class DamageCalculatorWidget(ParchmentWidget):
         lay.addWidget(star_container)
         self._update_star_display(side)
 
-        # 满资质
         full_iv = QCheckBox("满资质（5星·个体60）")
         full_iv.setStyleSheet(_check_style())
         full_iv.stateChanged.connect(lambda _: self.on_full_iv_changed(side))
         setattr(self, f"{side}_full_iv", full_iv)
         lay.addWidget(full_iv)
 
-        # 能力值配置（种族 + 个体勾选 + 个体值）
         iv_group = QGroupBox("能力值配置")
         iv_group.setStyleSheet(_group_style())
         iv_grid = QGridLayout(iv_group)
         iv_grid.setSpacing(5)
         race_inputs, iv_inputs, iv_checks = {}, {}, {}
-        # 表头
         for col, txt in enumerate(["属性", "种族", "个体?", "个体值"]):
             h = QLabel(txt)
             h.setStyleSheet(_label_style(PALETTE['gold_deep'], 11, True))
@@ -992,7 +935,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         setattr(self, f"{side}_iv_checks", iv_checks)
         lay.addWidget(iv_group)
 
-        # 性格
         lay.addWidget(self._section_label("性格"))
         nature_combo = QComboBox()
         nature_combo.addItem("无性格加成")
@@ -1006,7 +948,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         self._update_nature_display(side)
         lay.addWidget(nature_combo)
 
-        # 技能栏位
         lay.addWidget(self._section_label("技能栏位（点击选中）"))
         slot_vbox = QVBoxLayout()
         slot_vbox.setSpacing(5)
@@ -1024,7 +965,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         setattr(self, f"{side}_selected_slot", 0)
         lay.addWidget(slots_container)
 
-        # 选技能 + 清除按钮
         skill_btn_row = QHBoxLayout()
         skill_btn_row.setSpacing(6)
         pick_btn = QPushButton("选择技能")
@@ -1043,7 +983,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         skill_btn_row.addWidget(clear_btn)
         lay.addLayout(skill_btn_row)
 
-        # 战斗加成（攻防等级）
         bonus_group = QGroupBox("战斗加成（攻防等级）")
         bonus_group.setStyleSheet(_group_style())
         bg = QGridLayout(bonus_group)
@@ -1067,7 +1006,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         setattr(self, f"{side}_bonus", bonus_inputs)
         lay.addWidget(bonus_group)
 
-        # 技能威力调整
         skill_adj_group = QGroupBox("技能威力调整")
         skill_adj_group.setStyleSheet(_group_style())
         sg2 = QGridLayout(skill_adj_group)
@@ -1096,7 +1034,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         setattr(self, f"{side}_skill_adj", skill_adj)
         lay.addWidget(skill_adj_group)
 
-        # 伤害计算 + 重置
         btn_row = QHBoxLayout()
         btn_row.setSpacing(6)
         calc_btn = QPushButton("伤害计算")
@@ -1114,7 +1051,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         btn_row.addWidget(reset_btn)
         lay.addLayout(btn_row)
 
-        # 结果详情面板
         result_box = QGroupBox("计算结果（选中技能）")
         result_box.setStyleSheet(_group_style())
         rl = QVBoxLayout(result_box)
@@ -1127,7 +1063,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         setattr(self, f"{side}_result_label", result_label)
         lay.addWidget(result_box)
 
-        # 血条
         hp_container = QWidget()
         hp_container.setVisible(False)
         hp_v = QVBoxLayout(hp_container)
@@ -1166,7 +1101,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         lay.addStretch()
         return panel
 
-    # ── UI 小工具 ──
     def _section_label(self, text):
         lbl = QLabel(text)
         lbl.setStyleSheet(f"""
@@ -1201,14 +1135,12 @@ class DamageCalculatorWidget(ParchmentWidget):
         """)
         return lbl
 
-    # ── 精灵选择 ──
     def on_sprite_selected(self, sprite, side):
         if side == "sprite1":
             self.sprite1_data = sprite
         else:
             self.sprite2_data = sprite
 
-        # 属性
         attr = sprite.get('attribute', '未知')
         attrs = attr.split('/')
         a1 = getattr(self, f"{side}_attr1")
@@ -1216,7 +1148,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         self._set_attr_label(a1, attrs[0] if attrs else '—')
         self._set_attr_label(a2, attrs[1] if len(attrs) > 1 else '—')
 
-        # 种族值
         stats = sprite.get('stats', {})
         race = getattr(self, f"{side}_race_inputs")
         race["生命"].setValue(stats.get('hp', 0))
@@ -1226,11 +1157,9 @@ class DamageCalculatorWidget(ParchmentWidget):
         race["魔防"].setValue(stats.get('magic_defense', 0))
         race["速度"].setValue(stats.get('speed', 0))
 
-        # 预构建该精灵可学技能
         self._build_learnable(sprite, side)
 
         self.calculate_stats(side)
-        # 双方互相影响伤害显示
         self.refresh_all_damage("sprite1")
         self.refresh_all_damage("sprite2")
 
@@ -1261,7 +1190,6 @@ class DamageCalculatorWidget(ParchmentWidget):
     def _build_learnable(self, sprite, side):
         skills = sprite.get('skills', {})
         learnable = []
-        # 标记来源
         for sk in skills.get('normal_skills', []):
             learnable.append(dict(sk, _source='默认'))
         for sk in skills.get('bloodline_skills', []):
@@ -1276,7 +1204,6 @@ class DamageCalculatorWidget(ParchmentWidget):
             return []
         return self._build_skill_pool_for_pokemon.get(sprite.get('name', side), [])
 
-    # ── 技能选择 ──
     def on_pick_skill(self, side):
         idx = getattr(self, f"{side}_selected_slot")
         dlg = SkillSelectionDialog(self._get_learnable(side), self)
@@ -1305,14 +1232,12 @@ class DamageCalculatorWidget(ParchmentWidget):
         for i, s in enumerate(slots):
             s.set_selected(i == idx)
 
-    # ── 等级 ──
     def on_level_changed(self, value, side, label):
         setattr(self, f"{side}_level_value", value)
         label.setText(str(value))
         self.calculate_stats(side)
         self.refresh_all_damage(side)
 
-    # ── 星级 ──
     def on_star_clicked(self, star_index, side):
         cur = getattr(self, f"{side}_star_count")
         new_count = star_index if star_index < cur else star_index + 1
@@ -1365,7 +1290,6 @@ class DamageCalculatorWidget(ParchmentWidget):
             setattr(self, f"{side}_star_count", 5)
             self._update_star_display(side)
             for name in iv_checks.keys():
-                # 先放宽范围，否则 0 星时范围是 (7,10)，setValue(60) 会被钳成 10
                 iv_inputs[name].setRange(0, 60)
                 if iv_checks[name].isChecked():
                     iv_inputs[name].setValue(60)
@@ -1404,7 +1328,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         if cur > 0 and cur < combo.count():
             combo.setCurrentIndex(cur)
 
-    # ── 属性计算 ──
     def calculate_stats(self, side):
         sprite = self.sprite1_data if side == "sprite1" else self.sprite2_data
         if not sprite:
@@ -1494,7 +1417,6 @@ class DamageCalculatorWidget(ParchmentWidget):
             for k, v in computed.items():
                 labels[k].setText(f"{k}: {v}")
 
-    # ── 属性克制 ──
     def get_type_multiplier(self, skill_attr, target_sprite):
         if not skill_attr or not target_sprite:
             return 1.0
@@ -1522,7 +1444,6 @@ class DamageCalculatorWidget(ParchmentWidget):
             return 1.0
         return 1.0
 
-    # ── 核心：伤害计算管线（按 wiki 原理） ──
     def _compute_breakdown(self, attacker_side, skill):
         """返回完整分解 dict，无法计算时返回 None。"""
         defender_side = "sprite2" if attacker_side == "sprite1" else "sprite1"
@@ -1531,7 +1452,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         if not attacker or not defender or not skill:
             return None
 
-        # 基础威力
         raw_power = skill.get('power', 0)
         try:
             base_power = int(raw_power)
@@ -1540,22 +1460,18 @@ class DamageCalculatorWidget(ParchmentWidget):
         if base_power <= 0:
             return None  # 状态/防御技不造成伤害
 
-        # 技能威力区 → 有效威力
         adj = getattr(self, f"{attacker_side}_skill_adj")
         fixed_bonus = adj["技能威力"].value()
         skill_power_pct = adj["本次技能威力"].value() / 100.0
         effective_power = (base_power + fixed_bonus) * (1 + skill_power_pct)
 
-        # 本系加成
         skill_attr = skill.get('attribute', '')
         atk_attr = attacker.get('attribute', '')
         atk_attrs = [a.strip().replace('系', '') for a in atk_attr.split('/')]
         same_type = 1.25 if skill_attr.replace('系', '').strip() in atk_attrs else 1.0
 
-        # 克制
         type_mult = self.get_type_multiplier(skill_attr, defender)
 
-        # 攻防等级
         bonus = getattr(self, f"{attacker_side}_bonus")
         def_bonus = getattr(self, f"{defender_side}_bonus")
         atk_up = bonus["攻击提升"].value() / 100.0
@@ -1566,14 +1482,11 @@ class DamageCalculatorWidget(ParchmentWidget):
         denominator = 1 + atk_down + def_up
         atk_def_level = numerator / denominator if denominator > 0 else numerator
 
-        # 其他威力乘区（威力+25% 类，进入显示威力，和本系/克制一起）
         other_mult = 1 + adj["威力加成"].value() / 100.0
 
-        # 显示威力 = round(有效威力 × 本系 × 克制 × 攻防等级 × 其他)
         display_power = round(effective_power * same_type * type_mult
                               * atk_def_level * other_mult)
 
-        # 攻防数值
         dmg_type = skill.get('type', '')
         atk_stats = getattr(self, f"{attacker_side}_computed_stats", {})
         def_stats = getattr(self, f"{defender_side}_computed_stats", {})
@@ -1590,20 +1503,16 @@ class DamageCalculatorWidget(ParchmentWidget):
         if defense_val <= 0:
             return None
 
-        # 等级系数
         level = getattr(self, f"{attacker_side}_level_value")
         level_coeff = (level * 45 / 100 + 10) / 41.0
 
-        # 最终乘区（条件伤害）+ 连击数
         final_mult = 1 + adj["条件伤害"].value() / 100.0
         combo = adj["连击数"].value()
 
-        # 预计伤害 = floor(round(攻击 × 显示威力 × 等级系数) ÷ 防御) × 最终乘区 × 连击数
         raw = round(attack_val * display_power * level_coeff)
         main_damage = math.floor(raw / defense_val) * final_mult * combo
         main_damage = int(main_damage)
 
-        # 星陨印记：每层 30 威力幻系伤害，按攻击者双攻较高者结算（官方+NGA实测）
         mark_layers = adj["印记层数"].value()
         mark_extra = 0
         mark_type_mult = 1.0
@@ -1657,7 +1566,6 @@ class DamageCalculatorWidget(ParchmentWidget):
             slot.set_power_and_damage(br['display_power'], br['damage'],
                                       br['pct'], br['type_mult'])
 
-    # ── 伤害计算按钮 ──
     def on_calculate(self, side):
         idx = getattr(self, f"{side}_selected_slot")
         skills = getattr(self, f"{side}_skills", [])
@@ -1671,7 +1579,6 @@ class DamageCalculatorWidget(ParchmentWidget):
             result_label.setText("该技能不造成伤害（状态/防御类），或双方信息不完整。")
             return
 
-        # 详细分解文本
         kill = "斩杀 ✓" if br['damage'] >= br['max_hp'] else "未斩杀"
         kill_color = '#c8463c' if br['damage'] >= br['max_hp'] else PALETTE['text_sub']
         mark_line = ""
@@ -1708,7 +1615,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         """
         result_label.setText(html)
 
-        # 更新防御方血条
         self._update_hp_bar(br['defender_side'], br['damage'], br['max_hp'])
 
     def _update_hp_bar(self, side, damage, max_hp):
@@ -1726,7 +1632,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         pct = remaining / max_hp * 100 if max_hp > 0 else 0
         dmg_lbl.setText(f"受到 {damage} 点伤害（{damage/max_hp*100 if max_hp>0 else 0:.1f}%）")
         hp_text.setText(f"剩余 {remaining} / {max_hp}（{pct:.1f}%）")
-        # 颜色：>50%绿，20-50%黄，<20%红
         if pct > 50:
             color = '#5aa05a'
         elif pct > 20:
@@ -1734,7 +1639,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         else:
             color = '#c8463c'
         fill.setStyleSheet(f"background-color: {color}; border-radius: 3px;")
-        # 延迟设置宽度，确保父容器已布局
         QTimer.singleShot(0, lambda: self._resize_hp_fill(fill, pct))
 
     def _resize_hp_fill(self, fill, pct):
@@ -1744,7 +1648,6 @@ class DamageCalculatorWidget(ParchmentWidget):
         total = parent.width() - 4
         fill.setFixedWidth(max(int(total * pct / 100), 0))
 
-    # ── 重置 ──
     def on_reset(self, side):
         if side == "sprite1":
             self.sprite1_data = None
@@ -1752,19 +1655,14 @@ class DamageCalculatorWidget(ParchmentWidget):
             self.sprite2_data = None
         sb = getattr(self, f"{side}_search_box")
         sb.clear_text()
-        # 属性
         self._set_attr_label(getattr(self, f"{side}_attr1"), '—')
         self._set_attr_label(getattr(self, f"{side}_attr2"), '—')
-        # 等级
         getattr(self, f"{side}_level_slider").setValue(60)
         getattr(self, f"{side}_level_value_label").setText("60")
         setattr(self, f"{side}_level_value", 60)
-        # 星级
         setattr(self, f"{side}_star_count", 0)
         self._update_star_display(side)
-        # 满资质
         getattr(self, f"{side}_full_iv").setChecked(False)
-        # 个体值
         iv_checks = getattr(self, f"{side}_iv_checks")
         iv_inputs = getattr(self, f"{side}_iv_inputs")
         for name in iv_checks.keys():
@@ -1773,13 +1671,10 @@ class DamageCalculatorWidget(ParchmentWidget):
             iv_inputs[name].setValue(0)
             iv_inputs[name].setEnabled(False)
             iv_inputs[name].setRange(0, 60)
-        # 种族
         for sp in getattr(self, f"{side}_race_inputs").values():
             sp.setValue(0)
-        # 性格
         getattr(self, f"{side}_nature").setCurrentIndex(0)
         self._update_nature_display(side)
-        # 技能
         skills = getattr(self, f"{side}_skills")
         slots = getattr(self, f"{side}_skill_slots")
         for i in range(4):
@@ -1788,20 +1683,15 @@ class DamageCalculatorWidget(ParchmentWidget):
             slots[i].set_power_and_damage(None, None, 0, 1.0)
             slots[i].set_selected(i == 0)
         setattr(self, f"{side}_selected_slot", 0)
-        # 加成
         for sp in getattr(self, f"{side}_bonus").values():
             sp.setValue(0)
         for sp in getattr(self, f"{side}_skill_adj").values():
             sp.setValue(0)
-        # 属性显示
         for lbl in getattr(self, f"{side}_stat_labels", {}).values():
             lbl.setText(f"{lbl.text().split(':')[0]}: -")
         setattr(self, f"{side}_computed_stats", {})
-        # 结果
         getattr(self, f"{side}_result_label").setText(
             "选中技能后点击“伤害计算”查看详细分解。")
-        # 血条
         getattr(self, f"{side}_hp_container").setVisible(False)
-        # 刷新双方
         self.refresh_all_damage("sprite1")
         self.refresh_all_damage("sprite2")
