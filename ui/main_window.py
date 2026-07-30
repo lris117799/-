@@ -8413,7 +8413,7 @@ class MainWindow(QMainWindow):
             try:
                 from core.update_manager import CURRENT_VERSION
             except Exception:
-                CURRENT_VERSION = "4.6.11"
+                CURRENT_VERSION = "4.6.12"
             self.latest_version_label.setText(f"✅ 已是最新版本 v{CURRENT_VERSION}")
             self.latest_version_label.setStyleSheet("color: #10b981; font-size: 13px;")
             return
@@ -10637,7 +10637,7 @@ class MainWindow(QMainWindow):
         try:
             from core.update_manager import CURRENT_VERSION
         except Exception:
-            CURRENT_VERSION = "4.6.11"
+            CURRENT_VERSION = "4.6.12"
 
         version_section = QWidget()
         version_section_layout = QVBoxLayout(version_section)
