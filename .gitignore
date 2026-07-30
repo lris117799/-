@@ -53,7 +53,6 @@ image/debug_*.png
 image/tj/lkwg_enriched_data*.json
 test_*.png
 test_*.json
-image/sc/
 image/pokedex_cache/
 image/startup_screenshot.png
 # 运行时生成文件
@@ -165,6 +164,7 @@ test_tiles.py
 core/generate_type_chart.py
 core/map_navigation_backup.py
 ui/untitled-1.py
+dc_4611.py
 
 # ─── PresentMon 工具 ───
 tools/PresentMon/

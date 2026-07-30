@@ -25,7 +25,7 @@ from typing import Callable, Optional
 # ──────────────────────────────────────────────────────────────
 # 基础配置
 # ──────────────────────────────────────────────────────────────
-CURRENT_VERSION = "4.6.11"  # 当前程序版本号
+CURRENT_VERSION = "4.6.12"  # 当前程序版本号
 GITHUB_OWNER = "lris117799"
 GITHUB_REPO = "-"  # 仓库名称为 "-"
 
@@ -313,26 +313,41 @@ def apply_update(zip_path: str = "", extract_dir: str = "", restart: bool = True
     if not use_extract_dir and not zip_path:
         return (False, "apply_update 需要 extract_dir 或 zip_path")
 
-    # 检测 zip 包内是否有单一顶层目录（如 klxy/），如果有则进入该目录
+    # 保存原始解压目录（用于清理，顶层目录检测可能修改 extract_dir）
+    cleanup_dir = extract_dir
+
+    # 检测 zip 包内是否有顶层目录（如 klxy/ 或 dist/klxy/）
+    # 通过递归查找 klxy.exe 或 main.py 来确定正确的源目录
     if use_extract_dir:
-        entries = os.listdir(extract_dir)
-        if len(entries) == 1:
-            only_entry = os.path.join(extract_dir, entries[0])
-            if os.path.isdir(only_entry):
-                extract_dir = only_entry
+        def _find_src_dir(d, depth=0):
+            """在目录树中查找包含 klxy.exe 或 main.py 的目录（最多 3 层）"""
+            if depth > 3:
+                return None
+            if os.path.exists(os.path.join(d, "klxy.exe")) or os.path.exists(os.path.join(d, "main.py")):
+                return d
+            try:
+                for entry in os.listdir(d):
+                    sub = os.path.join(d, entry)
+                    if os.path.isdir(sub):
+                        result = _find_src_dir(sub, depth + 1)
+                        if result:
+                            return result
+            except OSError:
+                pass
+            return None
+
+        found = _find_src_dir(extract_dir)
+        if found and found != extract_dir:
+            extract_dir = found
 
     # 构造保留文件集合（绝对路径，规范化）
     preserve_set = _build_user_preserve_set(app_root)
 
-    # 把保留集合序列化为分号分隔的字符串（批处理用）
-    # 由于路径可能含空格、中文、等号等特殊字符，改用文件列表
-    preserve_list_path = os.path.join(tempfile.gettempdir(), "klxy_preserve_list.txt")
-    try:
-        with open(preserve_list_path, "w", encoding="utf-8") as f:
-            for p in sorted(preserve_set):
-                f.write(p + "\n")
-    except Exception as e:
-        return (False, f"写入保留文件列表失败: {e}")
+    # 从 USER_PRESERVE_FILES 提取文件名，用于 robocopy /XF 排除
+    exclude_filenames = set()
+    for rel_path in USER_PRESERVE_FILES:
+        exclude_filenames.add(os.path.basename(rel_path))
+    xf_param = " ".join(sorted(exclude_filenames))
 
     # 构造批处理脚本
     bat_path = os.path.join(tempfile.gettempdir(), "klxy_updater.bat")
@@ -345,6 +360,8 @@ def apply_update(zip_path: str = "", extract_dir: str = "", restart: bool = True
     restart_cmd = ""
     if restart and exe_name:
         restart_cmd = f'start "" "{exe_path}"'
+
+    log_file = os.path.join(app_root, "klxy_update.log")
 
     if use_extract_dir:
         # 新模式：程序内已解压完成，bat 只负责覆盖文件 + 重启
@@ -362,12 +379,24 @@ if not errorlevel 1 (
 )
 
 echo [klxy 更新器] 正在应用更新...
-powershell -NoProfile -Command "$root='{exe_dir}'; $src='{src_dir}'; $preserve=Get-Content '{preserve_list_path}' -ErrorAction SilentlyContinue; $preserveSet=@{{}}; if ($preserve) {{ foreach ($p in $preserve) {{ $pp=$p.Trim(); if ($pp) {{ $preserveSet[$pp]=$true }} }} }}; Get-ChildItem -Path $src -Recurse -File | ForEach-Object {{ $rel=$_.FullName.Substring($src.Length+1); $dest=Join-Path $root $rel; $destNorm=([System.IO.Path]::GetFullPath($dest)).TrimEnd('\\'); if ($preserveSet.ContainsKey($destNorm)) {{ Write-Host ('SKIP: ' + $rel); return }}; $dir=Split-Path $dest -Parent; if (!(Test-Path $dir)) {{ New-Item -ItemType Directory -Path $dir -Force | Out-Null }}; Copy-Item -Path $_.FullName -Destination $dest -Force; Write-Host ('OK: ' + $rel) }}"
+echo === 更新开始 %date% %time% === > "{log_file}"
+echo 源目录: {src_dir} >> "{log_file}"
+echo 目标目录: {exe_dir} >> "{log_file}"
+
+robocopy "{src_dir}" "{exe_dir}" /E /IS /R:1 /W:1 /XF {xf_param} /XD __pycache__ /NJH /NJS /NP >> "{log_file}" 2>&1
+set ROBO_EXIT=%errorlevel%
+
+echo === 更新完成 %date% %time% === >> "{log_file}"
 
 echo [klxy 更新器] 清理临时文件...
-rmdir /S /Q "{src_dir}" 2>nul
-del "{preserve_list_path}" 2>nul
+rmdir /S /Q "{cleanup_dir}" 2>nul
 {f'del "{zip_path}" 2>nul' if zip_path else ''}
+
+if %ROBO_EXIT% GEQ 8 (
+    echo [klxy 更新器] 更新失败！请查看日志: {log_file}
+    pause
+    exit /b 1
+)
 
 echo [klxy 更新器] 更新完成！
 {restart_cmd}
@@ -401,12 +430,24 @@ if errorlevel 1 (
 )
 
 echo [klxy 更新器] 正在应用更新...
-powershell -NoProfile -Command "$root='{exe_dir}'; $preserve=Get-Content '{preserve_list_path}' -ErrorAction SilentlyContinue; $preserveSet=@{{}}; if ($preserve) {{ foreach ($p in $preserve) {{ $pp=$p.Trim(); if ($pp) {{ $preserveSet[$pp]=$true }} }} }}; Get-ChildItem -Path '%TMP_DIR%' -Recurse -File | ForEach-Object {{ $rel=$_.FullName.Substring('%TMP_DIR%'.Length+1); $dest=Join-Path $root $rel; $destNorm=([System.IO.Path]::GetFullPath($dest)).TrimEnd('\\'); if ($preserveSet.ContainsKey($destNorm)) {{ Write-Host ('SKIP: ' + $rel); return }}; $dir=Split-Path $dest -Parent; if (!(Test-Path $dir)) {{ New-Item -ItemType Directory -Path $dir -Force | Out-Null }}; Copy-Item -Path $_.FullName -Destination $dest -Force; Write-Host ('OK: ' + $rel) }}"
+echo === 更新开始 %date% %time% === > "{log_file}"
+echo 源目录: %TMP_DIR% >> "{log_file}"
+echo 目标目录: {exe_dir} >> "{log_file}"
+
+robocopy "%TMP_DIR%" "{exe_dir}" /E /IS /R:1 /W:1 /XF {xf_param} /XD __pycache__ /NJH /NJS /NP >> "{log_file}" 2>&1
+set ROBO_EXIT=%errorlevel%
+
+echo === 更新完成 %date% %time% === >> "{log_file}"
 
 echo [klxy 更新器] 清理临时文件...
 rmdir /S /Q "%TMP_DIR%" 2>nul
-del "{preserve_list_path}" 2>nul
 del "{zip_path}" 2>nul
+
+if %ROBO_EXIT% GEQ 8 (
+    echo [klxy 更新器] 更新失败！请查看日志: {log_file}
+    pause
+    exit /b 1
+)
 
 echo [klxy 更新器] 更新完成！
 {restart_cmd}
