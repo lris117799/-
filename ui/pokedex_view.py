@@ -68,6 +68,7 @@ TYPE_COLORS_RGB = {
     "虫":   (140, 190, 60),
     "地":   (180, 140, 70),
     "幽灵": (115, 60, 200),
+    "幽":   (115, 60, 200),
     "龙":   (90, 70, 230),
     "恶":   (110, 100, 120),
     "机械": (155, 165, 180),
@@ -590,6 +591,10 @@ class SkillDetailDialog(QDialog):
                     for sk in skills.get('stone_skills', []):
                         if sk.get('name', '') == skill_name:
                             found = sk; source = 'stone'; break
+                if not found:
+                    for sk in skills.get('legendary_skills', []):
+                        if sk.get('name', '') == skill_name:
+                            found = sk; source = 'legendary'; break
                 if found:
                     seen_names.add(pname)
                     learners.append({
@@ -669,8 +674,8 @@ class SkillDetailDialog(QDialog):
         layout.addWidget(name_lbl)
 
         # 等级 + 来源 徽章
-        source_labels = {'default': '默认', 'bloodline': '血脉', 'stone': '技能石'}
-        source_colors = {'default': '#5aa05a', 'bloodline': '#b84a7d', 'stone': '#2a8a6a'}
+        source_labels = {'default': '默认', 'bloodline': '血脉', 'stone': '技能石', 'legendary': '传说'}
+        source_colors = {'default': '#5aa05a', 'bloodline': '#b84a7d', 'stone': '#2a8a6a', 'legendary': '#b8860b'}
 
         if level or source:
             badge_row = QHBoxLayout()
@@ -1555,16 +1560,21 @@ class PokemonDetailWidget(ParchmentWidget):
         normal_skills = skills.get('normal_skills', [])
         bloodline_skills = skills.get('bloodline_skills', [])
         stone_skills = skills.get('stone_skills', [])
+        legendary_skills = skills.get('legendary_skills', [])
 
         content_layout.addWidget(self._make_section_title("技能"))
 
-        # Tab 切换
+        # Tab 切换（传说技能页签仅在存在传说技能时显示）
+        tab_defs = [
+            ("精灵技能", normal_skills, 'normal'),
+            ("血脉技能", bloodline_skills, 'bloodline'),
+            ("技能石", stone_skills, 'stone'),
+        ]
+        if legendary_skills:
+            tab_defs.append(("传说技能", legendary_skills, 'legendary'))
+
         tab_row = QHBoxLayout()
         tab_row.setSpacing(8)
-
-        normal_tab_btn = QPushButton(f"精灵技能 ({len(normal_skills)})")
-        bloodline_tab_btn = QPushButton(f"血脉技能 ({len(bloodline_skills)})")
-        stone_tab_btn = QPushButton(f"技能石 ({len(stone_skills)})")
 
         tab_style_default = f"""
             QPushButton {{
@@ -1595,53 +1605,42 @@ class PokemonDetailWidget(ParchmentWidget):
                 outline: none;
             }}
         """
-        for btn in (normal_tab_btn, bloodline_tab_btn, stone_tab_btn):
-            btn.setCheckable(True)
-            btn.setCursor(Qt.PointingHandCursor)
-            btn.setAttribute(Qt.WA_MacShowFocusRect, False)
-            btn.setStyleSheet(tab_style_default)
-            tab_row.addWidget(btn)
+        tab_buttons = []
+        tab_scrolls = []
+        for title, skill_list, kind in tab_defs:
+            tab_btn = QPushButton(f"{title} ({len(skill_list)})")
+            tab_btn.setCheckable(True)
+            tab_btn.setCursor(Qt.PointingHandCursor)
+            tab_btn.setAttribute(Qt.WA_MacShowFocusRect, False)
+            tab_btn.setStyleSheet(tab_style_default)
+            tab_scroll = self._make_skill_scroll(skill_list, kind=kind)
+            tab_scroll.setVisible(False)
+            tab_row.addWidget(tab_btn)
+            tab_buttons.append((tab_btn, tab_scroll))
+            tab_scrolls.append(tab_scroll)
         tab_row.addStretch()
         content_layout.addLayout(tab_row)
 
-        # 三个滚动区
-        normal_scroll = self._make_skill_scroll(normal_skills)
-        bloodline_scroll = self._make_skill_scroll(bloodline_skills, kind='bloodline')
-        stone_scroll = self._make_skill_scroll(stone_skills, kind='stone')
+        # 默认选中第一个非空分组
+        first_btn, first_scroll = tab_buttons[0]
+        first_btn.setChecked(True)
+        first_btn.setStyleSheet(tab_style_active)
+        first_scroll.setVisible(True)
 
-        if normal_skills:
-            normal_scroll.setVisible(True); bloodline_scroll.setVisible(False); stone_scroll.setVisible(False)
-            normal_tab_btn.setChecked(True)
-            normal_tab_btn.setStyleSheet(tab_style_active)
-        elif bloodline_skills:
-            normal_scroll.setVisible(False); bloodline_scroll.setVisible(True); stone_scroll.setVisible(False)
-            bloodline_tab_btn.setChecked(True)
-            bloodline_tab_btn.setStyleSheet(tab_style_active)
-        else:
-            normal_scroll.setVisible(False); bloodline_scroll.setVisible(False); stone_scroll.setVisible(True)
-            stone_tab_btn.setChecked(True)
-            stone_tab_btn.setStyleSheet(tab_style_active)
-
-        def _activate(btn):
-            for b in (normal_tab_btn, bloodline_tab_btn, stone_tab_btn):
-                if b is btn:
-                    b.setStyleSheet(tab_style_active)
+        def _activate(active_btn):
+            for btn, sk_scroll in tab_buttons:
+                if btn is active_btn:
+                    btn.setStyleSheet(tab_style_active)
+                    sk_scroll.setVisible(True)
                 else:
-                    b.setStyleSheet(tab_style_default)
+                    btn.setStyleSheet(tab_style_default)
+                    sk_scroll.setVisible(False)
 
-        normal_tab_btn.clicked.connect(lambda: (
-            normal_scroll.setVisible(True), bloodline_scroll.setVisible(False), stone_scroll.setVisible(False),
-            _activate(normal_tab_btn)))
-        bloodline_tab_btn.clicked.connect(lambda: (
-            normal_scroll.setVisible(False), bloodline_scroll.setVisible(True), stone_scroll.setVisible(False),
-            _activate(bloodline_tab_btn)))
-        stone_tab_btn.clicked.connect(lambda: (
-            normal_scroll.setVisible(False), bloodline_scroll.setVisible(False), stone_scroll.setVisible(True),
-            _activate(stone_tab_btn)))
+        for btn, sk_scroll in tab_buttons:
+            btn.clicked.connect(lambda checked, b=btn: _activate(b))
 
-        content_layout.addWidget(normal_scroll)
-        content_layout.addWidget(bloodline_scroll)
-        content_layout.addWidget(stone_scroll)
+        for sk_scroll in tab_scrolls:
+            content_layout.addWidget(sk_scroll)
 
         content_layout.addStretch()
         scroll.setWidget(content_widget)
@@ -2095,6 +2094,7 @@ class PokemonDetailWidget(ParchmentWidget):
             'normal':    PALETTE['gold_deep'],
             'bloodline': '#b84a7d',
             'stone':     '#2a8a6a',
+            'legendary': PALETTE['leader'],
         }
         side_color = side_colors.get(kind, PALETTE['gold_deep'])
 

@@ -170,13 +170,13 @@ class RoiRecognitionWorker(QObject):
                     # 跳过OCR以节省资源
                     pass
 
-                # 血脉识别：当四叶草铅绘未识别到且血脉检查处于激活状态时，顺便OCR血脉框选区域
+                # 血脉识别：当陨星未识别到且血脉检查处于激活状态时，顺便OCR血脉框选区域
                 bloodline_result = None
                 bloodline_has_text = False
                 bl_checked = False
                 if (should_ocr and
                         self.bloodline_check_active and
-                        "四叶草铅绘" not in recognized_names):
+                        "陨星" not in recognized_names):
                     bl_enabled = self.settings.get("enable_bloodline_recognition", False)
                     bl_roi = self.settings.get("bloodline_roi")
                     if bl_enabled and bl_roi:
