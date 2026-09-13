@@ -6,12 +6,13 @@ import os
 POKEMON_DB_FILE = os.path.join(os.path.dirname(__file__), "pokemon_database.json")
 POKEMON_DB_FILE_S2 = os.path.join(os.path.dirname(__file__), "pokemon_database_s2.json")
 POKEMON_DB_FILE_S3 = os.path.join(os.path.dirname(__file__), "pokemon_database_s3.json")
+POKEMON_DB_FILE_S4 = os.path.join(os.path.dirname(__file__), "pokemon_database_s4.json")
 
 # 用户自定义精灵文件路径
 CUSTOM_POKEMON_FILE = os.path.join(os.path.dirname(__file__), "custom_pokemons.json")
 
 # 当前赛季
-CURRENT_SEASON = "第三赛季"  # "第一赛季" 或 "第二赛季" 或 "第三赛季"
+CURRENT_SEASON = "第四赛季"  # "第一赛季" 或 "第二赛季" 或 "第三赛季" 或 "第四赛季"
 
 def set_current_season(season):
     """设置当前赛季"""
@@ -24,14 +25,20 @@ def get_current_season():
 
 def get_seasons():
     """获取所有赛季列表"""
-    return ["第一赛季", "第二赛季", "第三赛季"]
+    return ["第一赛季", "第二赛季", "第三赛季", "第四赛季"]
 
 def load_pokemon_database(season=None):
     """加载图鉴数据库（支持赛季选择）"""
     if season is None:
         season = CURRENT_SEASON
     
-    if season == "第三赛季" and os.path.exists(POKEMON_DB_FILE_S3):
+    if season == "第四赛季" and os.path.exists(POKEMON_DB_FILE_S4):
+        try:
+            with open(POKEMON_DB_FILE_S4, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except:
+            return []
+    elif season == "第三赛季" and os.path.exists(POKEMON_DB_FILE_S3):
         try:
             with open(POKEMON_DB_FILE_S3, 'r', encoding='utf-8') as f:
                 return json.load(f)

@@ -3343,6 +3343,12 @@ def _build_pokemon_type_cache():
         types = entry.get("types", [])
         if name and name not in _POKEMON_TYPE_CACHE:
             _POKEMON_TYPE_CACHE[name] = types
+    db4 = load_pokemon_database("第四赛季")
+    for entry in db4:
+        name = entry.get("name", "")
+        types = entry.get("types", [])
+        if name and name not in _POKEMON_TYPE_CACHE:
+            _POKEMON_TYPE_CACHE[name] = types
     custom = load_custom_pokemon()
     for entry in custom:
         name = entry.get("name", "")
@@ -3429,7 +3435,7 @@ class MainWindow(QMainWindow):
         self.xt100_detected = False  # 是否检测到xt100
         self.current_battle_lkwg = None  # 当前战斗中的洛克王国精灵名
         self._breakthrough_counted_for_current_battle = False  # 当前战斗是否已计数(防重复)
-        # 血脉识别状态：检测到四叶草铅绘后激活，2秒内识别到血脉关键字则显示对应颜色，否则显示"普通"
+        # 血脉识别状态：检测到陨星后激活，2秒内识别到血脉关键字则显示对应颜色，否则显示"普通"
         self._bloodline_check_active = False
         self._bloodline_check_start_time = 0  # 血脉检查开始时间（time.time()）
         self._bloodline_check_timeout = 2.0  # 血脉检查2秒超时
@@ -3513,7 +3519,7 @@ class MainWindow(QMainWindow):
         # 初始加载数据
         self._load_initial_data()
         
-        # 同步童话事件提示计数
+        # 同步陨星事件提示计数
         active_counter = self.manager.get_active()
         if hasattr(self, 'game_capture') and self.game_capture and active_counter:
             self.game_capture.set_nightmare_count(active_counter.nightmare_count)
@@ -3891,7 +3897,7 @@ class MainWindow(QMainWindow):
             traceback.print_exc()
     
     def _on_floating_nightmare_adjust(self, delta):
-        """处理悬浮窗快捷键调整的童话事件提示计数"""
+        """处理悬浮窗快捷键调整的陨星事件提示计数"""
         try:
             active_counter = self.manager.get_active()
             if not active_counter:
@@ -3926,14 +3932,14 @@ class MainWindow(QMainWindow):
                     icon_id
                 )
 
-            logger.log(f"🔧 手动调整童话事件提示: {old_count} -> {active_counter.nightmare_count} ({'+' if delta > 0 else ''}{delta})")
+            logger.log(f"🔧 手动调整陨星事件提示: {old_count} -> {active_counter.nightmare_count} ({'+' if delta > 0 else ''}{delta})")
         except Exception as e:
             print(f"❌ 处理悬浮窗计数调整错误: {e}")
             import traceback
             traceback.print_exc()
     
     def _on_floating_breakthrough_adjust(self, delta):
-        """处理悬浮窗快捷键调整的童话事件计数（四叶草铅绘）"""
+        """处理悬浮窗快捷键调整的陨星事件计数（陨星）"""
         try:
             active_counter = self.manager.get_active()
             if not active_counter:
@@ -3963,13 +3969,13 @@ class MainWindow(QMainWindow):
                     icon_id
                 )
             
-            logger.log(f"🔧 手动调整童话事件: {old_count} -> {active_counter.count} ({'+' if delta > 0 else ''}{delta})")
+            logger.log(f"🔧 手动调整陨星事件: {old_count} -> {active_counter.count} ({'+' if delta > 0 else ''}{delta})")
             
             # 同步刷新详情视图（计数模式）
             if self.content_stack.currentIndex() == 1:
                 self._refresh_right_panel()
         except Exception as e:
-            print(f"❌ 处理悬浮窗童话事件调整错误: {e}")
+            print(f"❌ 处理悬浮窗陨星事件调整错误: {e}")
             import traceback
             traceback.print_exc()
     
@@ -3993,7 +3999,7 @@ class MainWindow(QMainWindow):
                     icon_id
                 )
                 self.floating_window.update_current_lkwg(self.current_battle_lkwg)
-                # 同步童话事件提示计数
+                # 同步陨星事件提示计数
                 if hasattr(self, 'game_capture') and self.game_capture:
                     self.game_capture.set_nightmare_count(new_counter.nightmare_count)
                 self._refresh_all()
@@ -4074,45 +4080,45 @@ class MainWindow(QMainWindow):
                 # 有有效识别，更新OCR状态
                 self.game_capture.update_ocr_state(has_valid_recognition=True, recognized_names=recognized_names)
             
-            # 处理识别结果 - 新逻辑：基于“四叶草铅绘”和精灵名字的战斗流程
-            if "四叶草铅绘" in recognized_names:
-                # 检测到四叶草铅绘，标记为进入战斗
+            # 处理识别结果 - 新逻辑：基于“陨星”和精灵名字的战斗流程
+            if "陨星" in recognized_names:
+                # 检测到陨星，标记为进入战斗
                 old_battle = self.current_battle_lkwg
-                self.current_battle_lkwg = "四叶草铅绘"
-                self._update_floating_current_lkwg("四叶草铅绘")
+                self.current_battle_lkwg = "陨星"
+                self._update_floating_current_lkwg("陨星")
 
                 
 
                 # 同步状态到子线程
                 if hasattr(self, 'screenshot_worker') and self.screenshot_worker is not None:
-                    self.screenshot_worker.current_battle_lkwg = "四叶草铅绘"
+                    self.screenshot_worker.current_battle_lkwg = "陨星"
                 
                 # 同步状态到ROI worker
                 if hasattr(self, 'roi_worker') and self.roi_worker is not None:
-                    self.roi_worker.set_current_battle("四叶草铅绘")
+                    self.roi_worker.set_current_battle("陨星")
                 
-                if old_battle != "四叶草铅绘":
-                    logger.log(f"✅ 检测到四叶草铅绘，进入战斗")
-                    # 激活血脉识别检查（配合童话事件使用）
+                if old_battle != "陨星":
+                    logger.log(f"✅ 检测到陨星，进入战斗")
+                    # 激活血脉识别检查（配合陨星事件使用）
                     bl_enabled = self.settings_manager.get("enable_bloodline_recognition", False)
                     bl_roi = self.settings_manager.get("bloodline_roi")
                     if bl_enabled and bl_roi:
                         self._set_bloodline_check_active(True)
                 
-                # 触发童话事件计数（原污染击破）
+                # 触发陨星事件计数（原污染击破）
                 active_counter = self.manager.get_active()
                 if active_counter:
                     # 防重复计数：只有当前战斗未计数时才触发
                     if not self._breakthrough_counted_for_current_battle:
                         self._trigger_lkwg_breakthrough(active_counter)
                         self._breakthrough_counted_for_current_battle = True
-                        logger.log(f"✓ 童话事件: {active_counter.pokemon_name} | 计数: {active_counter.count}/{active_counter.target}")
+                        logger.log(f"✓ 陨星事件: {active_counter.pokemon_name} | 计数: {active_counter.count}/{active_counter.target}")
                     else:
                         logger.log(f"⏭️ 跳过重复计数: {active_counter.pokemon_name}")
             elif recognized_names:
-                # 识别到其他精灵名字（四叶草铅绘消失后）
+                # 识别到其他精灵名字（陨星消失后）
                 for base_name in recognized_names:
-                    if base_name in self.game_capture.evolution_manager.evolution_chains and base_name != "四叶草铅绘":
+                    if base_name in self.game_capture.evolution_manager.evolution_chains and base_name != "陨星":
                         # 保持战斗状态，显示精灵名
                         old_battle = self.current_battle_lkwg
                         self.current_battle_lkwg = base_name
@@ -4126,10 +4132,10 @@ class MainWindow(QMainWindow):
                         if hasattr(self, 'roi_worker') and self.roi_worker is not None:
                             self.roi_worker.set_current_battle(base_name)
                         
-                        # 记录童话事件期间出现的精灵
+                        # 记录陨星事件期间出现的精灵
                         active_counter = self.manager.get_active()
-                        if active_counter and self.current_battle_lkwg == "四叶草铅绘" or old_battle == "四叶草铅绘":
-                            # 在童话事件期间，记录出现的精灵
+                        if active_counter and self.current_battle_lkwg == "陨星" or old_battle == "陨星":
+                            # 在陨星事件期间，记录出现的精灵
                             if base_name not in active_counter.battle_pokemon_stats:
                                 active_counter.battle_pokemon_stats[base_name] = 0
                             active_counter.battle_pokemon_stats[base_name] += 1
@@ -4140,11 +4146,11 @@ class MainWindow(QMainWindow):
             else:
                 # 没有识别到任何名字时，检查是否需要清空状态
                 if self.current_battle_lkwg:
-                    # 区分“四叶草铅绘”和“精灵名字”两种情况
-                    if self.current_battle_lkwg == "四叶草铅绘":
-                        # 四叶草铅绘消失，进入6秒等待期
+                    # 区分“陨星”和“精灵名字”两种情况
+                    if self.current_battle_lkwg == "陨星":
+                        # 陨星消失，进入6秒等待期
                         if not should_ocr and ocr_reason == "timeout":
-                            logger.log(f"⏱️ OCR超时，四叶草铅绘消失后未检测到精灵，判定战斗结束")
+                            logger.log(f"⏱️ OCR超时，陨星消失后未检测到精灵，判定战斗结束")
                             self.current_battle_lkwg = None
                             self._update_floating_current_lkwg(None)
                             
@@ -4200,8 +4206,8 @@ class MainWindow(QMainWindow):
                             self.game_capture.last_valid_recognition_time = 0
 
             # 血脉识别结果处理
-            # 逻辑：四叶草铅绘检测到时激活检查（但不开始计时）；
-            #       四叶草铅绘消失后子线程开始OCR血脉区域，此时开始2秒计时；
+            # 逻辑：陨星检测到时激活检查（但不开始计时）；
+            #       陨星消失后子线程开始OCR血脉区域，此时开始2秒计时；
             #       2秒内识别到 奇异/污染/混乱/异色 显示对应颜色并立即停止OCR；
             #       2秒超时未识别到关键字，显示"普通"并立即停止OCR；
             #       血脉显示会一直保留在悬浮窗上直到战斗结束。
@@ -4218,7 +4224,7 @@ class MainWindow(QMainWindow):
                     # 首次执行血脉OCR时开始计时
                     if self._bloodline_check_start_time == 0:
                         self._bloodline_check_start_time = time.time()
-                        logger.log(f"🩸 四叶草铅绘消失，开始2秒血脉识别计时")
+                        logger.log(f"🩸 陨星消失，开始2秒血脉识别计时")
                     elapsed = time.time() - self._bloodline_check_start_time
                     if elapsed >= self._bloodline_check_timeout:
                         # 2秒超时，显示"普通"并立即停止OCR
@@ -4258,7 +4264,7 @@ class MainWindow(QMainWindow):
             return
         self._bloodline_check_active = active
         if active:
-            # 激活时重置开始时间（等待四叶草铅绘消失后才开始计时）
+            # 激活时重置开始时间（等待陨星消失后才开始计时）
             self._bloodline_check_start_time = 0
             # 激活新事件时清空上一次的血脉显示
             if hasattr(self, 'floating_window') and self.floating_window is not None:
@@ -4466,8 +4472,8 @@ class MainWindow(QMainWindow):
         return None
     
     def _trigger_lkwg_breakthrough(self, counter):
-        """触发洛克王国精灵童话事件（原污染击破）"""
-        counter.count += 1  # 童话事件次数+1
+        """触发洛克王国精灵陨星事件（原污染击破）"""
+        counter.count += 1  # 陨星事件次数+1
         
         # 检查是否需要自动保存（基于时间间隔）
         auto_save_interval = self.settings_manager.get("auto_save_interval", 5)
@@ -5174,8 +5180,8 @@ class MainWindow(QMainWindow):
         title_layout.addWidget(season_label)
         
         self.counter_season_combo = TriangleComboBox()
-        self.counter_season_combo.addItems(["第一赛季", "第二赛季", "第三赛季"])
-        self.counter_season_combo.setCurrentText("第三赛季")
+        self.counter_season_combo.addItems(["第一赛季", "第二赛季", "第三赛季", "第四赛季"])
+        self.counter_season_combo.setCurrentText("第四赛季")
         self.counter_season_combo.setFixedWidth(120)
         self.counter_season_combo.setStyleSheet("""
             QComboBox {
@@ -5228,7 +5234,7 @@ class MainWindow(QMainWindow):
         """根据精灵列表动态生成卡片（只显示图鉴中的精灵，不显示自定义精灵）"""
         # 更新全局赛季设置
         from core.pokemon_data import set_current_season
-        season = self.counter_season_combo.currentText() if hasattr(self, 'counter_season_combo') else "第三赛季"
+        season = self.counter_season_combo.currentText() if hasattr(self, 'counter_season_combo') else "第四赛季"
         set_current_season(season)
         
         # 清空网格
@@ -5308,8 +5314,8 @@ class MainWindow(QMainWindow):
         
         # 如果icon_id未加载，尝试从ys文件夹加载（支持赛季目录）
         if not image_loaded:
-            # 获取当前选择的赛季（优先级：计数器界面 > 图鉴界面 > 默认第三赛季）
-            season = "第三赛季"
+            # 获取当前选择的赛季（优先级：计数器界面 > 图鉴界面 > 默认第四赛季）
+            season = "第四赛季"
             if hasattr(self, 'counter_season_combo'):
                 season = self.counter_season_combo.currentText()
             elif hasattr(self, 'season_combo'):
@@ -5588,7 +5594,7 @@ class MainWindow(QMainWindow):
         stat1_layout = QVBoxLayout(stat1)
         stat1_layout.setContentsMargins(12, 12, 12, 12)
 
-        stat1_label = QLabel("童话事件次数")
+        stat1_label = QLabel("陨星事件次数")
         stat1_label.setStyleSheet("color: #c084fc; font-size: 11px;")
         stat1_layout.addWidget(stat1_label)
 
@@ -5998,13 +6004,13 @@ class MainWindow(QMainWindow):
         target_layout.addWidget(self.edit_target)
         settings_layout.addWidget(target_group)
         
-        # 童话事件次数输入框
+        # 陨星事件次数输入框
         wai_group = QWidget()
         wai_layout = QVBoxLayout(wai_group)
         wai_layout.setContentsMargins(0, 0, 0, 0)
         wai_layout.setSpacing(4)
         
-        wai_label = QLabel("童话事件次数")
+        wai_label = QLabel("陨星事件次数")
         wai_label.setStyleSheet("color: #71717a; font-size: 12px;")
         wai_layout.addWidget(wai_label)
         
@@ -6246,8 +6252,8 @@ class MainWindow(QMainWindow):
         
         # 如果icon_id未加载，尝试从ys文件夹加载（支持赛季目录）
         if not image_loaded:
-            # 获取当前选择的赛季（优先级：计数器界面 > 图鉴界面 > 默认第三赛季）
-            season = "第三赛季"
+            # 获取当前选择的赛季（优先级：计数器界面 > 图鉴界面 > 默认第四赛季）
+            season = "第四赛季"
             if hasattr(self, 'counter_season_combo'):
                 season = self.counter_season_combo.currentText()
             elif hasattr(self, 'season_combo'):
@@ -6258,7 +6264,7 @@ class MainWindow(QMainWindow):
             
             # 如果当前赛季没有，尝试从其他赛季目录加载
             if not os.path.exists(image_path):
-                for s in ["第一赛季", "第二赛季", "第三赛季"]:
+                for s in ["第一赛季", "第二赛季", "第三赛季", "第四赛季"]:
                     if s == season:
                         continue
                     other_dir = os.path.join(self._base_dir, "image", "ys", s)
@@ -6447,8 +6453,8 @@ class MainWindow(QMainWindow):
             
             # 如果icon_id未加载，尝试从ys文件夹加载（支持赛季目录）
             if not image_loaded:
-                # 获取当前选择的赛季（优先级：计数器界面 > 图鉴界面 > 默认第三赛季）
-                season = "第三赛季"
+                # 获取当前选择的赛季（优先级：计数器界面 > 图鉴界面 > 默认第四赛季）
+                season = "第四赛季"
                 if hasattr(self, 'counter_season_combo'):
                     season = self.counter_season_combo.currentText()
                 elif hasattr(self, 'season_combo'):
@@ -6503,7 +6509,7 @@ class MainWindow(QMainWindow):
                     color: white;
                 """)
             
-            # 童话事件次数显示 count
+            # 陨星事件次数显示 count
             self.detail_count.setText(str(active.count))
             # 保底剩余显示 target - count
             remaining = active.target - active.count
@@ -6774,7 +6780,7 @@ class MainWindow(QMainWindow):
         self.manager.set_active(counter_id)
         self.manager.save_counters()  # 切换计数器后保存
         
-        # 同步童话事件提示计数
+        # 同步陨星事件提示计数
         active_counter = self.manager.get_active()
         if hasattr(self, 'game_capture') and self.game_capture and active_counter:
             self.game_capture.set_nightmare_count(active_counter.nightmare_count)
@@ -6790,7 +6796,7 @@ class MainWindow(QMainWindow):
             self.manager.set_active(counter_id)
             self.manager.save_counters()  # 切换计数器后保存
             
-            # 同步童话事件提示计数
+            # 同步陨星事件提示计数
             active_counter = self.manager.get_active()
             if hasattr(self, 'game_capture') and self.game_capture and active_counter:
                 self.game_capture.set_nightmare_count(active_counter.nightmare_count)
@@ -6808,7 +6814,7 @@ class MainWindow(QMainWindow):
         rename_action = menu.addAction("重命名")
         delete_action = menu.addAction("删除")
         pin_action = menu.addAction("置顶")
-        export_action = menu.addAction("导出童话事件统计")
+        export_action = menu.addAction("导出陨星事件统计")
         action = menu.exec(self.counter_list_widget.mapToGlobal(pos))
         if action == rename_action:
             self.rename_counter(counter_id)
@@ -6853,7 +6859,7 @@ class MainWindow(QMainWindow):
         self.manager.delete_counter(counter_id)
         self.manager.save_counters()  # 删除后立即保存
         
-        # 重置童话事件提示计数
+        # 重置陨星事件提示计数
         if hasattr(self, 'game_capture') and self.game_capture:
             self.game_capture.reset_nightmare_count()
         
@@ -6865,7 +6871,7 @@ class MainWindow(QMainWindow):
         self._refresh_all()
     
     def export_battle_stats(self, counter_id):
-        """导出童话事件期间精灵统计（支持多种格式）"""
+        """导出陨星事件期间精灵统计（支持多种格式）"""
         from PySide6.QtWidgets import (QFileDialog, QDialog, QVBoxLayout, QHBoxLayout, 
                                       QCheckBox, QDialogButtonBox, QLabel, QGroupBox, 
                                       QPushButton)
@@ -6878,7 +6884,7 @@ class MainWindow(QMainWindow):
         
         # 检查是否有统计数据
         if not counter.battle_pokemon_stats:
-            QMessageBox.information(self, "提示", "当前没有童话事件期间的精灵统计数据")
+            QMessageBox.information(self, "提示", "当前没有陨星事件期间的精灵统计数据")
             return
         
         # 加载精灵数据库（优先使用完整数据库）
@@ -6944,7 +6950,7 @@ class MainWindow(QMainWindow):
         
         # 创建导出格式选择对话框
         dialog = QDialog(self)
-        dialog.setWindowTitle("导出童话事件统计")
+        dialog.setWindowTitle("导出陨星事件统计")
         dialog.setFixedSize(500, 320)
         
         layout = QVBoxLayout(dialog)
@@ -7017,7 +7023,7 @@ class MainWindow(QMainWindow):
             return
         
         # 选择保存路径（使用QFileDialog实例设置defaultSuffix，避免Win11将输入解释为目录）
-        dlg = QFileDialog(self, "选择保存位置", f"{counter.pokemon_name}_童话事件统计")
+        dlg = QFileDialog(self, "选择保存位置", f"{counter.pokemon_name}_陨星事件统计")
         dlg.setAcceptMode(QFileDialog.AcceptSave)
         dlg.setDefaultSuffix("html")
         dlg.setFileMode(QFileDialog.AnyFile)
@@ -7034,7 +7040,7 @@ class MainWindow(QMainWindow):
         # 检查路径是否以目录分隔符结尾（表示Qt将其解释为目录）
         if base_path and (base_path.endswith('/') or base_path.endswith('\\')):
             # 如果被解释为目录，使用默认文件名
-            base_path = os.path.join(base_path, f"{counter.pokemon_name}_童话事件统计")
+            base_path = os.path.join(base_path, f"{counter.pokemon_name}_陨星事件统计")
         
         try:
             # 计算总次数
@@ -7090,7 +7096,7 @@ class MainWindow(QMainWindow):
                 QMessageBox.information(
                     self,
                     "导出成功",
-                    f"童话事件统计已导出到:\n{chr(10).join(exported_files)}\n\n共统计 {len(pokemon_info)} 种精灵，{total_count} 次出现"
+                    f"陨星事件统计已导出到:\n{chr(10).join(exported_files)}\n\n共统计 {len(pokemon_info)} 种精灵，{total_count} 次出现"
                 )
             
         except Exception as e:
@@ -7111,13 +7117,13 @@ class MainWindow(QMainWindow):
         try:
             content = []
             content.append("=" * 60)
-            content.append("童话事件统计报告")
+            content.append("陨星事件统计报告")
             content.append("=" * 60)
             content.append("")
             content.append(f"计数器名称: {counter.counter_name}")
             content.append(f"精灵名称: {counter.pokemon_name}")
             content.append(f"属性: {counter.type}")
-            content.append(f"童话事件次数: {counter.count}")
+            content.append(f"陨星事件次数: {counter.count}")
             content.append(f"保底上限: {counter.target}")
             content.append("")
             content.append("-" * 60)
@@ -7595,7 +7601,7 @@ class MainWindow(QMainWindow):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>童话事件统计 - {counter.pokemon_name}</title>
+    <title>陨星事件统计 - {counter.pokemon_name}</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
     <style>
         * {{
@@ -7737,11 +7743,11 @@ class MainWindow(QMainWindow):
 </head>
 <body>
     <div class="container">
-        <h1>{counter.pokemon_name} - 童话事件统计报告</h1>
+        <h1>{counter.pokemon_name} - 陨星事件统计报告</h1>
         
         <div class="stats-header">
             <div class="stat-card">
-                <h3>童话事件次数</h3>
+                <h3>陨星事件次数</h3>
                 <div class="value">{counter.count}</div>
             </div>
             <div class="stat-card">
@@ -8152,7 +8158,7 @@ class MainWindow(QMainWindow):
         reply = QMessageBox.question(
             self,
             "确认记录",
-            f"确定要记录【{active.pokemon_name}】的本次出闪吗？\n当前童话事件计数: {active.count}",
+            f"确定要记录【{active.pokemon_name}】的本次出闪吗？\n当前陨星事件计数: {active.count}",
             QMessageBox.Yes | QMessageBox.No,
             QMessageBox.No
         )
@@ -8178,8 +8184,8 @@ class MainWindow(QMainWindow):
         
         if reply == QMessageBox.Yes:
             active.count = 0
-            active.nightmare_count = 0  # 清空童话事件提示计数
-            active.battle_pokemon_stats = {}  # 清空童话事件精灵统计
+            active.nightmare_count = 0  # 清空陨星事件提示计数
+            active.battle_pokemon_stats = {}  # 清空陨星事件精灵统计
             active.breakthrough_notified = False  # 重置保底通知标记
             # 同步重置 game_capture 的 nightmare_detected_count
             if hasattr(self, 'game_capture') and self.game_capture:
@@ -8417,7 +8423,7 @@ class MainWindow(QMainWindow):
             try:
                 from core.update_manager import CURRENT_VERSION
             except Exception:
-                CURRENT_VERSION = "4.6.13"
+                CURRENT_VERSION = "4.7.0"
             self.latest_version_label.setText(f"✅ 已是最新版本 v{CURRENT_VERSION}")
             self.latest_version_label.setStyleSheet("color: #10b981; font-size: 13px;")
             return
@@ -8522,7 +8528,7 @@ class MainWindow(QMainWindow):
             return
         
         # 构建统计信息文本
-        info_text = "📊 全局童话事件统计\n\n"
+        info_text = "📊 全局陨星事件统计\n\n"
         total = 0
         for name, count in sorted(stats.items(), key=lambda x: x[1], reverse=True):
             info_text += f"{name}: {count} 次\n"
@@ -8926,7 +8932,7 @@ class MainWindow(QMainWindow):
             reply = QMessageBox.question(
                 self,
                 "同步数据",
-                f"检测到【{name}】已有 {global_count} 次童话事件记录。\n\n"
+                f"检测到【{name}】已有 {global_count} 次陨星事件记录。\n\n"
                 f"是否将这些记录同步到新创建的计数器？",
                 QMessageBox.Yes | QMessageBox.No,
                 QMessageBox.Yes
@@ -8963,7 +8969,7 @@ class MainWindow(QMainWindow):
         
         self.manager.save_counters()  # 添加后立即保存
         
-        # 重置童话事件提示计数
+        # 重置陨星事件提示计数
         if hasattr(self, 'game_capture') and self.game_capture:
             self.game_capture.set_nightmare_count(0)
             if counter:
@@ -8996,7 +9002,7 @@ class MainWindow(QMainWindow):
                 counter.target = target_val
             self.manager.save_counters()  # 添加后立即保存
             
-            # 重置童话事件提示计数
+            # 重置陨星事件提示计数
             if hasattr(self, 'game_capture') and self.game_capture:
                 self.game_capture.set_nightmare_count(0)
                 if counter:
@@ -10076,7 +10082,7 @@ class MainWindow(QMainWindow):
             [
                 ("识别间隔", "两次识别之间的时间间隔（100-5000ms），间隔越小识别越频繁但CPU占用越高", self.recognition_interval_spin),
                 ("nl识别置信度", "nl 图标的识别阈值，越高越准确", self.confidence_xt_spin),
-                ("童话事件置信度", "童话事件模板的识别阈值，越高越准确", self.confidence_pollution_spin),
+                ("陨星事件置信度", "陨星事件模板的识别阈值，越高越准确", self.confidence_pollution_spin),
                 ("OCR文字置信度", "OCR文字识别的置信度阈值，越高越严格", self.ocr_confidence_spin)
             ]
         )
@@ -10235,7 +10241,7 @@ class MainWindow(QMainWindow):
             "📊 全局追踪设置",
             [
                 ("启用全局追踪", 
-                 "记录所有检测到的童话事件，即使未创建对应计数器", 
+                 "记录所有检测到的陨星事件，即使未创建对应计数器", 
                  self.global_tracking_switch)
             ]
         )
@@ -10425,7 +10431,7 @@ class MainWindow(QMainWindow):
         )
         content_layout.addWidget(roi_section)
 
-        # 血脉识别设置（配合童话事件使用）
+        # 血脉识别设置（配合陨星事件使用）
         bloodline_section = QWidget()
         bloodline_section_layout = QVBoxLayout(bloodline_section)
         bloodline_section_layout.setContentsMargins(0, 0, 0, 0)
@@ -10494,7 +10500,7 @@ class MainWindow(QMainWindow):
         """)
         bloodline_select_btn.clicked.connect(self.on_bloodline_select)
 
-        bloodline_info = QLabel("框选血脉识别区域，配合童话事件自动识别 奇异/污染/混乱/异色 血脉（为了流畅，最好只框选提示区域，而非整个屏幕）")
+        bloodline_info = QLabel("框选血脉识别区域，配合陨星事件自动识别 奇异/污染/混乱/异色 血脉（为了流畅，最好只框选提示区域，而非整个屏幕）")
         bloodline_info.setStyleSheet("color: #71717a; font-size: 13px;")
         bloodline_info.setWordWrap(True)
 
@@ -10540,12 +10546,12 @@ class MainWindow(QMainWindow):
         hotkey_functions = [
             ("toggle_passthrough", "切换鼠标穿透（抓宠）", "Ctrl + N"),
             ("map_toggle_passthrough", "切换鼠标穿透（地图）", "Alt + M"),
-            ("count_plus", "童话事件 +1", "+"),
-            ("count_minus", "童话事件 -1", "-"),
+            ("count_plus", "陨星事件 +1", "+"),
+            ("count_minus", "陨星事件 -1", "-"),
             ("counter_prev", "上一个计数器", "["),
             ("counter_next", "下一个计数器", "]"),
-            ("nightmare_plus", "童话提示 +1", "》"),
-            ("nightmare_minus", "童话提示 -1", "《"),
+            ("nightmare_plus", "陨星提示 +1", "》"),
+            ("nightmare_minus", "陨星提示 -1", "《"),
         ]
 
         for i, (hk_id, func_name, default_display) in enumerate(hotkey_functions):
@@ -10660,7 +10666,7 @@ class MainWindow(QMainWindow):
         try:
             from core.update_manager import CURRENT_VERSION
         except Exception:
-            CURRENT_VERSION = "4.6.13"
+            CURRENT_VERSION = "4.7.0"
 
         version_section = QWidget()
         version_section_layout = QVBoxLayout(version_section)
@@ -11496,7 +11502,7 @@ class MainWindow(QMainWindow):
         prob_title.setStyleSheet("color: #e4e4e7; font-size: 16px; font-weight: 600;")
         prob_info_layout.addWidget(prob_title)
         
-        prob_desc = QLabel("用于计算童话事件概率的基础值（百分比）")
+        prob_desc = QLabel("用于计算陨星事件概率的基础值（百分比）")
         prob_desc.setStyleSheet("color: #71717a; font-size: 13px;")
         prob_info_layout.addWidget(prob_desc)
         
@@ -11840,8 +11846,8 @@ class MainWindow(QMainWindow):
         filter_layout.addWidget(season_label)
         
         self.season_combo = TriangleComboBox()
-        self.season_combo.addItems(["第一赛季", "第二赛季", "第三赛季"])
-        self.season_combo.setCurrentText("第三赛季")
+        self.season_combo.addItems(["第一赛季", "第二赛季", "第三赛季", "第四赛季"])
+        self.season_combo.setCurrentText("第四赛季")
         self.season_combo.setFixedWidth(120)
         self.season_combo.setStyleSheet("""
             QComboBox {
@@ -12143,8 +12149,8 @@ class MainWindow(QMainWindow):
                 image_dir = os.path.join(self._base_dir, "image", "ys", season)
                 image_path = os.path.join(image_dir, f"{pokemon_name}.png")
             else:
-                # 计数器界面可能没有season_combo，直接从第三赛季加载
-                image_dir = os.path.join(self._base_dir, "image", "ys", "第三赛季")
+                # 计数器界面可能没有season_combo，直接从第四赛季加载
+                image_dir = os.path.join(self._base_dir, "image", "ys", "第四赛季")
                 image_path = os.path.join(image_dir, f"{pokemon_name}.png")
             
             if os.path.exists(image_path):
@@ -12528,7 +12534,7 @@ class MainWindow(QMainWindow):
         
         counter_name = f"{name}计数器"
         counter = self.manager.add_counter(name, counter_name, type_)
-        # 重置童话事件提示计数
+        # 重置陨星事件提示计数
         if hasattr(self, 'game_capture') and self.game_capture:
             self.game_capture.set_nightmare_count(0)
         if counter:
@@ -12588,7 +12594,7 @@ class MainWindow(QMainWindow):
             
             self.manager.add_counter(name, f"{name}计数器", type_, is_custom=True)
             self.manager.save_counters()  # 添加后立即保存
-            # 重置童话事件提示计数
+            # 重置陨星事件提示计数
             if hasattr(self, 'game_capture') and self.game_capture:
                 self.game_capture.set_nightmare_count(0)
             self.content_stack.setCurrentIndex(1)
@@ -12665,7 +12671,7 @@ class MainWindow(QMainWindow):
         # 第四步：创建计数器
         self.manager.add_counter(name, f"{name}计数器", type_str, is_custom=True)
         self.manager.save_counters()
-        # 重置童话事件提示计数
+        # 重置陨星事件提示计数
         if hasattr(self, 'game_capture') and self.game_capture:
             self.game_capture.set_nightmare_count(0)
         self.content_stack.setCurrentIndex(1)
@@ -14623,7 +14629,7 @@ class MainWindow(QMainWindow):
     def _get_pokemon_image_path(self, pokemon_name):
         """获取精灵图片路径（支持赛季目录）"""
         # 先尝试从当前赛季目录加载
-        season = self.season_combo.currentText() if hasattr(self, 'season_combo') else "第三赛季"
+        season = self.season_combo.currentText() if hasattr(self, 'season_combo') else "第四赛季"
         season_dir = os.path.join(self._base_dir, "image", "ys", season)
         image_path = os.path.join(season_dir, f"{pokemon_name}.png")
         if os.path.exists(image_path):

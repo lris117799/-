@@ -18,7 +18,7 @@ class SettingsManager:
             # 识别设置
         "recognition_interval": 500,
         "recognition_confidence": 0.7,  # nl 和其他识别用的置信度
-        "confidence_pollution": 0.75,  # 童话事件用的置信度
+        "confidence_pollution": 0.75,  # 陨星事件用的置信度
         "ocr_confidence": 0.5,  # OCR文字识别置信度阈值
         "enable_background_recognition": True,
             
@@ -99,7 +99,7 @@ class SettingsManager:
                     loaded["enable_bloodline_recognition"] = True
                     loaded["settings_version"] = 1
                 if old_version < 2:
-                    # 童话事件置信度阈值从 0.6 提升到 0.75（减少误识别）
+                    # 陨星事件置信度阈值从 0.6 提升到 0.75（减少误识别）
                     loaded["confidence_pollution"] = 0.75
                     loaded["settings_version"] = 2
                 settings.update(loaded)

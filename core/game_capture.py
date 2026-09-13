@@ -51,7 +51,7 @@ class GameCapture:
         self.evolution_manager = EvolutionManager()
         self.pokemon_names = self._load_pokemon_names()
         
-        # 童话事件检测状态
+        # 陨星事件检测状态
         self.nightmare_detected_count = 0
         self.last_nightmare_time = 0
         self.nightmare_cooldown = 5  # 5秒冷却
@@ -71,10 +71,10 @@ class GameCapture:
         self.nl_trigger_time = 0  # nl触发时间（用于2秒计时）
         self.last_valid_recognition_time = 0  # 最后一次识别到有效文本的时间
         self.ocr_timeout = 6.0  # 6秒超时（战斗进行中）
-        self.nl_trigger_timeout = 2.0  # 2秒触发超时（nl检测到后等待四叶草铅绘）
+        self.nl_trigger_timeout = 2.0  # 2秒触发超时（nl检测到后等待陨星）
         self.nl_was_detected = False  # nl是否曾经被检测到（用于防止重复触发）
-        self.nl_detection_failed = False  # nl触发是否失败（2秒内未检测到四叶草铅绘）
-        self.battle_started = False  # 战斗是否已正式开始（检测到四叶草铅绘后）
+        self.nl_detection_failed = False  # nl触发是否失败（2秒内未检测到陨星）
+        self.battle_started = False  # 战斗是否已正式开始（检测到陨星后）
         
         # 缓存模板图片（避免重复加载）
         self.nightmare_template = None  # nightmare_template模板
@@ -126,7 +126,7 @@ class GameCapture:
                 self.nightmare_template = self.nightmare_template_original.copy()
                 logger.log(f"✅ 已缓存nightmare_template.png模板 (原始尺寸: {w}x{h})")
         
-        # 加载nl.png - 童话事件触发模板
+        # 加载nl.png - 陨星事件触发模板
         nl_path = os.path.join(image_dir, "nl.png")
         if os.path.exists(nl_path):
             self.nl_template_original = _cv2_imread(nl_path, cv2.IMREAD_COLOR)
@@ -777,9 +777,9 @@ class GameCapture:
             if text_len < 2:
                 continue
             
-            # 特殊处理："四叶草铅绘"直接通过，不经过进化链匹配
-            if text_clean == "四叶草铅绘":
-                matched.append("四叶草铅绘")
+            # 特殊处理："陨星"直接通过，不经过进化链匹配
+            if text_clean == "陨星":
+                matched.append("陨星")
                 continue
             
             # 优先检查缓存
@@ -944,7 +944,7 @@ class GameCapture:
                 if current_time - self.last_nightmare_time >= self.nightmare_cooldown:
                     self.nightmare_detected_count += 1
                     self.last_nightmare_time = current_time
-                    logger.log(f"✅ 检测到nightmare_template(缓存)，童话事件数: {self.nightmare_detected_count}")
+                    logger.log(f"✅ 检测到nightmare_template(缓存)，陨星事件数: {self.nightmare_detected_count}")
                 else:
                     remaining = self.nightmare_cooldown - (current_time - self.last_nightmare_time)
                     logger.log(f"⏳ nightmare_template在冷却中，剩余{remaining:.1f}秒")
@@ -999,7 +999,7 @@ class GameCapture:
                 if current_time - self.last_nightmare_time >= self.nightmare_cooldown:
                     self.nightmare_detected_count += 1
                     self.last_nightmare_time = current_time
-                    logger.log(f"✅ 检测到nightmare_template: 缩放={scale}x, 童话事件数: {self.nightmare_detected_count}")
+                    logger.log(f"✅ 检测到nightmare_template: 缩放={scale}x, 陨星事件数: {self.nightmare_detected_count}")
                 # 冷却中不输出日志,避免刷屏
                 break
             
@@ -1017,18 +1017,18 @@ class GameCapture:
         return detected, self.nightmare_detected_count
 
     def reset_nightmare_count(self):
-        """重置童话事件提示计数"""
+        """重置陨星事件提示计数"""
         self.nightmare_detected_count = 0
-        logger.log(f"🔄 童话事件提示计数已重置为 0")
+        logger.log(f"🔄 陨星事件提示计数已重置为 0")
     
     def set_nightmare_count(self, count):
-        """设置童话事件提示计数"""
+        """设置陨星事件提示计数"""
         self.nightmare_detected_count = max(0, count)
-        logger.log(f"🔄 童话事件提示计数已设置为 {self.nightmare_detected_count}")
+        logger.log(f"🔄 陨星事件提示计数已设置为 {self.nightmare_detected_count}")
     
     def detect_nl_trigger(self, image=None):
         """
-        检测是否出现nl.png模板（童话事件触发标志，带多尺度缩放和智能缓存）
+        检测是否出现nl.png模板（陨星事件触发标志，带多尺度缩放和智能缓存）
         :param image: 截图图像，如果为None则自动捕获
         :return: True/False
         """
@@ -1167,7 +1167,7 @@ class GameCapture:
                     self.last_valid_recognition_time = current_time  # 设置初始时间，用于超时判断
                     self.battle_started = False  # 战斗尚未开始
                     self.nl_detection_failed = False
-                    logger.log("🚀 检测到nl模板，启动OCR，等待2秒内检测四叶草铅绘")
+                    logger.log("🚀 检测到nl模板，启动OCR，等待2秒内检测陨星")
                     return True, "nl_triggered"
                 else:
                     # nl已被检测过但尚未消失，不再重复触发
@@ -1186,28 +1186,28 @@ class GameCapture:
         current_time = time.time()
         
         if self.ocr_enabled:
-            # 阶段1：nl触发后2秒内必须检测到“四叶草铅绘”
+            # 阶段1：nl触发后2秒内必须检测到“陨星”
             if not self.battle_started and self.nl_trigger_time > 0:
                 elapsed_since_nl = current_time - self.nl_trigger_time
                 
-                # 检查是否已经检测到四叶草铅绘
-                has_lucky_box = recognized_names and "四叶草铅绘" in recognized_names
+                # 检查是否已经检测到陨星
+                has_lucky_box = recognized_names and "陨星" in recognized_names
                 
                 if has_lucky_box:
-                    # 检测到四叶草铅绘，战斗正式开始
-                    logger.log("✅ nl触发后检测到四叶草铅绘，战斗开始")
+                    # 检测到陨星，战斗正式开始
+                    logger.log("✅ nl触发后检测到陨星，战斗开始")
                     self.battle_started = True
                     self.battle_start_time = current_time  # 重置计时器，用于6秒超时
                     self.last_valid_recognition_time = current_time
                 elif elapsed_since_nl > self.nl_trigger_timeout:
-                    # 2秒内未检测到四叶草铅绘，关闭OCR并标记失败
+                    # 2秒内未检测到陨星，关闭OCR并标记失败
                     self.ocr_enabled = False
                     self.nl_trigger_time = 0
                     self.battle_start_time = 0
                     self.last_valid_recognition_time = 0
                     self.nl_detection_failed = True  # 标记为失败，直到nl消失才重置
                     self.nl_was_detected = False  # 重置nl触发状态，允许下次触发
-                    logger.log(f"⏱️ nl触发后{elapsed_since_nl:.1f}秒内未检测到四叶草铅绘，关闭OCR，等待nl消失")
+                    logger.log(f"⏱️ nl触发后{elapsed_since_nl:.1f}秒内未检测到陨星，关闭OCR，等待nl消失")
             
             # 阶段2：战斗已正式开始，使用6秒超时判定
             elif self.battle_started:
@@ -1284,13 +1284,13 @@ class ScreenshotWorker(QThread):
                 roi_image = current_image[roi_y:roi_y+roi_h, roi_x:roi_x+roi_w]
                 recognized_names = self.game_capture.recognize_pokemon_name(image=roi_image, roi=(0, 0, roi_w, roi_h))
 
-            # 血脉识别：当四叶草铅绘未识别到且血脉检查处于激活状态时，顺便OCR血脉框选区域
+            # 血脉识别：当陨星未识别到且血脉检查处于激活状态时，顺便OCR血脉框选区域
             bloodline_result = None
             bloodline_has_text = False
             bloodline_checked = False  # 是否实际执行了血脉OCR
             if (should_ocr and
                     self.bloodline_check_active and
-                    "四叶草铅绘" not in recognized_names and
+                    "陨星" not in recognized_names and
                     hasattr(self.game_capture, 'settings_manager') and
                     self.game_capture.settings_manager):
                 bl_enabled = self.game_capture.settings_manager.get("enable_bloodline_recognition", False)

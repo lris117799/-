@@ -15,9 +15,9 @@ class Counter:
     base_prob: float = 1.8      # 基础异色概率
     is_custom: bool = False     # 是否为用户自定义
     is_locked: bool = False     # 是否锁定计数
-    nightmare_count: int = 0    # 童话事件计数
+    nightmare_count: int = 0    # 陨星事件计数
     icon_id: int = 0            # 精灵图标ID
-    battle_pokemon_stats: dict = field(default_factory=dict)  # 童话事件期间出现的精灵统计 {精灵名: 出现次数}
+    battle_pokemon_stats: dict = field(default_factory=dict)  # 陨星事件期间出现的精灵统计 {精灵名: 出现次数}
     breakthrough_notified: bool = False  # 是否已发送保底通知
 
     def current_probability(self):
@@ -129,12 +129,12 @@ class CounterManager:
     
     # ================= 全局追踪功能 =================
     def add_global_breakthrough(self, pokemon_name: str):
-        """增加全局童话事件计数"""
+        """增加全局陨星事件计数"""
         if pokemon_name:
             self.pokemon_breakthrough_stats[pokemon_name] = self.pokemon_breakthrough_stats.get(pokemon_name, 0) + 1
     
     def get_global_breakthrough(self, pokemon_name: str) -> int:
-        """获取全局童话事件计数"""
+        """获取全局陨星事件计数"""
         return self.pokemon_breakthrough_stats.get(pokemon_name, 0)
     
     def remove_global_breakthrough(self, pokemon_name: str):
@@ -357,7 +357,7 @@ class CounterManager:
         
         Args:
             pokemon_name: 精灵名称
-            count: 本次出闪时的童话事件次数
+            count: 本次出闪时的陨星事件次数
             is_shiny: 是否出闪
         """
         import datetime

@@ -606,8 +606,8 @@ class FloatingWindow(QWidget):
     
     # 信号：当计数变化时通知主窗口
     count_changed = Signal(int)
-    nightmare_count_changed = Signal(int)  # 童话事件提示计数变化
-    breakthrough_count_changed = Signal(int)  # 童话事件计数变化
+    nightmare_count_changed = Signal(int)  # 陨星事件提示计数变化
+    breakthrough_count_changed = Signal(int)  # 陨星事件计数变化
     counter_navigate = Signal(int)  # 快捷计数器导航：-1=上一个, +1=下一个
     
     def __init__(self, parent=None):
@@ -632,10 +632,10 @@ class FloatingWindow(QWidget):
         self.hover_timer.setInterval(2000)  # 悬停2秒后激活
         self.hover_timer.timeout.connect(self._activate_interactive_mode)
         
-        # 童话事件提示计数（本地缓存）
+        # 陨星事件提示计数（本地缓存）
         self.current_nightmare_count = 0
         
-        # 童话事件计数（本地缓存）
+        # 陨星事件计数（本地缓存）
         self.current_breakthrough_count = 0
         
         # 注册全局快捷键 Ctrl+N（使用低级键盘钩子，不阻塞按键传递）
@@ -763,7 +763,7 @@ class FloatingWindow(QWidget):
         info_bar = QHBoxLayout()
         info_bar.setContentsMargins(0, 12, 0, 0)  # 增加顶部留白,与名字拉开更大距离
         
-        left_info = QLabel("童话事件")
+        left_info = QLabel("陨星事件")
         left_info.setStyleSheet("color: #e0aaff; font-size: 12px;")
         info_bar.addWidget(left_info)
         
@@ -836,8 +836,8 @@ class FloatingWindow(QWidget):
         
         bottom_bar.addStretch()
         
-        # 童话事件提示（nightmare_template检测）
-        self.nightmare_label = QLabel("童话事件提示: 0")
+        # 陨星事件提示（nightmare_template检测）
+        self.nightmare_label = QLabel("陨星事件提示: 0")
         self.nightmare_label.setStyleSheet("color: #ef4444; font-size: 12px; font-weight: bold;")
         bottom_bar.addWidget(self.nightmare_label)
         
@@ -1010,7 +1010,7 @@ class FloatingWindow(QWidget):
         self.progress_bar.setValue(count)
         remaining = target - count
         self.remaining_label.setText(f"保底剩余 {remaining}")
-        self.nightmare_label.setText(f"童话事件提示: {nightmare_count}")
+        self.nightmare_label.setText(f"陨星事件提示: {nightmare_count}")
         
         # 更新本地缓存
         self.current_breakthrough_count = count
@@ -1085,7 +1085,7 @@ class FloatingWindow(QWidget):
             
             # 如果赛季目录没有，尝试从其他赛季目录加载
             if not os.path.exists(image_path):
-                for s in ["第一赛季", "第二赛季", "第三赛季"]:
+                for s in ["第一赛季", "第二赛季", "第三赛季", "第四赛季"]:
                     if s == season:
                         continue
                     other_dir = os.path.join(base_dir, "image", "ys", s)
@@ -1112,12 +1112,12 @@ class FloatingWindow(QWidget):
             self.icon_label.setStyleSheet("font-size: 16px; background: transparent;")
     
     def update_nightmare_count(self, count):
-        """更新童话事件提示数"""
+        """更新陨星事件提示数"""
         self.current_nightmare_count = count
-        self.nightmare_label.setText(f"童话事件提示: {count}")
+        self.nightmare_label.setText(f"陨星事件提示: {count}")
     
     def _adjust_nightmare_count(self, delta):
-        """调整童话事件计数（通过快捷键 +/-）"""
+        """调整陨星事件计数（通过快捷键 +/-）"""
         # 更新本地计数
         self.current_breakthrough_count = max(0, self.current_breakthrough_count + delta)
         
@@ -1142,7 +1142,7 @@ class FloatingWindow(QWidget):
         ))
     
     def _emit_nightmare_adjust(self, delta):
-        """发射童话事件提示调整信号（快捷键《》调用）"""
+        """发射陨星事件提示调整信号（快捷键《》调用）"""
         self.nightmare_count_changed.emit(delta)
     
     def set_size(self, size_name):
