@@ -47,6 +47,7 @@ class GameCapture:
         self.window_title = window_title
         self.hwnd = None
         self.ocr_engine = None
+        self.settings_manager = None  # 由外部注入（主窗口 / 识别线程）
         self.evolution_manager = EvolutionManager()
         self.pokemon_names = self._load_pokemon_names()
         
@@ -58,6 +59,7 @@ class GameCapture:
         # 窗口捕获缓存（避免每次重复 GDI 调用）
         self._capture_cache = {'valid': False}
         self._capture_lock = threading.Lock()  # 防止多线程同时调用 GDI 导致死锁
+        self._fs_dpi_scale = None  # 全屏捕获模式 DPI 缓存
 
         # OCR优化参数
         self.ocr_last_hash = None
@@ -197,8 +199,21 @@ class GameCapture:
         logger.log(f"📋 DPI 获取调试信息: {' | '.join(debug_info)}")
         return 1.0
 
+    def _is_fullscreen_capture(self):
+        """是否启用全屏捕获模式（不查找游戏窗口、不枚举进程，直接识别整个屏幕）"""
+        try:
+            if self.settings_manager is not None:
+                return bool(self.settings_manager.get("fullscreen_capture", False))
+        except Exception:
+            pass
+        return False
+
     def find_window(self):
         """查找游戏窗口(通过进程名过滤,只匹配NRC-Win64-Shipping.exe)"""
+        # 全屏捕获模式：不枚举进程、不查找窗口，直接视为可用
+        if self._is_fullscreen_capture():
+            return True
+
         import psutil
         
         # 如果已有窗口句柄且窗口仍然有效,直接返回
@@ -318,6 +333,10 @@ class GameCapture:
         """获取所有可用的游戏窗口列表
         :return: [(index, hwnd, title), ...]
         """
+        # 全屏捕获模式：不枚举进程、不查找窗口，直接返回空列表
+        if self._is_fullscreen_capture():
+            return []
+
         import psutil
 
         # 收集所有匹配进程的PID（支持双开）
@@ -358,6 +377,10 @@ class GameCapture:
         :param return_raw: True=返回BGRA原始格式（跳过颜色转换，约省15-30ms）
         :return: BGR或BGRA格式的numpy数组
         """
+        # 全屏捕获模式：不查找窗口、不枚举进程，直接截取整个电脑屏幕
+        if self._is_fullscreen_capture():
+            return self._capture_fullscreen(roi, return_raw)
+
         # 验证窗口句柄是否仍然有效
         if self.hwnd != 0:
             try:
@@ -503,7 +526,83 @@ class GameCapture:
             import traceback
             traceback.print_exc()
             return None
-    
+
+    def _capture_fullscreen(self, roi=None, return_raw=False):
+        """全屏捕获模式：直接截取整个电脑屏幕（虚拟屏幕，含多显示器）
+
+        不查找游戏窗口、不枚举进程，其余逻辑（ROI裁剪/颜色格式）与窗口捕获保持一致。
+        :param roi: 框选区域 (x, y, width, height)，屏幕绝对坐标；None 则返回整个屏幕
+        :param return_raw: True=返回BGRA原始格式
+        :return: BGR或BGRA格式的numpy数组
+        """
+        try:
+            # 虚拟屏幕边界（支持多显示器）
+            virtual_left = windll.user32.GetSystemMetrics(win32con.SM_XVIRTUALSCREEN)
+            virtual_top = windll.user32.GetSystemMetrics(win32con.SM_YVIRTUALSCREEN)
+            virtual_width = windll.user32.GetSystemMetrics(win32con.SM_CXVIRTUALSCREEN)
+            virtual_height = windll.user32.GetSystemMetrics(win32con.SM_CYVIRTUALSCREEN)
+
+            if virtual_width <= 0 or virtual_height <= 0:
+                logger.log("❌ 全屏捕获: 获取虚拟屏幕尺寸失败")
+                return None
+
+            with self._capture_lock:
+                screen_dc = win32gui.GetDC(0)
+                mfc_dc = win32ui.CreateDCFromHandle(screen_dc)
+                save_dc = mfc_dc.CreateCompatibleDC()
+
+                bitmap = win32ui.CreateBitmap()
+                bitmap.CreateCompatibleBitmap(mfc_dc, virtual_width, virtual_height)
+                save_dc.SelectObject(bitmap)
+                save_dc.BitBlt((0, 0), (virtual_width, virtual_height),
+                               mfc_dc, (virtual_left, virtual_top), win32con.SRCCOPY)
+
+                bmpstr = bitmap.GetBitmapBits(True)
+                img = np.frombuffer(bmpstr, dtype=np.uint8).reshape((virtual_height, virtual_width, 4)).copy()
+
+                win32gui.DeleteObject(bitmap.GetHandle())
+                save_dc.DeleteDC()
+                win32gui.ReleaseDC(0, screen_dc)
+
+            if not return_raw:
+                img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
+
+            # ROI 裁剪（roi 为屏幕逻辑坐标，先转物理像素，再换算为相对虚拟屏幕左上角的偏移）
+            if roi:
+                x, y, w, h = roi
+                # 缓存 DPI（框选工具返回 Qt 逻辑坐标，全屏截图是物理像素）
+                # 注意：不用 _get_dpi_scale()——其无窗口回退路径 GetDeviceCaps 在64位下
+                # 会因 HDC 截断返回 0；GetDpiForSystem 无需句柄且准确
+                if self._fs_dpi_scale is None:
+                    try:
+                        dpi = windll.user32.GetDpiForSystem()
+                        self._fs_dpi_scale = dpi / 96.0 if dpi > 0 else 1.0
+                    except Exception:
+                        self._fs_dpi_scale = 1.0
+                if self._fs_dpi_scale != 1.0:
+                    x = int(x * self._fs_dpi_scale)
+                    y = int(y * self._fs_dpi_scale)
+                    w = int(w * self._fs_dpi_scale)
+                    h = int(h * self._fs_dpi_scale)
+                relative_x = x - virtual_left
+                relative_y = y - virtual_top
+                h_img, w_img = img.shape[:2]
+                relative_x = max(0, min(relative_x, w_img - 1))
+                relative_y = max(0, min(relative_y, h_img - 1))
+                w = min(w, w_img - relative_x)
+                h = min(h, h_img - relative_y)
+                if w > 0 and h > 0:
+                    img = img[relative_y:relative_y + h, relative_x:relative_x + w]
+                else:
+                    logger.log("❌ ROI超出全屏图像范围!")
+
+            return img
+        except Exception as e:
+            logger.log(f"❌ 全屏捕获失败: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
+
     def init_ocr(self):
         """初始化OCR引擎（极速优化版）"""
         if self.ocr_engine is None:

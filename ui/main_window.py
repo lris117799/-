@@ -8257,6 +8257,8 @@ class MainWindow(QMainWindow):
         # 坐标识别设置
         if hasattr(self, 'roi_recognition_switch'):
             self.roi_recognition_switch.setChecked(self.settings_manager.get("enable_roi_recognition", False))
+        if hasattr(self, 'fullscreen_capture_switch'):
+            self.fullscreen_capture_switch.setChecked(self.settings_manager.get("fullscreen_capture", False))
 
         # 血脉识别设置
         if hasattr(self, 'bloodline_recognition_switch'):
@@ -8330,6 +8332,8 @@ class MainWindow(QMainWindow):
         # 坐标识别设置
         if hasattr(self, 'roi_recognition_switch'):
             self.settings_manager.set("enable_roi_recognition", self.roi_recognition_switch.isChecked())
+        if hasattr(self, 'fullscreen_capture_switch'):
+            self.settings_manager.set("fullscreen_capture", self.fullscreen_capture_switch.isChecked())
 
         # 血脉识别设置
         if hasattr(self, 'bloodline_recognition_switch'):
@@ -8413,7 +8417,7 @@ class MainWindow(QMainWindow):
             try:
                 from core.update_manager import CURRENT_VERSION
             except Exception:
-                CURRENT_VERSION = "4.6.12"
+                CURRENT_VERSION = "4.6.13"
             self.latest_version_label.setText(f"✅ 已是最新版本 v{CURRENT_VERSION}")
             self.latest_version_label.setStyleSheet("color: #10b981; font-size: 13px;")
             return
@@ -8602,12 +8606,17 @@ class MainWindow(QMainWindow):
             client_x, client_y, phys_w, phys_h = x, y, w, h
             conversion_ok = False
             try:
-                if hasattr(self, 'game_capture') and self.game_capture and self.game_capture.hwnd:
-                    hwnd = self.game_capture.hwnd
-                    # 获取DPI缩放因子（与ROISelector相同的方法）
+                if hasattr(self, 'game_capture') and self.game_capture:
                     import ctypes
+                    # 全屏捕获模式：不依赖游戏窗口，直接用屏幕物理坐标
+                    is_fullscreen = self.game_capture._is_fullscreen_capture()
+
+                    # 获取DPI缩放因子（与ROISelector相同的方法）
                     try:
-                        dpi = ctypes.windll.user32.GetDpiForWindow(hwnd)
+                        if not is_fullscreen and self.game_capture.hwnd:
+                            dpi = ctypes.windll.user32.GetDpiForWindow(self.game_capture.hwnd)
+                        else:
+                            dpi = ctypes.windll.user32.GetDpiForSystem()
                         dpi_scale = dpi / 96.0
                     except:
                         try:
@@ -8622,12 +8631,22 @@ class MainWindow(QMainWindow):
                     phys_w = int(w * dpi_scale)
                     phys_h = int(h * dpi_scale)
 
-                    # 获取窗口客户区的屏幕物理坐标
-                    client_origin = win32gui.ClientToScreen(hwnd, (0, 0))
-                    # 转换为窗口客户区相对物理坐标（与截图坐标系一致）
-                    client_x = phys_x - client_origin[0]
-                    client_y = phys_y - client_origin[1]
-                    conversion_ok = True
+                    if is_fullscreen:
+                        # 全屏截图坐标系以虚拟屏幕左上角为原点，直接减去虚拟屏幕偏移
+                        import win32con
+                        virtual_left = ctypes.windll.user32.GetSystemMetrics(win32con.SM_XVIRTUALSCREEN)
+                        virtual_top = ctypes.windll.user32.GetSystemMetrics(win32con.SM_YVIRTUALSCREEN)
+                        client_x = phys_x - virtual_left
+                        client_y = phys_y - virtual_top
+                        conversion_ok = True
+                    elif self.game_capture.hwnd:
+                        hwnd = self.game_capture.hwnd
+                        # 获取窗口客户区的屏幕物理坐标
+                        client_origin = win32gui.ClientToScreen(hwnd, (0, 0))
+                        # 转换为窗口客户区相对物理坐标（与截图坐标系一致）
+                        client_x = phys_x - client_origin[0]
+                        client_y = phys_y - client_origin[1]
+                        conversion_ok = True
             except Exception:
                 pass
 
@@ -10392,11 +10411,15 @@ class MainWindow(QMainWindow):
         
         # 启用坐标识别开关
         self.roi_recognition_switch = ToggleSwitch()
-        
+
+        # 全屏捕获开关
+        self.fullscreen_capture_switch = ToggleSwitch()
+
         roi_section = self._create_clean_section(
             "🎯 框选识别设置",
             [
                 ("启用坐标识别", "启用后使用框选坐标识别方式  <span style='color:#ef4444;font-weight:600;'>⚠️ 非极端分辨率请勿开启</span>", self.roi_recognition_switch),
+                ("全屏捕获", "开启后不查找游戏窗口、不枚举进程，直接识别整个电脑屏幕  <span style='color:#ef4444;font-weight:600;'>⚠️ 需保持游戏画面不被遮挡</span>", self.fullscreen_capture_switch),
                 ("", "", roi_select_btn)
             ]
         )
@@ -10637,7 +10660,7 @@ class MainWindow(QMainWindow):
         try:
             from core.update_manager import CURRENT_VERSION
         except Exception:
-            CURRENT_VERSION = "4.6.12"
+            CURRENT_VERSION = "4.6.13"
 
         version_section = QWidget()
         version_section_layout = QVBoxLayout(version_section)

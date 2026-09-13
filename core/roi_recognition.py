@@ -33,6 +33,7 @@ class RoiRecognitionWorker(QObject):
         super().__init__()
         self.capture = GameCapture()
         self.settings = SettingsManager()
+        self.capture.settings_manager = self.settings  # 注入设置（支持全屏捕获等开关）
         self.is_running = False
         self.thread = None
         self.current_battle_lkwg = None  # 当前战斗中的精灵名（由主窗口同步）

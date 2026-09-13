@@ -58,38 +58,78 @@ class PerformanceMonitorWidget(QWidget):
         self._fps_process = None      # PresentMon QProcess
         self._fps_buffer = ""         # PresentMon 行缓冲
         self._fps_header_skipped = False  # CSV表头是否已跳过
-        
-        # CPU 预热：psutil 第一次调用返回 0，预热后后续调用才准确
-        psutil.cpu_percent(interval=0)
-        
-        # 启动性能定时器（1秒更新UI）
+
+        # 运行状态标志：仅在性能监控面板开启时为 True
+        self._running = False
+        self._process = None
+        self._start_time = 0
+
+        # 定时器（暂不启动，由 start() 控制）
         self._update_timer = QTimer(self)
         self._update_timer.setInterval(1000)
         self._update_timer.timeout.connect(self._collect_metrics)
-        self._update_timer.start()
-        
-        # FPS 计算定时器（每秒统计一次帧数）
+
         self._fps_calc_timer = QTimer(self)
         self._fps_calc_timer.setInterval(1000)
         self._fps_calc_timer.timeout.connect(self._calc_fps)
-        self._fps_calc_timer.start()
-        
-        # 游戏进程检测定时器（每3秒检查一次）
+
         self._game_check_timer = QTimer(self)
         self._game_check_timer.setInterval(3000)
         self._game_check_timer.timeout.connect(self._check_game_pid)
-        self._game_check_timer.start()
-        
-        self._elapsed.start()
-        
+
+    def start(self):
+        """启动性能监控：开启定时器与后台采集进程（PresentMon / PowerShell）
+
+        仅在性能监控面板开启时调用；重复调用安全。
+        """
+        if self._running:
+            return
+        self._running = True
+
+        # CPU 预热：psutil 第一次调用返回 0，预热后后续调用才准确
+        psutil.cpu_percent(interval=0)
+
+        # 进程对象
         self._process = psutil.Process()
         self._start_time = self._process.create_time()
-        
+
+        # 启动定时器
+        self._update_timer.start()
+        self._fps_calc_timer.start()
+        self._game_check_timer.start()
+
+        # 启动运行时长计时
+        self._elapsed.start()
+
         # 立即检查一次游戏进程
         self._check_game_pid()
-        
+
         # 启动持久 PowerShell 进程（后台持续采集 GPU 数据）
         self._start_ps_poll()
+
+    def stop(self):
+        """停止性能监控：停止所有定时器并清理后台进程
+
+        关闭面板时调用；重复调用安全。完全停用 PresentMon 和 PowerShell。
+        """
+        if not self._running:
+            return
+        self._running = False
+
+        # 停止定时器
+        self._update_timer.stop()
+        self._fps_calc_timer.stop()
+        self._game_check_timer.stop()
+
+        # 停止 PowerShell GPU 采集
+        self._stop_ps_poll()
+
+        # 停止 PresentMon FPS 监控
+        self._stop_fps_monitor()
+
+        # 清空运行时状态
+        self._process = None
+        self._start_time = 0
     
     def widget_height(self):
         """返回当前需要的面板高度（数据+曲线图）"""
@@ -200,7 +240,9 @@ class PerformanceMonitorWidget(QWidget):
         self._gpu_display = "--"
     
     def restart_all_perf(self):
-        """异常重启时调用：停止所有持久进程并重新启动"""
+        """异常重启时调用：仅在性能监控运行中才重启持久进程"""
+        if not self._running:
+            return
         self._stop_ps_poll()
         self._stop_fps_monitor()
         self._game_pid = None
@@ -616,8 +658,7 @@ class FloatingWindow(QWidget):
 
     def closeEvent(self, event):
         """关闭前清理 QProcess，避免 'Destroyed while process is still running' 警告"""
-        self.performance_monitor._stop_ps_poll()
-        self.performance_monitor._stop_fps_monitor()
+        self.performance_monitor.stop()
         # 清理键盘钩子
         if hasattr(self, '_unregister_hotkeys'):
             self._unregister_hotkeys()
@@ -1181,8 +1222,16 @@ class FloatingWindow(QWidget):
             self.btn_lock.setToolTip("锁定/解锁位置")
     
     def set_performance_monitor_visible(self, visible):
-        """显示/隐藏性能监控面板，自动调整窗口高度"""
+        """显示/隐藏性能监控面板，自动调整窗口高度
+
+        开启时启动后台采集进程（PowerShell / PresentMon），
+        关闭时立即停止所有后台进程，避免无谓的资源占用。
+        """
         self.performance_monitor.setVisible(visible)
+        if visible:
+            self.performance_monitor.start()
+        else:
+            self.performance_monitor.stop()
         self._resize_for_perf_monitor()
 
     def _resize_for_perf_monitor(self):
