@@ -48,6 +48,9 @@ class SettingsManager:
             # 框选识别区域
             "recognition_roi": None,  # 框选区域 (x, y, width, height)，None表示全屏识别
 
+            # 全屏捕获
+            "fullscreen_capture": False,  # 开启后不查找游戏窗口/不枚举进程，直接识别整个电脑屏幕
+
             # 血脉识别设置
             "enable_bloodline_recognition": True,  # 血脉识别开关（默认开启）
             "bloodline_roi": None,  # 血脉识别框选区域 (x, y, width, height)，None表示未设置
